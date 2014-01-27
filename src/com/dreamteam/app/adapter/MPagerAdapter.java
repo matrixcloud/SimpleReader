@@ -1,8 +1,8 @@
-package com.dreateam.app.adpater;
+package com.dreamteam.app.adapter;
 
 import java.util.ArrayList;
 
-import com.dreateam.app.ui.MFragment;
+import com.dreamteam.app.ui.MFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,6 @@
-package com.dreateam.app.ui;
+package com.dreamteam.app.ui;
+
+import com.dreateam.app.ui.R;
 
 import android.app.Activity;
 import android.content.Intent;

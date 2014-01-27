@@ -1,8 +1,9 @@
-package com.dreateam.app.ui;
+package com.dreamteam.app.ui;
 
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -17,10 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dreamteam.app.adapter.MPagerAdapter;
 import com.dreamteam.app.db.DBHelper;
 import com.dreamteam.app.entity.Section;
-import com.dreateam.app.adpater.MPagerAdapter;
-import com.dreateam.custom.ui.PathAnimations;
+import com.dreamteam.custom.ui.PathAnimations;
+import com.dreateam.app.ui.R;
 
 public class Main extends FragmentActivity
 {
@@ -124,6 +126,7 @@ public class Main extends FragmentActivity
 					case R.id.composer_btn_about:
 						break;
 					case R.id.composer_btn_add:
+						openSubscribeCenter();
 						break;
 					case R.id.composer_btn_moon:
 						break;
@@ -131,11 +134,19 @@ public class Main extends FragmentActivity
 				}
 			});
 		}
-
+		
 		composerShowHideBtn.startAnimation(PathAnimations
 				.getRotateAnimation(0, 360, 200));
 	}
 
+	//打开订阅中心
+	private void openSubscribeCenter()
+	{
+		Intent intent = new Intent();
+		intent.setClass(this, FeedCategory.class);
+		startActivity(intent);
+	}
+	
 	private void initPager()
 	{
 		MFragment fragment = new MFragment();

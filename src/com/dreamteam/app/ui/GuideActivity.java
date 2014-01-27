@@ -1,4 +1,4 @@
-package com.dreateam.app.ui;
+package com.dreamteam.app.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.dreamteam.app.adapter.GuideViewPagerAdapter;
 import com.dreamteam.app.db.FeedDBHelper;
+import com.dreateam.app.ui.R;
 
 /**
  * 

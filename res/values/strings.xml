@@ -3,6 +3,15 @@
 
     <string name="app_name">SimpleReader</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
 
+    <string-array name="feed_category">
+        <item>新闻资讯</item>
+        <item>科学技术</item>
+        <item>读书文娱</item>
+        <item>体育赛事</item>
+        <item>动漫游戏</item>
+        <item>名人博客</item>
+        <item>外语资讯</item>
+        <item>娱乐八卦</item>
+    </string-array>
 </resources>

@@ -1,4 +1,4 @@
-package com.dreateam.app.adpater;
+package com.dreamteam.app.adapter;
 
 import java.util.ArrayList;
 

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.dreateam.app.ui.Main;
+import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
 
 

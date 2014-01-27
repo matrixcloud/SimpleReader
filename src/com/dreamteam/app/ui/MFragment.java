@@ -1,4 +1,4 @@
-package com.dreateam.app.ui;
+package com.dreamteam.app.ui;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.dreamteam.app.adapter.SectionGridAdapter;
 import com.dreamteam.app.entity.Section;
-import com.dreateam.app.adpater.SectionGridAdapter;
+import com.dreateam.app.ui.R;
 
 public class MFragment extends Fragment
 {
