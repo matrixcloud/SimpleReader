@@ -4,7 +4,6 @@ public class Section
 {
 	private String title;
 	private String url;
-	private String FirstItemDetail;
 	private String tableName;//所属数据库表
 	
 	
@@ -23,14 +22,6 @@ public class Section
 	public void setUrl(String url)
 	{
 		this.url = url;
-	}
-	public String getFirstItemDetail()
-	{
-		return FirstItemDetail;
-	}
-	public void setFirstItemDetail(String firstItemDetail)
-	{
-		FirstItemDetail = firstItemDetail;
 	}
 	public String getTableName()
 	{

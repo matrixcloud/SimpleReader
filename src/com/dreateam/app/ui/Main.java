@@ -2,23 +2,23 @@ package com.dreateam.app.ui;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dreamteam.app.db.DBHelper;
+import com.dreamteam.app.entity.Section;
 import com.dreateam.app.adpater.MPagerAdapter;
 import com.dreateam.custom.ui.PathAnimations;
 
@@ -30,6 +30,7 @@ public class Main extends FragmentActivity
 	private ImageView composerShowHideIconIv;
 	private TextView pagerCounterTv;
 	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
+	private ArrayList<Section> sections = new ArrayList<Section>();
 	private boolean areButtonsShowing;
 	
 	
@@ -40,6 +41,37 @@ public class Main extends FragmentActivity
 		initView();
 		initPathMenu();
 		initPager();
+		try
+		{
+			initSection();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+
+	private void initSection() throws Exception
+	{
+		//从数据库读数据
+		DBHelper helper = new DBHelper(this, "reader.db", null, 1);
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Cursor cursor = db.query("section", null, null, null, null, null, null);
+	
+		if (cursor.moveToFirst())
+		{
+			for (int i = 0, len = cursor.getCount(); i < len; i++)
+			{
+				Section s = new Section();
+				String title = cursor.getString(cursor.getColumnIndex("title"));
+				String url = cursor.getString(cursor.getColumnIndex("url"));
+				s.setTitle(title);
+				s.setUrl(url);
+				sections.add(s);
+				cursor.moveToNext();
+			}
+		}
+		db.close();
 	}
 
 
@@ -117,7 +149,6 @@ public class Main extends FragmentActivity
 
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@SuppressLint("NewApi")
 	private void initView()
 	{
 		setContentView(R.layout.main);
