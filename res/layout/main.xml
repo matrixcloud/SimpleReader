@@ -83,6 +83,7 @@
             android:layout_marginRight="144dp"
             android:background="@drawable/composer_moon"
             android:visibility="gone" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -100,4 +101,13 @@
             android:layout_centerInParent="true"
             android:src="@drawable/composer_icon_plus" />
     </RelativeLayout>
+    <TextView
+            android:id="@+id/home_pager_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:text="1/1" />
 </RelativeLayout>

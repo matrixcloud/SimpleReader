@@ -2,14 +2,21 @@ package com.dreateam.app.ui;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.view.View.OnDragListener;
+import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreateam.app.adpater.MPagerAdapter;
@@ -21,9 +28,9 @@ public class Main extends FragmentActivity
 	private RelativeLayout composerWrapper;
 	private RelativeLayout composerShowHideBtn;
 	private ImageView composerShowHideIconIv;
+	private TextView pagerCounterTv;
 	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
 	private boolean areButtonsShowing;
-	
 	
 	
 	@Override
@@ -109,10 +116,32 @@ public class Main extends FragmentActivity
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressLint("NewApi")
 	private void initView()
 	{
 		setContentView(R.layout.main);
 		mPager = (ViewPager) findViewById(R.id.home_pager);
+		mPager.setOnPageChangeListener(new OnPageChangeListener()
+		{
+			
+			@Override
+			public void onPageSelected(int position)
+			{
+			}
+			
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+			{
+				pagerCounterTv.setText((position + 1) + "/" + mPager.getChildCount());
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state)
+			{
+			}
+		});
+		pagerCounterTv = (TextView) findViewById(R.id.home_pager_counter);
 	}
 	
 }
