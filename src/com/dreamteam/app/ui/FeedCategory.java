@@ -20,8 +20,6 @@ public class FeedCategory extends Activity
 	private ListView categoryList;
 	private ImageButton btn_add;
 	
-	private Intent intent = new Intent();
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -54,6 +52,7 @@ public class FeedCategory extends Activity
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id)
 			{
+				Intent intent = new Intent();
 				intent.putExtra("category", position);
 				intent.setClass(FeedCategory.this, CategoryDetail.class);
 				FeedCategory.this.startActivity(intent);

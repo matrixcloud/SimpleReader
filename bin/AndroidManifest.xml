@@ -24,6 +24,7 @@
         <activity android:name="com.dreamteam.app.ui.Main"></activity>
         <activity android:name="GuideActivity"></activity>
         <activity android:name="com.dreamteam.app.ui.FeedCategory"></activity>
+        <activity android:name="com.dreamteam.app.ui.CategoryDetail"></activity>
     </application>
 
 </manifest>
