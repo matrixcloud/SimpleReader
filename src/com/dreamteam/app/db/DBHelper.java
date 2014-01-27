@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper
 {
 	public static final String CREATE_FAVORITE_FEED =
-				"create table section(title text, url text, category_id integer)";
+				"create table section(title text, url text)";
 	public static final String CREATE_FAVORITE_ITEM = 
 				"create table favorite_item(title text, pubdate text, item_detail text)";
 	

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -18,6 +19,7 @@ import com.dreamteam.app.adapter.CategoryDetailAdapter;
 import com.dreamteam.app.commons.Appcontext;
 import com.dreamteam.app.db.FeedDBHelper;
 import com.dreamteam.app.entity.Feed;
+import com.dreamteam.app.utils.CategoryNameExchange;
 import com.dreateam.app.ui.R;
 
 /**
@@ -31,20 +33,9 @@ public class CategoryDetail extends Activity
 	
 	private ListView detailList;
 	private TextView titleTv;
-	private String[] categories;
-
 	private ArrayList<Feed> feeds = new ArrayList<Feed>();
+	private CategoryDetailAdapter mAdapter;
 	
-	private CategoryDetailAdapter adapter;
-	
-	private static final int POS_NEWS = 0;
-	private static final int POS_SCIENCE = 1;
-	private static final int POS_CULTURE = 2;
-	private static final int POS_SPORTS = 3;
-	private static final int POS_MANGA = 4;
-	private static final int POS_BLOG = 5;
-	private static final int POS_ENGLISH = 6;
-	private static final int POS_FUN = 7;
 	
 	
 	@Override
@@ -64,52 +55,14 @@ public class CategoryDetail extends Activity
 
 	private void initData() throws Exception
 	{
-		categories = getResources()
-				.getStringArray(R.array.feed_category);
-		
 		Intent intent = getIntent();
+		String tableName = intent.getStringExtra("category");
+		CategoryNameExchange exchange = new CategoryNameExchange(this);
+		titleTv.setText(exchange.en2zh(tableName) + "");
 		//读取数据库
 		FeedDBHelper helper = new FeedDBHelper(this, "feed.db", null, 1);
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = null;
-		int key = intent.getIntExtra("category", -1);
-		switch(key)
-		{
-		case POS_NEWS:
-			adapter.setTabelName("news");
-			cursor = db.query("news", null, null, null, null, null, null);
-			break;
-		case POS_SCIENCE:
-			adapter.setTabelName("science");
-			cursor = db.query("science", null, null, null, null, null, null);
-			break;
-		case POS_CULTURE:
-			adapter.setTabelName("culture");
-			cursor = db.query("culture", null, null, null, null, null, null);
-			break;
-		case POS_SPORTS:
-			adapter.setTabelName("sports");
-			cursor = db.query("sports", null, null, null, null, null, null);
-			break;
-		case POS_MANGA:
-			adapter.setTabelName("manga");
-			cursor = db.query("manga", null, null, null, null, null, null);
-			break;
-		case POS_BLOG:
-			adapter.setTabelName("blog");
-			cursor = db.query("blog", null, null, null, null, null, null);
-			break;
-		case POS_ENGLISH:
-			adapter.setTabelName("english");
-			cursor = db.query("english", null, null, null, null, null, null);
-			break;
-		case POS_FUN:
-			adapter.setTabelName("fun");
-			cursor = db.query("fun", null, null, null, null, null, null);
-			break;
-		}
-		//设置title
-		titleTv.setText(categories[key]);
+		Cursor cursor = db.query(tableName, null, null, null, null, null, null);
 		if (cursor.moveToFirst())
 		{
 			for (int i = 0, n = cursor.getCount(); i < n; i++)
@@ -127,7 +80,9 @@ public class CategoryDetail extends Activity
 			}
 		}
 		db.close();
-		adapter.updateData(feeds);
+		//设置适配器
+		mAdapter = new CategoryDetailAdapter(this, feeds, tableName);
+		detailList.setAdapter(mAdapter);
 	}
 
 	private void initView()
@@ -135,15 +90,13 @@ public class CategoryDetail extends Activity
 		setContentView(R.layout.category_detail);
 		detailList = (ListView) findViewById(R.id.catagory_detail_lv_feed);
 		titleTv = (TextView) findViewById(R.id.cd_title_tv);
-		adapter = new CategoryDetailAdapter(this, feeds);
-		detailList.setAdapter(adapter);
-		
 		detailList.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3)
 			{
+				Log.d(tag, "click!");
 				if(!Appcontext.isNetworkAvailable(CategoryDetail.this))
 				{
 					Toast.makeText(CategoryDetail.this, "请检查网络设置！", Toast.LENGTH_SHORT).show();

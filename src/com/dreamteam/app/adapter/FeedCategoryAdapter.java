@@ -18,26 +18,26 @@ public class FeedCategoryAdapter extends BaseAdapter
 {
 	private Context context;
 	private LayoutInflater inflater;
-	private String[] categories;
+	private String[] categories_zh;
 	
 	
 	public FeedCategoryAdapter(Context context)
 	{
 		this.context = context;
-		categories = context.getResources()
+		categories_zh = context.getResources()
 				   .getStringArray(R.array.feed_category);
 	}	
 	
 	@Override
 	public int getCount()
 	{
-		return categories.length;
+		return categories_zh.length;
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		return categories[position];
+		return categories_zh[position];
 	}
 
 	@Override
@@ -56,19 +56,19 @@ public class FeedCategoryAdapter extends BaseAdapter
 			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.category_item, null);
 			viewHolder = new ViewHolder();
-			viewHolder.CATEGORY_TITLE = (TextView) convertView.findViewById(R.id.category_title);
+			viewHolder.categoryTitle = (TextView) convertView.findViewById(R.id.category_title);
 			convertView.setTag(viewHolder);
 		}
 		else
 		{
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		viewHolder.CATEGORY_TITLE.setText(categories[position]);
+		viewHolder.categoryTitle.setText(categories_zh[position]);
 		return convertView;
 	}
 	
 	private static final class ViewHolder
 	{
-		TextView CATEGORY_TITLE;
+		TextView categoryTitle;
 	}
 }

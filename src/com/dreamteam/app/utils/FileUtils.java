@@ -20,6 +20,7 @@ import com.dreamteam.app.commons.AppConfig;
 
 public class FileUtils
 {
+	
 	public static String getSDRootPath()
 	{
 		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
@@ -32,14 +33,12 @@ public class FileUtils
 		}
 	}
 	
-	//����Ŀ¼
 	public static void createDir(String path, String dirName)
 	{
 		File file = new File(path + dirName);
 		file.mkdirs();
 	}
 	
-	//�����ļ�
 	public static void createFile(String path, String fileName)
 	{
 		File file = new File(path + fileName);
@@ -53,7 +52,6 @@ public class FileUtils
 		}
 	}
 	
-	//�ж��ļ��Ƿ����
 	public static boolean isFileExists(String path, String fileName)
 	{
 		File file = new File(path + fileName);
@@ -115,7 +113,6 @@ public class FileUtils
 		}
 	}
 	
-	//ɾ���ļ�
 	public static boolean deleteFile(String path, String fileName)
 	{
 		File file = new File(path + fileName);

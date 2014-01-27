@@ -15,9 +15,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dreamteam.app.db.DBHelper;
 import com.dreamteam.app.db.FeedDBHelper;
 import com.dreamteam.app.entity.Feed;
-import com.dreamteam.app.entity.Section;
 import com.dreateam.app.ui.R;
 
 /**
@@ -29,22 +29,16 @@ public class CategoryDetailAdapter extends BaseAdapter
 {
 	public static final String tag = "CategoryDetailAdapter";
 	private LayoutInflater inflater;
-	
 	private Context context;
-	
 	private ArrayList<Feed> feeds = new ArrayList<Feed>();
-	private String tableName;
-	
+	private String tableName;//所分类对应的表名
+	public static final String SECTION_TABLE_NAME = "section";
 
-	public CategoryDetailAdapter(Context context)
-	{
-		this.context = context;
-	}
-	
-	public CategoryDetailAdapter(Context context, ArrayList<Feed> feeds)
+	public CategoryDetailAdapter(Context context, ArrayList<Feed> feeds, String tableName)
 	{
 		this.context = context;
 		this.feeds = feeds;
+		this.tableName = tableName;
 	}
 	
 	public void updateData(ArrayList<Feed> feeds)
@@ -60,15 +54,15 @@ public class CategoryDetailAdapter extends BaseAdapter
 	}
 
 	@Override
-	public Object getItem(int arg0)
+	public Object getItem(int position)
 	{
-		return null;
+		return feeds.get(position);
 	}
 
 	@Override
-	public long getItemId(int arg0)
+	public long getItemId(int id)
 	{
-		return 0;
+		return id;
 	}
 
 	@Override
@@ -81,49 +75,70 @@ public class CategoryDetailAdapter extends BaseAdapter
 			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.category_detail_item, null);
 			holder = new ViewHolder();
-			holder.FEED_TITLE = (TextView) convertView.findViewById(R.id.category_detail_feed_title);
-			holder.ADD_BTN = (ImageButton) convertView.findViewById(R.id.category_detail_add);
-			holder.ADD_BTN.setOnClickListener(new OnClickListener()
+			holder.feedTitle = (TextView) convertView.findViewById(R.id.category_detail_feed_title);
+			holder.addBtn = (ImageButton) convertView.findViewById(R.id.category_detail_add);
+			holder.addBtn.setOnClickListener(new OnClickListener()
 			{
-				/* (non-Javadoc)
-				 * @see android.view.View.OnClickListener#onClick(android.view.View)
-				 */
 				@Override
 				public void onClick(View v)
 				{
-					if(feeds.get(position).getSelectStatus() == 1)
+					Feed feed = feeds.get(position);
+					
+					//已经选中，取消选中状态
+					if(feed.getSelectStatus() == 1)
+					{
+						//该变传入feeds
+						feed.setSelectStatus(0);
+						Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
+								R.drawable.add);
+						holder.addBtn.setImageBitmap(bmp);
+						//删除section表中记录的数据
+						DBHelper helper = new DBHelper(context, "reader.db", null, 1);
+						SQLiteDatabase db = helper.getWritableDatabase();
+						db.delete(SECTION_TABLE_NAME, "url=?", new String[]{feed.getUrl()});
+						db.close();
+						//更新feed.db中所对应表的状态为0
+						FeedDBHelper helper_1 = new FeedDBHelper(context, "feed.db", null, 1);
+						SQLiteDatabase db_1 = helper_1.getWritableDatabase();
+						ContentValues values = new ContentValues();
+						values.put("select_status", 0);
+						db_1.update(tableName, values, "url=?", new String[]{feed.getUrl()});
+						db_1.close();
 						return;
+					}
+					//否则，选中状态
+					feed.setSelectStatus(1);
 					Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
 							R.drawable.added);
-					holder.ADD_BTN.setImageBitmap(bmp);
-
-					FeedDBHelper helper = new FeedDBHelper(context, "feed.db", null, 1);
+					holder.addBtn.setImageBitmap(bmp);
+					//加入section表
+					DBHelper helper = new DBHelper(context, "reader.db", null, 1);
 					SQLiteDatabase db = helper.getWritableDatabase();
 					ContentValues values = new ContentValues();
-					values.put("select_status", 1);
-					db.update(tableName, values, "id=?", new String[]{"" + position});
+					values.put("title", feed.getTitle());
+					values.put("url", feed.getUrl());
+					db.insert(SECTION_TABLE_NAME, null, values);
 					db.close();
-					
-					String title = feeds.get(position).getTitle();
-					String url = feeds.get(position).getUrl();
-					Section s = new Section();
-					s.setTitle(title);
-					s.setUrl(url);
-					s.setTableName(tableName);
+					//更新feed.db中所对应表的状态为1
+					FeedDBHelper helper_1 = new FeedDBHelper(context, "feed.db", null, 1);
+					SQLiteDatabase db_1 = helper_1.getWritableDatabase();
+					values.put("select_status", 1);
+					db_1.update(tableName, values, "url=?", new String[]{feed.getUrl()});
+					db_1.close();
 				}
 			});
-			
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		Feed f = feeds.get(position);
-		holder.FEED_TITLE.setText((CharSequence) f.getTitle());
+		Feed feed = feeds.get(position);
+		holder.feedTitle.setText((CharSequence)
+				feed.getTitle());
+		//addBtn状态图标设置
 		Bitmap bm = null;
-		if(f.getSelectStatus() == 1)
+		if(feed.getSelectStatus() == 1)
 		{
 			bm = BitmapFactory.decodeResource(context.getResources(),
 						R.drawable.added);
@@ -135,17 +150,15 @@ public class CategoryDetailAdapter extends BaseAdapter
 					R.drawable.add);
 			notifyDataSetChanged();
 		}
-		holder.ADD_BTN.setImageBitmap(bm);
+		holder.addBtn.setImageBitmap(bm);
 		return convertView;
 	}
+	
+	
 	private static final class ViewHolder
 	{
-		TextView FEED_TITLE;
-		ImageButton ADD_BTN;
-	}
-	public void setTabelName(String tableName)
-	{
-		this.tableName = tableName;
+		TextView feedTitle;
+		ImageButton addBtn;
 	}
 	
 }

@@ -14,4 +14,16 @@
         <item>外语资讯</item>
         <item>娱乐八卦</item>
     </string-array>
+    
+    <string-array name="feed_category_en">
+        <item>news</item>
+        <item>science</item>
+        <item>cultule</item>
+        <item>sports</item>
+        <item>manga</item>
+        <item>blog</item>
+        <item>english</item>
+        <item>fun</item>
+    </string-array>
+    
 </resources>
