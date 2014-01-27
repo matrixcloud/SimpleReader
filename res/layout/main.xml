@@ -1,16 +1,103 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Main" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@drawable/home_bg_default">
+	
+	<android.support.v4.view.ViewPager
+		android:id="@+id/home_pager"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		/>
+    
+    <RelativeLayout
+        android:id="@+id/composer_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:clipChildren="false"
+        android:clipToPadding="false" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        <ImageButton
+            android:id="@+id/composer_btn_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="142dp"
+            android:layout_marginRight="10.667dp"
+            android:background="@drawable/composer_user"
+            android:visibility="gone" />
 
+        <ImageButton
+            android:id="@+id/composer_btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="135.333dp"
+            android:layout_marginRight="52dp"
+            android:background="@drawable/composer_setting"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="116.666dp"
+            android:layout_marginRight="89.33333333333333dp"
+            android:background="@drawable/composer_feedback"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="87.33333333333333dp"
+            android:layout_marginRight="118.6666666666667dp"
+            android:background="@drawable/composer_about"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="137.3333333333333dp"
+            android:background="@drawable/composer_add"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_moon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8.666666666666667dp"
+            android:layout_marginRight="144dp"
+            android:background="@drawable/composer_moon"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/composer_show_hide_button"
+        android:layout_width="60dp"
+        android:layout_height="57.33333333333333dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/composer_button" >
+
+        <ImageView
+            android:id="@+id/composer_show_hide_button_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/composer_icon_plus" />
+    </RelativeLayout>
 </RelativeLayout>

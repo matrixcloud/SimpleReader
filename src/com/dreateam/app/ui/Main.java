@@ -1,23 +1,118 @@
 package com.dreateam.app.ui;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-public class Main extends Activity {
+import com.dreateam.app.adpater.MPagerAdapter;
+import com.dreateam.custom.ui.PathAnimations;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-    }
+public class Main extends FragmentActivity
+{
+	private ViewPager mPager;
+	private RelativeLayout composerWrapper;
+	private RelativeLayout composerShowHideBtn;
+	private ImageView composerShowHideIconIv;
+	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
+	private boolean areButtonsShowing;
+	
+	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		initView();
+		initPathMenu();
+		initPager();
+	}
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    
+	private void initPathMenu()
+	{
+		composerWrapper = (RelativeLayout) findViewById(R.id.composer_wrapper);
+		composerShowHideBtn = (RelativeLayout) findViewById(R.id.composer_show_hide_button);
+		composerShowHideBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				if (!areButtonsShowing)
+				{
+					PathAnimations.startAnimationsIn(composerWrapper, 300);
+					composerShowHideIconIv
+							.startAnimation(PathAnimations.getRotateAnimation(0,
+									-270, 300));
+				} else
+				{
+					PathAnimations
+							.startAnimationsOut(composerWrapper, 300);
+					composerShowHideIconIv
+							.startAnimation(PathAnimations.getRotateAnimation(
+									-270, 0, 300));
+				}
+				areButtonsShowing = !areButtonsShowing;
+			}
+		});
+		composerShowHideIconIv = (ImageView) findViewById(R.id.composer_show_hide_button_icon);
+		
+		//Buttons事件处理
+		for (int i = 0; i < composerWrapper.getChildCount(); i++)
+		{
+			composerWrapper.getChildAt(i).setOnClickListener(
+			new View.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					switch(v.getId())
+					{
+					case R.id.composer_btn_user:
+						Toast.makeText(Main.this, "Hello", Toast.LENGTH_SHORT).show();
+						break;
+					case R.id.composer_btn_setting:
+						break;
+					case R.id.composer_btn_feedback:
+						break;
+					case R.id.composer_btn_about:
+						break;
+					case R.id.composer_btn_add:
+						break;
+					case R.id.composer_btn_moon:
+						break;
+					}
+				}
+			});
+		}
+
+		composerShowHideBtn.startAnimation(PathAnimations
+				.getRotateAnimation(0, 360, 200));
+	}
+
+	private void initPager()
+	{
+		MFragment fragment = new MFragment();
+		MFragment fragment1 = new MFragment();
+		fragments.add(fragment);
+		fragments.add(fragment1);
+		
+		MPagerAdapter mPagerAdapter = new MPagerAdapter(getSupportFragmentManager(), fragments);
+		mPager.setAdapter(mPagerAdapter);
+	}
+
+
+	private void initView()
+	{
+		setContentView(R.layout.main);
+		mPager = (ViewPager) findViewById(R.id.home_pager);
+	}
+	
 }
