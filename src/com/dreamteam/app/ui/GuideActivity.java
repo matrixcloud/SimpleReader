@@ -69,7 +69,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener
 		try
 		{
 			inputStream = getAssets().open("feed.db");
-			FeedDBHelper helper = new FeedDBHelper(this, "feed.db", null, 1);
+			FeedDBHelper helper = new FeedDBHelper(this, FeedDBHelper.DB_NAME, null, 1);
 			SQLiteDatabase db = helper.getWritableDatabase();
 			File dbFile = new File(db.getPath());
 			if(dbFile.exists())

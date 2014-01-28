@@ -22,6 +22,7 @@ public class MFragment extends Fragment
 	private SectionGridAdapter gridAdapter;
 	private int page;//所在页码
 	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
@@ -45,24 +46,21 @@ public class MFragment extends Fragment
 	
 	private void readSections() throws Exception
 	{
-		System.out.println("--------------->>readTable()");
 		int len = 0;//表长
 		int start = 0;//其实读
 		int end = 0;//结尾
 		
 		//从数据库读数据
-		DBHelper helper = new DBHelper(getActivity(), "reader.db", null, 1);
+		DBHelper helper = new DBHelper(getActivity(), DBHelper.DB_NAME, null, 1);
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query("section", null, null, null, null, null, null);
+		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
 		
 		len = cursor.getCount();
 		start = page * Main.PAGE_SECTION_SIZE;
-		System.out.println("start = " + start);
 		if (cursor.moveToPosition(start))
 		{
 			int offset = start + Main.PAGE_SECTION_SIZE;
 			end = len < offset ? len : offset;
-			System.out.println("end = " + end);
 			for (int i = start; i < end; i++)
 			{
 				Section s = new Section();
@@ -75,5 +73,20 @@ public class MFragment extends Fragment
 			}
 		}
 		db.close();
+	}
+
+	public SectionGridAdapter getGridAdapter()
+	{
+		return gridAdapter;
+	}
+	
+	public boolean isFull()
+	{
+		return sections.size() >= Main.PAGE_SECTION_SIZE;
+	}
+
+	public boolean isEmpty()
+	{
+		return sections.isEmpty();
 	}
 }

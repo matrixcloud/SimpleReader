@@ -13,6 +13,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FeedDBHelper extends SQLiteOpenHelper
 {
 
+	public static final String DB_NAME = "feed.db";
+	
 	public FeedDBHelper(Context context, String name, CursorFactory factory,
 			int version)
 	{

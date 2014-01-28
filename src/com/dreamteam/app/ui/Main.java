@@ -1,19 +1,19 @@
 package com.dreamteam.app.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -22,12 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.MPagerAdapter;
+import com.dreamteam.app.adapter.SectionGridAdapter;
 import com.dreamteam.app.db.DBHelper;
+import com.dreamteam.app.entity.Section;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
 
 public class Main extends FragmentActivity
 {
+	public static final String tag = "Main";
 
 	private ViewPager mPager;
 	private MPagerAdapter mPagerAdapter;
@@ -38,11 +41,13 @@ public class Main extends FragmentActivity
 	private BroadcastReceiver mReceiver;
 	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
 	private boolean areButtonsShowing;
-	
+	private int pageCount = 0;//总页面数，mPager.getChildCount()不能立即到账
 	public static final int PAGE_SECTION_SIZE = 8;//一页8个section
-	public static final String UPDATE_SECTION = "com.dreamteam.app.action.update_home_section";
-	
-	private int oldPageSize;
+	public static final String ADD_SECTION = "com.dreamteam.app.action.add_section";
+	public static final String DELETE_SECTION = "com.dreamteam.app.action.delete_section";
+	public static final int PAGE_SIZE_INCREASE = 1;
+	public static final int PAGE_SIZE_NOT_CHANGE = 0;
+	public static final int PAGE_SIZE_DECREASE = -1;
 	
 	
 	@Override
@@ -69,15 +74,62 @@ public class Main extends FragmentActivity
 			@Override
 			public void onReceive(Context context, Intent intent)
 			{
+				
 				String action = intent.getAction();
-				System.out.println("--------->>onReceive()");
+				if(action.equals(ADD_SECTION))
+				{
+					MFragment lastFragment = mPagerAdapter.getLastFragment();
+					//最后一个已满或pagerAdapter为空，添加mFragment
+					if(lastFragment == null || lastFragment.isFull())
+					{
+						MFragment fragment = new MFragment();
+						mPagerAdapter.addItem(fragment);
+						lastFragment = fragment;
+					}
+					else
+					{
+						SectionGridAdapter gridAdapter = lastFragment.getGridAdapter();
+						gridAdapter.addItem(getNewSection());
+					}
+				}
+				else if(action.equals(DELETE_SECTION))
+				{
+					//去掉最后fragment的section
+					MFragment lastFragment = mPagerAdapter.getLastFragment();
+					SectionGridAdapter gridAdapter = lastFragment.getGridAdapter();
+					String url = intent.getStringExtra("url");
+					gridAdapter.removeItem(url);
+					if(lastFragment.isEmpty() && !mPagerAdapter.isOneLesser())
+						mPagerAdapter.removeLastItem();
+				}
 			}
 		};
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(UPDATE_SECTION);
+		filter.addAction(ADD_SECTION);
+		filter.addAction(DELETE_SECTION);
 		registerReceiver(mReceiver, filter);
 	}
 
+	//获取表新加入的section
+	private Section getNewSection()
+	{
+		Section section = new Section();
+		DBHelper helper = new DBHelper(Main.this, DBHelper.DB_NAME, null, 1);
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
+		if(cursor.moveToLast())
+		{
+			String title = cursor.getString(cursor.getColumnIndex("title"));
+			String url = cursor.getString(cursor.getColumnIndex("url"));
+			String tableName = cursor.getString(cursor.getColumnIndex("table_name"));
+			section.setTitle(title);
+			section.setUrl(url);
+			section.setTableName(tableName);
+		}
+		db.close();
+		return section;
+	}
+	
 	private void initPathMenu()
 	{
 		composerWrapper = (RelativeLayout) findViewById(R.id.composer_wrapper);
@@ -151,9 +203,9 @@ public class Main extends FragmentActivity
 	private void initPager() throws Exception
 	{
 		//从数据库读数据
-		DBHelper helper = new DBHelper(this, "reader.db", null, 1);
+		DBHelper helper = new DBHelper(this, DBHelper.DB_NAME, null, 1);
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query("section", null, null, null, null, null, null);
+		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
 		
 		//pager分页
 		int pageSize = 0;
@@ -168,6 +220,9 @@ public class Main extends FragmentActivity
 			MFragment fragment = new MFragment();
 			fragments.add(fragment);
 		}
+		//保证有一个fragment
+		if(fragments.isEmpty())
+			fragments.add(new MFragment());
 		mPagerAdapter = new MPagerAdapter(getSupportFragmentManager(), fragments);
 		mPager.setAdapter(mPagerAdapter);
 	}

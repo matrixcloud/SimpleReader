@@ -1,6 +1,7 @@
 package com.dreamteam.app.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,10 +13,15 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper
 {
-	public static final String CREATE_FAVORITE_FEED =
-				"create table section(title text, url text)";
+	public static final String DB_NAME = "reader.db";
+	public static final String SECTION_TABLE_NAME = "section";
+	public static final String FAVORITE_ITEM_TABLE_NAME = "favorite_item";
+	
+	public static final String CREATE_SECTION =
+				"create table" + " " + SECTION_TABLE_NAME + "(title text, url text, table_name text)";
 	public static final String CREATE_FAVORITE_ITEM = 
-				"create table favorite_item(title text, pubdate text, item_detail text)";
+				"create table" + " " + FAVORITE_ITEM_TABLE_NAME + "(title text, pubdate text, item_detail text)";
+
 	
 	
 	public DBHelper(Context context, String name, CursorFactory factory,
@@ -27,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		db.execSQL(CREATE_FAVORITE_FEED);
+		db.execSQL(CREATE_SECTION);
 		db.execSQL(CREATE_FAVORITE_ITEM);
 	}
 
@@ -35,4 +41,5 @@ public class DBHelper extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
 	}
+	
 }

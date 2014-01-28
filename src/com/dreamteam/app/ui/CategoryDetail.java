@@ -59,7 +59,7 @@ public class CategoryDetail extends Activity
 		CategoryNameExchange exchange = new CategoryNameExchange(this);
 		titleTv.setText(exchange.en2zh(tableName) + "");
 		//读取数据库
-		FeedDBHelper helper = new FeedDBHelper(this, "feed.db", null, 1);
+		FeedDBHelper helper = new FeedDBHelper(this, FeedDBHelper.DB_NAME, null, 1);
 		SQLiteDatabase db = helper.getWritableDatabase();
 		Cursor cursor = db.query(tableName, null, null, null, null, null, null);
 		if (cursor.moveToFirst())
@@ -95,7 +95,6 @@ public class CategoryDetail extends Activity
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3)
 			{
-				Log.d(tag, "click!");
 				if(!Appcontext.isNetworkAvailable(CategoryDetail.this))
 				{
 					Toast.makeText(CategoryDetail.this, "请检查网络设置！", Toast.LENGTH_SHORT).show();

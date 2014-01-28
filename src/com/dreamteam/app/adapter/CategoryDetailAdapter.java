@@ -32,7 +32,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 	public static final String tag = "CategoryDetailAdapter";
 	private LayoutInflater inflater;
 	private Context context;
-	private ArrayList<Feed> feeds = new ArrayList<Feed>();
+	private ArrayList<Feed> feeds;
 	private String tableName;//所分类对应的表名
 	public static final String SECTION_TABLE_NAME = "section";
 
@@ -90,21 +90,23 @@ public class CategoryDetailAdapter extends BaseAdapter
 					//已经选中，取消选中状态
 					if(feed.getSelectStatus() == 1)
 					{
+						
 						//该变传入feeds
 						feed.setSelectStatus(0);
 						Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
 								R.drawable.add);
 						holder.addBtn.setImageBitmap(bmp);
 						//更新主界面
-						intent.setAction(Main.UPDATE_SECTION);
+						intent.putExtra("url", feed.getUrl());
+						intent.setAction(Main.DELETE_SECTION);
 						context.sendBroadcast(intent);
 						//删除section表中记录的数据
-						DBHelper helper = new DBHelper(context, "reader.db", null, 1);
+						DBHelper helper = new DBHelper(context, DBHelper.DB_NAME, null, 1);
 						SQLiteDatabase db = helper.getWritableDatabase();
 						db.delete(SECTION_TABLE_NAME, "url=?", new String[]{feed.getUrl()});
 						db.close();
 						//更新feed.db中所对应表的状态为0
-						FeedDBHelper helper_1 = new FeedDBHelper(context, "feed.db", null, 1);
+						FeedDBHelper helper_1 = new FeedDBHelper(context, FeedDBHelper.DB_NAME, null, 1);
 						SQLiteDatabase db_1 = helper_1.getWritableDatabase();
 						ContentValues values = new ContentValues();
 						values.put("select_status", 0);
@@ -118,21 +120,23 @@ public class CategoryDetailAdapter extends BaseAdapter
 							R.drawable.added);
 					holder.addBtn.setImageBitmap(bmp);
 					//更新主界面
-					intent.setAction(Main.UPDATE_SECTION);
+					intent.setAction(Main.ADD_SECTION);
 					context.sendBroadcast(intent);
 					//加入section表
-					DBHelper helper = new DBHelper(context, "reader.db", null, 1);
+					DBHelper helper = new DBHelper(context, DBHelper.DB_NAME, null, 1);
 					SQLiteDatabase db = helper.getWritableDatabase();
 					ContentValues values = new ContentValues();
 					values.put("title", feed.getTitle());
 					values.put("url", feed.getUrl());
+					values.put("table_name", tableName);
 					db.insert(SECTION_TABLE_NAME, null, values);
 					db.close();
 					//更新feed.db中所对应表的状态为1
-					FeedDBHelper helper_1 = new FeedDBHelper(context, "feed.db", null, 1);
+					FeedDBHelper helper_1 = new FeedDBHelper(context, FeedDBHelper.DB_NAME, null, 1);
 					SQLiteDatabase db_1 = helper_1.getWritableDatabase();
-					values.put("select_status", 1);
-					db_1.update(tableName, values, "url=?", new String[]{feed.getUrl()});
+					ContentValues values_1 = new ContentValues();
+					values_1.put("select_status", 1);
+					db_1.update(tableName, values_1, "url=?", new String[]{feed.getUrl()});
 					db_1.close();
 				}
 			});

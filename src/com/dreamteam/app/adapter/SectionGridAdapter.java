@@ -15,7 +15,7 @@ import com.dreateam.app.ui.R;
 public class SectionGridAdapter extends BaseAdapter
 {
 	private Context context;
-	private ArrayList<Section> sections = new ArrayList<Section>();
+	private ArrayList<Section> sections;
 	
 	
 	public SectionGridAdapter(Context context, ArrayList<Section> sections)
@@ -72,5 +72,25 @@ public class SectionGridAdapter extends BaseAdapter
 	private static final class ViewHolder
 	{
 		TextView itemTitle;
+	}
+	
+	public void addItem(Section section)
+	{
+		sections.add(section);
+		notifyDataSetChanged();
+	}
+
+
+	public void removeItem(String url)
+	{
+		for(int i = 0; i < sections.size(); i++)
+		{
+			Section s = sections.get(i);
+			if(s.getUrl().equals(url))
+			{
+				sections.remove(i);
+			}
+		}
+		notifyDataSetChanged();
 	}
 }
