@@ -39,9 +39,10 @@ public class Main extends FragmentActivity
 	private RelativeLayout composerShowHideBtn;
 	private ImageView composerShowHideIconIv;
 	private TextView pagerCounterTv;
+	private ArrayList<GridView> gridViews = new ArrayList<GridView>(); 
+	private ArrayList<GridAdapter> gridAdapters = new ArrayList<GridAdapter>();
 	private BroadcastReceiver mReceiver;
 	private boolean areButtonsShowing;
-	private int pageCount = 0;//总页面数，mPager.getChildCount()不能立即到账
 	public static final int PAGE_SECTION_SIZE = 8;//一页8个section
 	public static final String ADD_SECTION = "com.dreamteam.app.action.add_section";
 	public static final String DELETE_SECTION = "com.dreamteam.app.action.delete_section";
@@ -78,9 +79,31 @@ public class Main extends FragmentActivity
 				String action = intent.getAction();
 				if(action.equals(ADD_SECTION))
 				{
+					//最后一个adapter为空或已满，新生一个gridView
+					GridAdapter lastGridAdapter = getLastGridAdapter();
+					
+					if(lastGridAdapter == null || lastGridAdapter.getCount() >= PAGE_SECTION_SIZE)
+					{
+						GridView view = newGridView();
+						gridViews.add(view);
+						mPagerAdapter.notifyDataSetChanged();
+					}
+					//最后一个gridAdapter添加section
+					getLastGridAdapter().addItem(getNewSection());
 				}
 				else if(action.equals(DELETE_SECTION))
 				{
+					//若最后一个adapter为空，删除gridView
+					GridAdapter lastGridAdapter = getLastGridAdapter();
+					if(lastGridAdapter.isEmpty())
+					{
+						removeLastGridView();
+						mPagerAdapter.notifyDataSetChanged();
+						return;
+					}
+					//删除最后一个adapter的section
+					String url = intent.getStringExtra("url");
+					lastGridAdapter.removeItem(url);
 				}
 			}
 		};
@@ -188,7 +211,6 @@ public class Main extends FragmentActivity
 		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
 		
 		//pager分页
-		ArrayList<GridView> gridViews = new ArrayList<GridView>(); 
 		int pageSize = 0;
 		int sectionCount = cursor.getCount();
 		db.close();
@@ -196,7 +218,7 @@ public class Main extends FragmentActivity
 			pageSize = sectionCount / PAGE_SECTION_SIZE;
 		else
 			pageSize = sectionCount / PAGE_SECTION_SIZE + 1;
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < pageSize; i++)
 		{
 			gridViews.add(newGridView());
 		}
@@ -241,9 +263,53 @@ public class Main extends FragmentActivity
 		int bottom = ImageUtils.dip2px(this, 20);
 		grid.setPadding(left, top, right, bottom);
 		grid.setNumColumns(2);
-		ArrayList<Section> sections = new ArrayList<Section>();
-		grid.setAdapter(new GridAdapter(this, sections));
+		ArrayList<Section> sections = null;
+		try
+		{
+			sections = readSections();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		GridAdapter gridAdapter = new GridAdapter(this, sections);
+		gridAdapters.add(gridAdapter);
+		grid.setAdapter(gridAdapter);
 		return grid;
+	}
+	
+	private ArrayList<Section> readSections() throws Exception
+	{
+		ArrayList<Section> sections = null;
+		int len = 0;//表长
+		int start = 0;//其实读
+		int end = 0;//结尾
+		
+		//从数据库读数据
+		DBHelper helper = new DBHelper(this, DBHelper.DB_NAME, null, 1);
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
+		
+		len = cursor.getCount();
+		start = mPager.getChildCount() * Main.PAGE_SECTION_SIZE;
+		if (cursor.moveToPosition(start))
+		{
+			sections = new ArrayList<Section>();
+			
+			int offset = start + Main.PAGE_SECTION_SIZE;
+			end = len < offset ? len : offset;
+			for (int i = start; i < end; i++)
+			{
+				Section s = new Section();
+				String title = cursor.getString(cursor.getColumnIndex("title"));
+				String url = cursor.getString(cursor.getColumnIndex("url"));
+				s.setTitle(title);
+				s.setUrl(url);
+				sections.add(s);
+				cursor.moveToNext();
+			}
+		}
+		db.close();
+		return sections;
 	}
 	
 	@Override
@@ -254,4 +320,17 @@ public class Main extends FragmentActivity
 		unregisterReceiver(mReceiver);
 	}
 	
+	private GridAdapter getLastGridAdapter()
+	{
+		if(gridAdapters.isEmpty())
+			return null;
+		return gridAdapters.get(gridAdapters.size() - 1);
+	}
+	
+	private void removeLastGridView()
+	{
+		if(gridViews.isEmpty())
+			return;
+		gridViews.remove(gridViews.size() - 1);
+	}
 }
