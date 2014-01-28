@@ -3,7 +3,10 @@ package com.dreamteam.app.ui;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -20,20 +23,26 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.MPagerAdapter;
 import com.dreamteam.app.db.DBHelper;
-import com.dreamteam.app.entity.Section;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
 
 public class Main extends FragmentActivity
 {
+
 	private ViewPager mPager;
+	private MPagerAdapter mPagerAdapter;
 	private RelativeLayout composerWrapper;
 	private RelativeLayout composerShowHideBtn;
 	private ImageView composerShowHideIconIv;
 	private TextView pagerCounterTv;
+	private BroadcastReceiver mReceiver;
 	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
-	private ArrayList<Section> sections = new ArrayList<Section>();
 	private boolean areButtonsShowing;
+	
+	public static final int PAGE_SECTION_SIZE = 8;//一页8个section
+	public static final String UPDATE_SECTION = "com.dreamteam.app.action.update_home_section";
+	
+	private int oldPageSize;
 	
 	
 	@Override
@@ -42,40 +51,32 @@ public class Main extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		initView();
 		initPathMenu();
-		initPager();
 		try
 		{
-			initSection();
+			initPager();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+		initBroadcast();
 	}
 
-
-	private void initSection() throws Exception
+	private void initBroadcast()
 	{
-		//从数据库读数据
-		DBHelper helper = new DBHelper(this, "reader.db", null, 1);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query("section", null, null, null, null, null, null);
-	
-		if (cursor.moveToFirst())
+		mReceiver = new BroadcastReceiver()
 		{
-			for (int i = 0, len = cursor.getCount(); i < len; i++)
+			
+			@Override
+			public void onReceive(Context context, Intent intent)
 			{
-				Section s = new Section();
-				String title = cursor.getString(cursor.getColumnIndex("title"));
-				String url = cursor.getString(cursor.getColumnIndex("url"));
-				s.setTitle(title);
-				s.setUrl(url);
-				sections.add(s);
-				cursor.moveToNext();
+				String action = intent.getAction();
+				System.out.println("--------->>onReceive()");
 			}
-		}
-		db.close();
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(UPDATE_SECTION);
+		registerReceiver(mReceiver, filter);
 	}
-
 
 	private void initPathMenu()
 	{
@@ -147,19 +148,30 @@ public class Main extends FragmentActivity
 		startActivity(intent);
 	}
 	
-	private void initPager()
+	private void initPager() throws Exception
 	{
-		MFragment fragment = new MFragment();
-		MFragment fragment1 = new MFragment();
-		fragments.add(fragment);
-		fragments.add(fragment1);
+		//从数据库读数据
+		DBHelper helper = new DBHelper(this, "reader.db", null, 1);
+		SQLiteDatabase db = helper.getWritableDatabase();
+		Cursor cursor = db.query("section", null, null, null, null, null, null);
 		
-		MPagerAdapter mPagerAdapter = new MPagerAdapter(getSupportFragmentManager(), fragments);
+		//pager分页
+		int pageSize = 0;
+		int sectionCount = cursor.getCount();
+		db.close();
+		if(sectionCount % PAGE_SECTION_SIZE == 0)
+			pageSize = sectionCount / PAGE_SECTION_SIZE;
+		else
+			pageSize = sectionCount / PAGE_SECTION_SIZE + 1;
+		for(int i = 0; i < pageSize; i++)
+		{
+			MFragment fragment = new MFragment();
+			fragments.add(fragment);
+		}
+		mPagerAdapter = new MPagerAdapter(getSupportFragmentManager(), fragments);
 		mPager.setAdapter(mPagerAdapter);
 	}
 
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void initView()
 	{
 		setContentView(R.layout.main);
@@ -183,7 +195,16 @@ public class Main extends FragmentActivity
 			{
 			}
 		});
+		
 		pagerCounterTv = (TextView) findViewById(R.id.home_pager_counter);
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		//销毁广播接收器
+		unregisterReceiver(mReceiver);
 	}
 	
 }

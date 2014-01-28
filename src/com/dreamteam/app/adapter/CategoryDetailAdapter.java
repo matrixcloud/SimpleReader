@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.dreamteam.app.db.DBHelper;
 import com.dreamteam.app.db.FeedDBHelper;
 import com.dreamteam.app.entity.Feed;
+import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
 
 /**
@@ -83,6 +85,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 				public void onClick(View v)
 				{
 					Feed feed = feeds.get(position);
+					Intent intent = new Intent();
 					
 					//已经选中，取消选中状态
 					if(feed.getSelectStatus() == 1)
@@ -92,6 +95,9 @@ public class CategoryDetailAdapter extends BaseAdapter
 						Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
 								R.drawable.add);
 						holder.addBtn.setImageBitmap(bmp);
+						//更新主界面
+						intent.setAction(Main.UPDATE_SECTION);
+						context.sendBroadcast(intent);
 						//删除section表中记录的数据
 						DBHelper helper = new DBHelper(context, "reader.db", null, 1);
 						SQLiteDatabase db = helper.getWritableDatabase();
@@ -111,6 +117,9 @@ public class CategoryDetailAdapter extends BaseAdapter
 					Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
 							R.drawable.added);
 					holder.addBtn.setImageBitmap(bmp);
+					//更新主界面
+					intent.setAction(Main.UPDATE_SECTION);
+					context.sendBroadcast(intent);
 					//加入section表
 					DBHelper helper = new DBHelper(context, "reader.db", null, 1);
 					SQLiteDatabase db = helper.getWritableDatabase();

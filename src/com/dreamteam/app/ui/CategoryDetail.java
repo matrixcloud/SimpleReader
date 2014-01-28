@@ -37,7 +37,6 @@ public class CategoryDetail extends Activity
 	private CategoryDetailAdapter mAdapter;
 	
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
