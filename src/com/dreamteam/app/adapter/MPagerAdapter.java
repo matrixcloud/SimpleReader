@@ -2,71 +2,49 @@ package com.dreamteam.app.adapter;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
 
-import com.dreamteam.app.ui.MFragment;
-
-public class MPagerAdapter extends FragmentStatePagerAdapter
+public class MPagerAdapter extends PagerAdapter
 {
 	public static final String tag = "MPagerAdapter";
-	private ArrayList<MFragment> fragments = null;
 	
+	private ArrayList<GridView> views;
+	private Context context;
 	
-	public MPagerAdapter(FragmentManager fm, ArrayList<MFragment> fragments)
+	public MPagerAdapter(Context context, ArrayList<GridView> views)
 	{
-		super(fm);
-		this.fragments = fragments;
+		this.context = context;
+		this.views = views;
+	}
+	
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object)
+	{
+		container.removeView(views.get(position));
 	}
 
 	@Override
-	public Fragment getItem(int postion)
+	public Object instantiateItem(ViewGroup container, int position)
 	{
-		MFragment fragment = fragments.get(postion);
-		Bundle args = new Bundle();
-		args.putInt("page", postion);
-		fragment.setArguments(args);
-		return fragment;
+		((ViewPager) container).addView(views.get(position), 0);
+		return views.get(position);
 	}
 
 	@Override
 	public int getCount()
 	{
-		return fragments.size();
-	}
-	
-	public void addItem(MFragment fragment)
-	{
-		fragments.add(fragment);
-		notifyDataSetChanged();
-	}
-	
-	public void removeItem(int index)
-	{
-		fragments.remove(index);
-		notifyDataSetChanged();
-	}
-	
-	public MFragment getLastFragment()
-	{
-		if(fragments.isEmpty())
-			return null;
-		return fragments.get(fragments.size() - 1);
+		return views.size();
 	}
 
-	public void removeLastItem()
+	@Override
+	public boolean isViewFromObject(View arg0, Object arg1)
 	{
-		if(fragments.isEmpty())
-			return;
-		fragments.remove(fragments.size() - 1);
-		notifyDataSetChanged();
+		return arg0 == arg1;
 	}
 	
-	//保证至少有一个fragment
-	public boolean isOneLesser()
-	{
-		return fragments.size() < 1;
-	}
 }

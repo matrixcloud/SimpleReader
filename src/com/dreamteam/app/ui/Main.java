@@ -1,7 +1,6 @@
 package com.dreamteam.app.ui;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,18 +12,20 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.MPagerAdapter;
-import com.dreamteam.app.adapter.SectionGridAdapter;
+import com.dreamteam.app.adapter.GridAdapter;
 import com.dreamteam.app.db.DBHelper;
 import com.dreamteam.app.entity.Section;
+import com.dreamteam.app.utils.ImageUtils;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
 
@@ -39,7 +40,6 @@ public class Main extends FragmentActivity
 	private ImageView composerShowHideIconIv;
 	private TextView pagerCounterTv;
 	private BroadcastReceiver mReceiver;
-	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
 	private boolean areButtonsShowing;
 	private int pageCount = 0;//总页面数，mPager.getChildCount()不能立即到账
 	public static final int PAGE_SECTION_SIZE = 8;//一页8个section
@@ -78,29 +78,9 @@ public class Main extends FragmentActivity
 				String action = intent.getAction();
 				if(action.equals(ADD_SECTION))
 				{
-					MFragment lastFragment = mPagerAdapter.getLastFragment();
-					//最后一个已满或pagerAdapter为空，添加mFragment
-					if(lastFragment == null || lastFragment.isFull())
-					{
-						MFragment fragment = new MFragment();
-						mPagerAdapter.addItem(fragment);
-						lastFragment = fragment;
-					}
-					else
-					{
-						SectionGridAdapter gridAdapter = lastFragment.getGridAdapter();
-						gridAdapter.addItem(getNewSection());
-					}
 				}
 				else if(action.equals(DELETE_SECTION))
 				{
-					//去掉最后fragment的section
-					MFragment lastFragment = mPagerAdapter.getLastFragment();
-					SectionGridAdapter gridAdapter = lastFragment.getGridAdapter();
-					String url = intent.getStringExtra("url");
-					gridAdapter.removeItem(url);
-					if(lastFragment.isEmpty() && !mPagerAdapter.isOneLesser())
-						mPagerAdapter.removeLastItem();
 				}
 			}
 		};
@@ -208,6 +188,7 @@ public class Main extends FragmentActivity
 		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null, null, null, null);
 		
 		//pager分页
+		ArrayList<GridView> gridViews = new ArrayList<GridView>(); 
 		int pageSize = 0;
 		int sectionCount = cursor.getCount();
 		db.close();
@@ -215,15 +196,11 @@ public class Main extends FragmentActivity
 			pageSize = sectionCount / PAGE_SECTION_SIZE;
 		else
 			pageSize = sectionCount / PAGE_SECTION_SIZE + 1;
-		for(int i = 0; i < pageSize; i++)
+		for(int i = 0; i < 8; i++)
 		{
-			MFragment fragment = new MFragment();
-			fragments.add(fragment);
+			gridViews.add(newGridView());
 		}
-		//保证有一个fragment
-		if(fragments.isEmpty())
-			fragments.add(new MFragment());
-		mPagerAdapter = new MPagerAdapter(getSupportFragmentManager(), fragments);
+		mPagerAdapter = new MPagerAdapter(this, gridViews);
 		mPager.setAdapter(mPagerAdapter);
 	}
 
@@ -233,7 +210,6 @@ public class Main extends FragmentActivity
 		mPager = (ViewPager) findViewById(R.id.home_pager);
 		mPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
-			
 			@Override
 			public void onPageSelected(int position)
 			{
@@ -254,6 +230,22 @@ public class Main extends FragmentActivity
 		pagerCounterTv = (TextView) findViewById(R.id.home_pager_counter);
 	}
 
+	private GridView newGridView()
+	{
+		GridView grid = new GridView(this);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		grid.setLayoutParams(params);
+		int right = ImageUtils.dip2px(this, 50);
+		int left = ImageUtils.dip2px(this, 20);
+		int top = ImageUtils.dip2px(this, 20);
+		int bottom = ImageUtils.dip2px(this, 20);
+		grid.setPadding(left, top, right, bottom);
+		grid.setNumColumns(2);
+		ArrayList<Section> sections = new ArrayList<Section>();
+		grid.setAdapter(new GridAdapter(this, sections));
+		return grid;
+	}
+	
 	@Override
 	protected void onDestroy()
 	{
