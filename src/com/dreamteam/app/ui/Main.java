@@ -20,7 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dreamteam.app.adapter.GridAdapter;
 import com.dreamteam.app.adapter.MPagerAdapter;
@@ -59,8 +58,6 @@ public class Main extends FragmentActivity
 		initPathMenu();
 		initPager();
 		initBroadcast();
-		Log.e(tag, gridAdapters.size() + "init_adapters");
-		Log.e(tag, gridViews.size() + "init_views");
 	}
 
 	private void initBroadcast()
@@ -197,8 +194,10 @@ public class Main extends FragmentActivity
 								login();
 								break;
 							case R.id.composer_btn_setting:
+								openSetting();
 								break;
 							case R.id.composer_btn_feedback:
+								feedback();
 								break;
 							case R.id.composer_btn_about:
 								break;
@@ -212,6 +211,7 @@ public class Main extends FragmentActivity
 								break;
 							}
 						}
+
 					});
 		}
 
@@ -219,6 +219,20 @@ public class Main extends FragmentActivity
 				360, 200));
 	}
 
+	//反馈
+	private void feedback()
+	{
+		
+	}
+	
+	//打开设置界面
+	private void openSetting()
+	{
+		Intent intent = new Intent();
+		intent.setClass(Main.this, Setting.class);
+		Main.this.startActivity(intent);
+	}
+	
 	//登陆
 	private void login()
 	{

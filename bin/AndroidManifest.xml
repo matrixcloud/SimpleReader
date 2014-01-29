@@ -35,6 +35,7 @@
         <activity android:name="com.dreamteam.app.ui.GuideActivity"></activity>
         <activity android:name="com.dreamteam.app.ui.FeedCategory"></activity>
         <activity android:name="com.dreamteam.app.ui.CategoryDetail"></activity>
+        <activity android:name="com.dreamteam.app.ui.Setting"></activity>
     </application>
 
 </manifest>
