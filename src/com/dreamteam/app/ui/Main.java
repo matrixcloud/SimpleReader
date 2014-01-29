@@ -1,5 +1,6 @@
 package com.dreamteam.app.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -22,11 +24,18 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamteam.app.adapter.GridAdapter;
 import com.dreamteam.app.adapter.MPagerAdapter;
+import com.dreamteam.app.commons.Appcontext;
+import com.dreamteam.app.commons.ItemListEntityParser;
+import com.dreamteam.app.commons.SerializationHelper;
 import com.dreamteam.app.db.DBHelper;
+import com.dreamteam.app.entity.FeedItem;
+import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
+import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.app.utils.ImageUtils;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
@@ -321,11 +330,27 @@ public class Main extends FragmentActivity
 				Section section = (Section) adapter.getItem(position);
 				String title = section.getTitle();
 				String url = section.getUrl();
-				Intent intent = new Intent();
-				intent.putExtra("section_title", title);
-				intent.putExtra("url", url);
-				intent.setClass(Main.this, ItemList.class);
-				Main.this.startActivity(intent);
+				
+				//读取缓存
+				File cache = FileUtils.getSectionCacheFile(url);
+				if(cache.exists())
+				{
+					Intent intent = new Intent();
+					intent.putExtra("section_title", title);
+					intent.putExtra("url", url);
+					intent.setClass(Main.this, ItemList.class);
+					Main.this.startActivity(intent);
+				}
+				else
+				{
+					if(!Appcontext.isNetworkAvailable(Main.this))
+					{
+						Toast.makeText(Main.this, "请检查网络设置", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					//异步加载数据
+					new LoadDataTask().execute(url);
+				}
 			}
 		});
 		
@@ -436,4 +461,22 @@ public class Main extends FragmentActivity
 		return pageSize;
 	}
 
+	
+	private class LoadDataTask extends AsyncTask<String, Integer, ItemListEntity>
+	{
+
+		@Override
+		protected ItemListEntity doInBackground(String... params)
+		{
+			ItemListEntityParser parser = new ItemListEntityParser();
+			ItemListEntity entity = parser.parse(params[0]);
+			if(entity != null)
+			{
+				SerializationHelper helper = SerializationHelper.newInstance();
+				File file = FileUtils.createSectionCacheFile(params[0]);
+				helper.saveObject(entity, file);
+			}
+			return entity;
+		}
+	}
 }

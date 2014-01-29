@@ -1,10 +1,7 @@
 package com.dreamteam.app.entity;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import com.dreamteam.app.commons.ItemListEntityParser;
 
 @SuppressWarnings("serial")
 public class ItemListEntity implements Serializable
@@ -21,9 +18,4 @@ public class ItemListEntity implements Serializable
 		this.itemList = itemList;
 	}
 	
-	public ItemListEntity parse(InputStream inputStream)
-	{
-		ItemListEntityParser ile = new ItemListEntityParser();
-		return ile.parse(inputStream);
-	}
 }

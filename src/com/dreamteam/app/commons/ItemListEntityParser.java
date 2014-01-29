@@ -20,6 +20,7 @@ import android.util.Log;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.utils.DateUtils;
+import com.dreamteam.app.utils.HttpUtils;
 
 
 public class ItemListEntityParser extends DefaultHandler
@@ -39,14 +40,14 @@ public class ItemListEntityParser extends DefaultHandler
 	@Override
 	public void startDocument() throws SAXException
 	{
-		Log.i(tag, "��ʼ����");
+		Log.i(tag, "startDocument()");
 		itemListEntity = new ItemListEntity();
 	}
 	
 	@Override
 	public void endDocument() throws SAXException 
 	{
-		Log.i(tag, "�������");
+		Log.i(tag, "endDocument()");
 		itemListEntity.setItemList(items);
 	}
 	
@@ -113,13 +114,15 @@ public class ItemListEntityParser extends DefaultHandler
 	 * @param inputStream
 	 * @return ItemListEntity
 	 */
-	public ItemListEntity parse(InputStream inputStream)
+	public ItemListEntity parse(String url)
 	{
-		SAXParserFactory saxpf = SAXParserFactory.newInstance();
+		InputStream inputStream = null;
 		SAXParser saxp = null;
+		SAXParserFactory saxpf = SAXParserFactory.newInstance();
 		
 		try
 		{
+			inputStream = HttpUtils.getInputStream(url);
 			saxp = saxpf.newSAXParser();
 			XMLReader xmlr = saxp.getXMLReader();
 			xmlr.setContentHandler(this);
@@ -146,6 +149,23 @@ public class ItemListEntityParser extends DefaultHandler
 		{
 			e.printStackTrace();
 			return null;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			if(inputStream != null)
+			{
+				try
+				{
+					inputStream.close();
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

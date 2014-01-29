@@ -54,7 +54,6 @@ public class ItemList extends Activity
 		initView();
 		initHandler();
 		initData();
-		
 	}
 
 	private void initHandler()

@@ -39,6 +39,7 @@
         <activity android:name="com.dreamteam.app.ui.FeedbackUI"></activity>
         <activity android:name="com.dreamteam.app.ui.SwitchBg"></activity>
         <activity android:name="com.dreamteam.app.ui.ItemList"></activity>
+        <activity android:name="com.dreamteam.app.ui.ItemDetail"></activity>
     </application>
 
 </manifest>
