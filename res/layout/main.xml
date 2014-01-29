@@ -26,7 +26,34 @@
             android:background="@drawable/pageid" />
     </RelativeLayout>
 	
-    <RelativeLayout
+	<RelativeLayout
+  		    android:id="@+id/home_loading_layout"
+		    android:layout_width="100dp"
+		    android:layout_height="wrap_content"
+		    android:background="@color/light_black"
+		    android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+		    android:alpha="0.5"
+		    android:visibility="gone"
+		    >
+			    <TextView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentLeft="true"
+			        android:layout_centerVertical="true"
+			        android:textColor="@color/white"
+			        android:text="加载中……" />
+			    <ProgressBar
+			        style="@android:style/Widget.ProgressBar.Small"
+			        android:layout_alignParentRight="true"
+			        android:layout_centerVertical="true"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			         />
+		</RelativeLayout>
+	
+   	<RelativeLayout
         android:id="@+id/composer_wrapper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -100,7 +127,6 @@
             android:layout_marginRight="144dp"
             android:background="@drawable/composer_moon"
             android:visibility="gone" />
-
     </RelativeLayout>
 
     <RelativeLayout

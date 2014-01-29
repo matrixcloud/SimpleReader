@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/blue"
+        android:background="@drawable/shap_title_bar"
 		>
         <ImageButton
             android:id="@+id/feed_category_btn_back"

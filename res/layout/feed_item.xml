@@ -1,21 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="#ffeef1f3">
  	<RelativeLayout
- 	    android:id="@+id/feeditem_left"
- 	    android:layout_toRightOf="@+id/feeditem_image"
+ 	    android:id="@+id/feeditem_right"
+ 	    android:layout_toLeftOf="@+id/feeditem_image"
  	    android:layout_width="wrap_content"
- 	    android:layout_height="wrap_content">
+ 	    android:layout_height="wrap_content"
+ 	   	android:padding="8dp"
+ 	   	android:layout_centerVertical="true"
+ 	    >
 	    <TextView
 	        android:id="@+id/feeditem_title"
-	        android:layout_marginLeft="5dp"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="程序人员写程序，又拿程序换酒钱！一辈子的程序员"
 	        android:textSize="18sp" />
 	    <TextView
 	        android:id="@+id/feeditem_pubdate"
+	        android:layout_marginTop="10dp"
 	        android:layout_below="@id/feeditem_title"
 	        android:layout_alignParentRight="true"
 	        android:layout_width="wrap_content"
@@ -25,9 +28,12 @@
      </RelativeLayout>
 	 <ImageView
 	     android:id="@+id/feeditem_image"
-	     android:layout_width="wrap_content"
-	     android:layout_height="wrap_content"
-	     android:layout_alignTop="@id/feeditem_left"
+	     android:layout_alignParentRight="true"
+	     android:layout_centerVertical="true"
+	     android:layout_width="80dp"
+	     android:layout_height="80dp"
+	     android:padding="5dp"
+	     android:src="@drawable/blue"
 	     android:scaleType="centerCrop"
 	     />
 </RelativeLayout>

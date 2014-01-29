@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/window_bg" >
+    android:background="@color/item_bg" >
 
     <RelativeLayout
         android:id="@+id/layout_title_bar"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:layout_gravity="center_vertical"
-        android:background="@color/blue" >
+        android:background="@drawable/shap_title_bar" >
 
         <ImageButton
             android:id="@+id/button_return"
@@ -61,7 +61,7 @@
         android:layout_below="@id/FrameLayout"
         android:layout_alignParentRight="true"
         android:text="提交"
-        android:textColor="@color/white"
+        android:textColor="@color/blue"
         android:textStyle="bold"
           />
 

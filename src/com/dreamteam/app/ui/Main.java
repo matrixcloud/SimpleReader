@@ -2,6 +2,8 @@ package com.dreamteam.app.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,7 +23,10 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +37,6 @@ import com.dreamteam.app.commons.Appcontext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
 import com.dreamteam.app.db.DBHelper;
-import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.utils.FileUtils;
@@ -50,6 +54,7 @@ public class Main extends FragmentActivity
 	private RelativeLayout composerShowHideBtn;
 	private ImageView composerShowHideIconIv;
 	private TextView pageTv;
+	private RelativeLayout homeLoadingLayout;
 	private ArrayList<GridView> gridViews = new ArrayList<GridView>();
 	private ArrayList<GridAdapter> gridAdapters = new ArrayList<GridAdapter>();
 	private BroadcastReceiver mReceiver;
@@ -60,7 +65,9 @@ public class Main extends FragmentActivity
 	public static final int PAGE_SIZE_INCREASE = 1;
 	public static final int PAGE_SIZE_NOT_CHANGE = 0;
 	public static final int PAGE_SIZE_DECREASE = -1;
-
+	private Intent mIntent;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -283,6 +290,7 @@ public class Main extends FragmentActivity
 	{
 		setContentView(R.layout.main);
 		pageTv = (TextView) findViewById(R.id.home_page_tv);
+		homeLoadingLayout = (RelativeLayout) findViewById(R.id.home_loading_layout);
 		mPager = (ViewPager) findViewById(R.id.home_pager);
 		mPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
@@ -330,16 +338,19 @@ public class Main extends FragmentActivity
 				Section section = (Section) adapter.getItem(position);
 				String title = section.getTitle();
 				String url = section.getUrl();
+				//初始intent
+				mIntent = new Intent();
+				mIntent.putExtra("section_title", title);
+				mIntent.putExtra("url", url);
+				mIntent.setClass(Main.this, ItemList.class);
+				
 				
 				//读取缓存
 				File cache = FileUtils.getSectionCacheFile(url);
 				if(cache.exists())
 				{
-					Intent intent = new Intent();
-					intent.putExtra("section_title", title);
-					intent.putExtra("url", url);
-					intent.setClass(Main.this, ItemList.class);
-					Main.this.startActivity(intent);
+					
+					Main.this.startActivity(mIntent);
 				}
 				else
 				{
@@ -464,6 +475,26 @@ public class Main extends FragmentActivity
 	
 	private class LoadDataTask extends AsyncTask<String, Integer, ItemListEntity>
 	{
+
+		@Override
+		protected void onPreExecute()
+		{
+			homeLoadingLayout.setVisibility(View.VISIBLE);
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values)
+		{
+			super.onProgressUpdate(values);
+		}
+
+		@Override
+		protected void onPostExecute(ItemListEntity result)
+		{
+			homeLoadingLayout.setVisibility(View.GONE);
+			//跳转界面
+			Main.this.startActivity(mIntent);
+		}
 
 		@Override
 		protected ItemListEntity doInBackground(String... params)
