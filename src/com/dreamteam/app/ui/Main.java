@@ -3,6 +3,8 @@ package com.dreamteam.app.ui;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.net.ssl.ManagerFactoryParameters;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -41,7 +44,6 @@ public class Main extends FragmentActivity
 	private BroadcastReceiver mReceiver;
 	private ArrayList<MFragment> fragments = new ArrayList<MFragment>();
 	private boolean areButtonsShowing;
-	private int pageCount = 0;//总页面数，mPager.getChildCount()不能立即到账
 	public static final int PAGE_SECTION_SIZE = 8;//一页8个section
 	public static final String ADD_SECTION = "com.dreamteam.app.action.add_section";
 	public static final String DELETE_SECTION = "com.dreamteam.app.action.delete_section";
@@ -84,6 +86,8 @@ public class Main extends FragmentActivity
 					{
 						MFragment fragment = new MFragment();
 						mPagerAdapter.addItem(fragment);
+						mPagerAdapter.notifyDataSetChanged();
+						fragment.onCreateView(getLayoutInflater(), mPager, null);
 						lastFragment = fragment;
 					}
 					else
@@ -94,12 +98,27 @@ public class Main extends FragmentActivity
 				}
 				else if(action.equals(DELETE_SECTION))
 				{
-					//去掉最后fragment的section
-					MFragment lastFragment = mPagerAdapter.getLastFragment();
-					SectionGridAdapter gridAdapter = lastFragment.getGridAdapter();
+					MFragment decreaseFragment = null;
+					
 					String url = intent.getStringExtra("url");
-					gridAdapter.removeItem(url);
-					if(lastFragment.isEmpty() && !mPagerAdapter.isOneLesser())
+					for(int i = 0; i<mPagerAdapter.getCount(); i++)
+					{
+						MFragment fragment = (MFragment) mPagerAdapter.getFragment(i);
+						if(fragment.getGridAdapter().removeItem(url))
+						{
+							decreaseFragment = fragment;
+						}
+					}
+					//重新排列
+					MFragment lastFragment = mPagerAdapter.getLastFragment();
+					if(!lastFragment.equals(decreaseFragment))
+					{
+						SectionGridAdapter lastAdapter = lastFragment.getGridAdapter();
+						Section section = lastAdapter.getLastItem();
+						decreaseFragment.getGridAdapter().addItem(section);
+						lastAdapter.removeItem(section.getUrl());
+					}
+					if(!mPagerAdapter.isOneLesser() && lastFragment.getGridAdapter().isEmpty())
 						mPagerAdapter.removeLastItem();
 				}
 			}

@@ -81,7 +81,7 @@ public class SectionGridAdapter extends BaseAdapter
 	}
 
 
-	public void removeItem(String url)
+	public boolean removeItem(String url)
 	{
 		for(int i = 0; i < sections.size(); i++)
 		{
@@ -89,8 +89,15 @@ public class SectionGridAdapter extends BaseAdapter
 			if(s.getUrl().equals(url))
 			{
 				sections.remove(i);
+				notifyDataSetChanged();
+				return true;
 			}
 		}
-		notifyDataSetChanged();
+		return false;
+	}
+	
+	public Section getLastItem()
+	{
+		return sections.get(sections.size() - 1);
 	}
 }

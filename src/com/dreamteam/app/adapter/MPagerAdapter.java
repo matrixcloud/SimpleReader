@@ -69,4 +69,9 @@ public class MPagerAdapter extends FragmentStatePagerAdapter
 	{
 		return fragments.size() < 1;
 	}
+	
+	public MFragment getFragment(int position)
+	{
+		return fragments.get(position);
+	}
 }
