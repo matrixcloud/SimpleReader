@@ -222,7 +222,9 @@ public class Main extends FragmentActivity
 	//反馈
 	private void feedback()
 	{
-		
+		Intent intent = new Intent();
+		intent.setClass(Main.this, FeedbackUI.class);
+		Main.this.startActivity(intent);
 	}
 	
 	//打开设置界面
