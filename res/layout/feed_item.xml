@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+ 	<RelativeLayout
+ 	    android:id="@+id/feeditem_left"
+ 	    android:layout_toRightOf="@+id/feeditem_image"
+ 	    android:layout_width="wrap_content"
+ 	    android:layout_height="wrap_content">
+	    <TextView
+	        android:id="@+id/feeditem_title"
+	        android:layout_marginLeft="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="程序人员写程序，又拿程序换酒钱！一辈子的程序员"
+	        android:textSize="18sp" />
+	    <TextView
+	        android:id="@+id/feeditem_pubdate"
+	        android:layout_below="@id/feeditem_title"
+	        android:layout_alignParentRight="true"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/gray"
+	        android:text="8分钟前"/>
+     </RelativeLayout>
+	 <ImageView
+	     android:id="@+id/feeditem_image"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignTop="@id/feeditem_left"
+	     android:scaleType="centerCrop"
+	     />
+</RelativeLayout>

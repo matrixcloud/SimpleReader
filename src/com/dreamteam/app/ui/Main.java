@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -204,13 +206,13 @@ public class Main extends FragmentActivity
 								break;
 							case R.id.composer_btn_add:
 								openSubscribeCenter();
-								overridePendingTransition(
-										R.anim.anim_fromright_toup6,
-										R.anim.anim_down_toleft6);
 								break;
 							case R.id.composer_btn_moon:
 								break;
 							}
+							overridePendingTransition(
+									R.anim.anim_fromright_toup6,
+									R.anim.anim_down_toleft6);
 						}
 
 					});
@@ -308,6 +310,25 @@ public class Main extends FragmentActivity
 		int bottom = ImageUtils.dip2px(this, 20);
 		grid.setPadding(left, top, right, bottom);
 		grid.setNumColumns(2);
+		grid.setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
+			{
+				GridAdapter adapter = gridAdapters.get(
+							mPager.getCurrentItem());
+				Section section = (Section) adapter.getItem(position);
+				String title = section.getTitle();
+				String url = section.getUrl();
+				Intent intent = new Intent();
+				intent.putExtra("section_title", title);
+				intent.putExtra("url", url);
+				intent.setClass(Main.this, ItemList.class);
+				Main.this.startActivity(intent);
+			}
+		});
+		
 		ArrayList<Section> sections = null;
 		try
 		{
@@ -315,10 +336,6 @@ public class Main extends FragmentActivity
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		for (int i = 0; i < sections.size(); i++)
-		{
-			Log.i(tag, sections.get(i).getTitle());
 		}
 		GridAdapter gridAdapter = new GridAdapter(this, sections);
 		gridAdapters.add(gridAdapter);
