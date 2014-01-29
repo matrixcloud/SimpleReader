@@ -26,4 +26,8 @@
         <item>fun</item>
     </string-array>
     
+    <string name="ani_time">250</string>
+ 	<string name="ani_time2">500</string>
+ 	<string name="ani_timestartof">150</string>
+    
 </resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false" >
+    <alpha
+        android:duration="@string/ani_time2"
+        android:fromAlpha="0"	android:fillAfter="true"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:toAlpha="1" />
+    
+  <scale
+        android:duration="@string/ani_time" 	android:startOffset="@string/ani_time"
+        android:fromXScale="0.6"
+        android:fromYScale="0.6"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:pivotX="50%"	android:fillAfter="true"
+        android:pivotY="50%"
+        android:toXScale="1"
+        android:toYScale="1" />
+
+     <translate
+        android:duration="@string/ani_time" 	android:startOffset="@string/ani_time"
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:fillAfter="true"
+        android:toXDelta="-50%p"
+        android:toYDelta="0" >
+    </translate>
+ <scale
+        android:duration="@string/ani_time" 
+        android:fromXScale="0.6"
+        android:fromYScale="0.6"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:pivotX="50%"	android:fillAfter="true"
+        android:pivotY="50%"
+        android:toXScale="1"
+        android:toYScale="1" />
+
+     <translate
+        android:duration="@string/ani_time" 
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:fillAfter="true"
+        android:toXDelta="50%p"
+        android:toYDelta="0" >
+    </translate>
+         
+</set>
