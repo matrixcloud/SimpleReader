@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dreamteam.app.entity.Section;
+import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
 
 public class GridAdapter extends BaseAdapter
@@ -103,5 +104,11 @@ public class GridAdapter extends BaseAdapter
 	public Section getLastItem()
 	{
 		return sections.get(sections.size() - 1);
+	}
+
+
+	public boolean isFull()
+	{
+		return sections.size() >= Main.PAGE_SECTION_SIZE;
 	}
 }
