@@ -1,13 +1,13 @@
 package com.dreamteam.app.ui;
 
-import com.dreateam.app.ui.R;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import com.dreateam.app.ui.R;
 
 /**
  * 
@@ -38,6 +38,7 @@ public class SplashActivity extends Activity
 	/**
 	 * Handler:跳转到不同界面
 	 */
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler()
 	{
 

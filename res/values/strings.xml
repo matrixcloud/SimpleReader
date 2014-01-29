@@ -27,6 +27,12 @@
     </string-array>
     
     
+     <string-array name="login_accounts">
+        <item>新浪微博登陆</item>
+        <item>QQ账号登陆</item>
+        <item>人人账号登陆</item>
+    </string-array>
+    
     <string name="ani_time">250</string>
 	<string name="ani_time2">500</string>
 	<string name="ani_timestartof">150</string>
