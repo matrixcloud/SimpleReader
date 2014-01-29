@@ -200,6 +200,7 @@ public class Main extends FragmentActivity
 								feedback();
 								break;
 							case R.id.composer_btn_about:
+								swithBg();
 								break;
 							case R.id.composer_btn_add:
 								openSubscribeCenter();
@@ -219,6 +220,14 @@ public class Main extends FragmentActivity
 				360, 200));
 	}
 
+	//切换壁纸
+	private void swithBg()
+	{
+		Intent intent = new Intent();
+		intent.setClass(Main.this, SwitchBg.class);
+		Main.this.startActivity(intent);
+	}
+	
 	//反馈
 	private void feedback()
 	{
