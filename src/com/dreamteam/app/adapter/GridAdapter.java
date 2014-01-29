@@ -79,7 +79,7 @@ public class GridAdapter extends BaseAdapter
 		notifyDataSetChanged();
 	}
 
-	public void removeItem(String url)
+	public boolean removeItem(String url)
 	{
 		for(int i = 0; i < sections.size(); i++)
 		{
@@ -87,13 +87,21 @@ public class GridAdapter extends BaseAdapter
 			if(s.getUrl().equals(url))
 			{
 				sections.remove(i);
+				notifyDataSetChanged();
+				return true;
 			}
 		}
-		notifyDataSetChanged();
+		return false;
 	}
 	
 	public boolean isEmpty()
 	{
 		return sections.isEmpty();
+	}
+
+
+	public Section getLastItem()
+	{
+		return sections.get(sections.size() - 1);
 	}
 }

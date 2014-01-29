@@ -31,6 +31,7 @@ public class MPagerAdapter extends PagerAdapter
 	@Override
 	public Object instantiateItem(ViewGroup container, int position)
 	{
+		System.out.println("--------->>instantiateItem()");
 		((ViewPager) container).addView(views.get(position), 0);
 		return views.get(position);
 	}
@@ -45,6 +46,15 @@ public class MPagerAdapter extends PagerAdapter
 	public boolean isViewFromObject(View arg0, Object arg1)
 	{
 		return arg0 == arg1;
+	}
+
+	public void removeAllViews()
+	{
+		for(int i = 0; i < views.size(); i++)
+		{
+			views.remove(i);
+		}
+		notifyDataSetChanged();
 	}
 	
 }
