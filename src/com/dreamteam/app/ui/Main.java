@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -49,6 +50,7 @@ public class Main extends FragmentActivity
 	private MPagerAdapter mPagerAdapter;
 	private RelativeLayout composerWrapper;
 	private RelativeLayout composerShowHideBtn;
+	private RelativeLayout bgLayout;
 	private ImageView composerShowHideIconIv;
 	private TextView pageTv;
 	private RelativeLayout homeLoadingLayout;
@@ -138,12 +140,18 @@ public class Main extends FragmentActivity
 						removeLastGridView();
 						removeLastGridAdapter();
 					}
+				}else if(action.equals(SwitchBg.SWITCH_HOME_BG))
+				{
+					Log.d(tag, "ok");
+					int resid = intent.getIntExtra("home_bg_id", R.drawable.home_bg_default);
+					bgLayout.setBackgroundResource(resid);
 				}
 			}
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(ADD_SECTION);
 		filter.addAction(DELETE_SECTION);
+		filter.addAction(SwitchBg.SWITCH_HOME_BG);
 		registerReceiver(mReceiver, filter);
 	}
 
@@ -215,7 +223,7 @@ public class Main extends FragmentActivity
 							case R.id.composer_btn_feedback:
 								feedback();
 								break;
-							case R.id.composer_btn_about:
+							case R.id.composer_btn_switch_bg:
 								swithBg();
 								break;
 							case R.id.composer_btn_add:
@@ -294,6 +302,10 @@ public class Main extends FragmentActivity
 		setContentView(R.layout.main);
 		pageTv = (TextView) findViewById(R.id.home_page_tv);
 		homeLoadingLayout = (RelativeLayout) findViewById(R.id.home_loading_layout);
+		bgLayout = (RelativeLayout) findViewById(R.id.home_bg_layout);
+		SharedPreferences prefs = AppContext.getPrefrences(this);
+		int bgId = prefs.getInt("home_bg", R.drawable.home_bg_default);
+		bgLayout.setBackgroundResource(bgId);
 		mPager = (ViewPager) findViewById(R.id.home_pager);
 		mPager.setOnPageChangeListener(new OnPageChangeListener()
 		{

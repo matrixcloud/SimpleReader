@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_bg_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="@drawable/bg1">
+    android:background="@drawable/home_bg_default">
 	
 	<android.support.v4.view.ViewPager
 		android:id="@+id/home_pager"
@@ -96,14 +97,14 @@
             android:visibility="gone" />
 
         <ImageButton
-            android:id="@+id/composer_btn_about"
+            android:id="@+id/composer_btn_switch_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="87.33333333333333dp"
             android:layout_marginRight="118.6666666666667dp"
-            android:background="@drawable/composer_about"
+            android:background="@drawable/composer_switch_bg"
             android:visibility="gone" />
 
         <ImageButton
