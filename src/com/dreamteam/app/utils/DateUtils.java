@@ -18,8 +18,8 @@ public class DateUtils
 	{
 		String[] strs = date.split("\\s+|:");
 		
-		return strs[3] + "-" + enNumberMonth(strs[2])
-					   + "-" + strs[1] + "-" + strs[4]
+		return strs[3] + "/" + enNumberMonth(strs[2])
+					   + "/" + strs[1] + "-" + strs[4]
 					   + ":" + strs[5];
 	}
 	

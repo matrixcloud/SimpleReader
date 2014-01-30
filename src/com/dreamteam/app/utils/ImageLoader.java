@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.ImageView;
 
 
@@ -28,9 +29,9 @@ public class ImageLoader
 	
 	private static HashMap<String, SoftReference<Bitmap>> cache;
 	private static Map<ImageView, String> imageViews;
-	
 	private static ExecutorService pool;
-
+	private Bitmap defBitmap;
+	
 	static
 	{
 		cache = new HashMap<String, SoftReference<Bitmap>>();
@@ -60,16 +61,17 @@ public class ImageLoader
 		}
 		else
 		{
+			Log.d(tag, "loadfromFile");
 			File file = FileUtils.getImageSDFile(url);
 			if(file.exists())
 			{
 				bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-				Bitmap mBmp = ImageUtils.zoomBitmap(bmp, width, height);
-				imageView.setImageBitmap(mBmp);
+				imageView.setImageBitmap(bmp);
 			}
 			else
 			{
-				imageView.setImageBitmap(null);
+				//下载网络图片
+				imageView.setImageBitmap(defBitmap);
 				loadNetImage(url, imageView, width, height);
 			}
 		}
@@ -115,5 +117,10 @@ public class ImageLoader
 				}
 			}
 		});
+	}
+
+	public void setDefBitmap(Bitmap defBitmap)
+	{
+		this.defBitmap = defBitmap;
 	}
 }

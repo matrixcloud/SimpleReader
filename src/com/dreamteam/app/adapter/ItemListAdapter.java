@@ -6,6 +6,8 @@ package com.dreamteam.app.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,8 @@ public class ItemListAdapter extends BaseAdapter
 	{
 		this.context = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		Bitmap defBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.loading_default);
+		loader.setDefBitmap(defBitmap);
 	}
 
 	public void updateData(ArrayList<FeedItem> items)

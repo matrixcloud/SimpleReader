@@ -15,12 +15,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.util.Log;
-
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.utils.DateUtils;
 import com.dreamteam.app.utils.HttpUtils;
+
+import android.util.Log;
+
+
 
 
 public class ItemListEntityParser extends DefaultHandler
@@ -40,14 +42,14 @@ public class ItemListEntityParser extends DefaultHandler
 	@Override
 	public void startDocument() throws SAXException
 	{
-		Log.i(tag, "startDocument()");
+		Log.i(tag, "开始解析");
 		itemListEntity = new ItemListEntity();
 	}
 	
 	@Override
 	public void endDocument() throws SAXException 
 	{
-		Log.i(tag, "endDocument()");
+		Log.i(tag, "结束解析");
 		itemListEntity.setItemList(items);
 	}
 	
@@ -56,7 +58,7 @@ public class ItemListEntityParser extends DefaultHandler
 			Attributes attributes) throws SAXException
 	{	
 		sb.setLength(0);
-		if(localName.equalsIgnoreCase("item"))
+		if(qName.equalsIgnoreCase("item"))
 		{
 			feedItem = new FeedItem();
 			items.add(feedItem);
@@ -71,12 +73,12 @@ public class ItemListEntityParser extends DefaultHandler
 	{
 		String content = sb.toString();
 		
-		if(!isFeedTitle && localName.equalsIgnoreCase("title"))
+		if(!isFeedTitle && qName.equalsIgnoreCase("title"))
 		{
 			feedItem.setTitle(content);
 			return;
 		}
-		if(!isFeedDesc && localName.equalsIgnoreCase("description"))
+		if(!isFeedDesc && qName.equalsIgnoreCase("description"))
 		{
 			feedItem.setDescription(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
@@ -86,7 +88,7 @@ public class ItemListEntityParser extends DefaultHandler
 			isFeedDesc = false;
 			return;
 		}
-		if(localName.equalsIgnoreCase("pubDate"))
+		if(qName.equalsIgnoreCase("pubDate"))
 		{
 			content = DateUtils.rfcNormalDate(content);
 			if(feedItem != null)
@@ -116,13 +118,14 @@ public class ItemListEntityParser extends DefaultHandler
 	 */
 	public ItemListEntity parse(String url)
 	{
-		InputStream inputStream = null;
-		SAXParser saxp = null;
 		SAXParserFactory saxpf = SAXParserFactory.newInstance();
+		SAXParser saxp = null;
+		InputStream inputStream = null;
 		
 		try
 		{
 			inputStream = HttpUtils.getInputStream(url);
+			
 			saxp = saxpf.newSAXParser();
 			XMLReader xmlr = saxp.getXMLReader();
 			xmlr.setContentHandler(this);
@@ -161,10 +164,12 @@ public class ItemListEntityParser extends DefaultHandler
 				try
 				{
 					inputStream.close();
+					inputStream = null;
 				} catch (IOException e)
 				{
 					e.printStackTrace();
 				}
+				
 			}
 		}
 	}

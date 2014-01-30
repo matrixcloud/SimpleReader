@@ -2,8 +2,6 @@ package com.dreamteam.app.ui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,16 +15,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +62,7 @@ public class Main extends FragmentActivity
 	public static final int PAGE_SIZE_NOT_CHANGE = 0;
 	public static final int PAGE_SIZE_DECREASE = -1;
 	private Intent mIntent;
+	private boolean exit = false;//双击退出
 	
 	
 	@Override
@@ -360,6 +357,7 @@ public class Main extends FragmentActivity
 						return;
 					}
 					//异步加载数据
+					Log.d(tag, "" + url);
 					new LoadDataTask().execute(url);
 				}
 			}
@@ -493,7 +491,14 @@ public class Main extends FragmentActivity
 		{
 			homeLoadingLayout.setVisibility(View.GONE);
 			//跳转界面
-			Main.this.startActivity(mIntent);
+			if(result != null && mIntent != null)
+			{
+				Main.this.startActivity(mIntent);
+			}
+			else
+			{
+				Toast.makeText(Main.this, "网络异常！", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		@Override
@@ -508,6 +513,28 @@ public class Main extends FragmentActivity
 				helper.saveObject(entity, file);
 			}
 			return entity;
+		}
+	}
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if(exit)
+		{
+			finish();
+			return true;
+		}
+		else
+		{
+			if(mIntent != null)
+			{
+				mIntent = null;
+				return false;
+			}
+			Toast.makeText(Main.this, "再按下返回退出程序", Toast.LENGTH_SHORT).show();
+			exit = true;
+			return false;
 		}
 	}
 }

@@ -40,6 +40,48 @@
         <activity android:name="com.dreamteam.app.ui.SwitchBg"></activity>
         <activity android:name="com.dreamteam.app.ui.ItemList"></activity>
         <activity android:name="com.dreamteam.app.ui.ItemDetail"></activity>
+    
+         <!-- ###################注册SDK使用的Activity###################### -->
+        <!--分享编辑页-->
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDialog"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+
+        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+        <activity android:name="com.tencent.tauth.AuthActivity" />
+
+        <!-- ###################添加UmengAppkey###################### -->
+        
+        <!--查看评论页-->
+        <activity
+            android:name="com.umeng.socialize.view.CommentActivity"
+            android:configChanges="orientation|keyboard"
+            android:theme="@style/Theme.UMDefault" >
+        </activity>
+        <!--详细评论页-->
+        <activity
+            android:name="com.umeng.socialize.view.CommentDetail"
+            android:configChanges="orientation|keyboard"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDefault" >
+        </activity>
+        <!--无地图功能的详细评论页-->
+        <activity
+            android:name="com.umeng.socialize.view.CommentDetailNoMap"
+            android:configChanges="orientation|keyboard"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDefault" >
+        </activity>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5269be4956240b2d8b048955" >
+        </meta-data>
+    
     </application>
 
 </manifest>

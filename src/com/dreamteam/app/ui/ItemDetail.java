@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.FetchCommetsListener;
 
+@SuppressWarnings("deprecation")
 public class ItemDetail extends FragmentActivity
 {
 	@SuppressWarnings("unused")
@@ -50,9 +52,11 @@ public class ItemDetail extends FragmentActivity
 	
 	boolean canSpeech = true;
 	//html全局属性
-	public final static String WEB_STYLE = "<style>* {font-size:16px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
+	public final static String WEB_STYLE = "<style>* {font-size:16px;line-height:20px;} p {color:#333;backgroud-color:#0} a {color:#3E62A6;} img {max-width:310px;} "
 			+ "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
 			+ "pre {font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;} "
+			+ "a {text-decoration: none}" 
+			+ "h1 {text-align:center;font-size:20px}"
 			+ "a.tag {font-size:15px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
 	private String title;
 	private String pubdate;
@@ -69,7 +73,7 @@ public class ItemDetail extends FragmentActivity
 		
 		initView();
 		loadData();
-		initTts();
+//		initTts();
 		initComments();
 	}
 
@@ -97,30 +101,31 @@ public class ItemDetail extends FragmentActivity
 		}, -1);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
+	@SuppressWarnings("deprecation")
+	@SuppressLint({ "SetJavaScriptEnabled", "NewApi" })
 	private void initView()
 	{
 		setContentView(R.layout.feed_item_detail);
 
-		speechBtn = (ImageButton) findViewById(R.id.fid_btn_speech);
-		speechBtn.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v)
-			{
-				if(!canSpeech)
-				{
-					tts.stopSpeaking(mTtsListener);
-					canSpeech = true;
-					return;
-				}
-				if (speechText.length() <= 0 || speechText == null)
-				{
-					return;
-				}
-				tts.startSpeaking(speechText, mTtsListener);
-				canSpeech = false;
-			}
-		});
+//		speechBtn = (ImageButton) findViewById(R.id.fid_btn_speech);
+//		speechBtn.setOnClickListener(new OnClickListener(){
+//			@Override
+//			public void onClick(View v)
+//			{
+//				if(!canSpeech)
+//				{
+//					tts.stopSpeaking(mTtsListener);
+//					canSpeech = true;
+//					return;
+//				}
+//				if (speechText.length() <= 0 || speechText == null)
+//				{
+//					return;
+//				}
+//				tts.startSpeaking(speechText, mTtsListener);
+//				canSpeech = false;
+//			}
+//		});
 		
 		shareBtn = (ImageButton) findViewById(R.id.fid_btn_share);
 		shareBtn.setOnClickListener(new OnClickListener(){
@@ -147,7 +152,6 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
-				//�ղ�����ݿ�
 				DBHelper helper = new DBHelper(ItemDetail.this, "reader.db", null, 1);
 				SQLiteDatabase db = helper.getWritableDatabase();
 				ContentValues values = new ContentValues();
@@ -165,8 +169,9 @@ public class ItemDetail extends FragmentActivity
 		mWebView = (WebView) findViewById(R.id.my_web_view);
 //		mWebView.getSettings().setSupportZoom(true);
 		mWebView.getSettings().setBuiltInZoomControls(true);
+		mWebView.getSettings().setDisplayZoomControls(false);
+		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 		mWebView.getSettings().setJavaScriptEnabled(true);
-		mWebView.getSettings().setDefaultFontSize(15);
 	}
 	
 	private void loadData()
@@ -189,11 +194,11 @@ public class ItemDetail extends FragmentActivity
 		{
 			itemDetail = itemDetail.replaceAll("(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)", "");
 		}
-		sb.append("<h3>" + title + "</h3>"
+		sb.append("<h1>" + title + "</h1>"
 				  + "<p>" + pubdate + "</p>");
 		
 
-		sb.append("<hr>" + itemDetail + "</hr>");
+		sb.append("<body>" + itemDetail + "<body>");
 		mWebView.loadDataWithBaseURL(null, WEB_STYLE + sb.toString(), "text/html", "UTF-8", null);
 	}
 
@@ -251,8 +256,8 @@ public class ItemDetail extends FragmentActivity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		tts.stopSpeaking(null);
-		tts.destory();
+//		tts.stopSpeaking(null);
+//		tts.destory();
 	}
 }
 

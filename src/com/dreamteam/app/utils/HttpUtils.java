@@ -9,7 +9,7 @@ import java.net.URL;
  *
  * @description: TODO
  *
- * @date: 2013��10��10��
+ * @date: 2013/10/10
  *
  */
 public class HttpUtils
