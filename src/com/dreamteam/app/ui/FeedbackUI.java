@@ -1,6 +1,7 @@
 package com.dreamteam.app.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,32 +31,19 @@ public class FeedbackUI extends Activity
 								.getText().toString().trim();
 						if ("".equals(msg))
 						{
-							Toast.makeText(FeedbackUI.this, "����������", Toast.LENGTH_SHORT).show();
+							Toast.makeText(FeedbackUI.this, "请输入内容，谢谢！", Toast.LENGTH_SHORT).show();
 							return;
 						}
-						msg = "#"
-								+ "v1.0"
-								+ "#" + msg;
-						new Thread()
-						{
-							//send a mail to me
-							@Override
-							public void run()
-							{
-								try
-								{
-									Thread.sleep(2000);
-								}
-								catch(InterruptedException e)
-								{
-									e.printStackTrace();
-								}
-							}
-						}.start();
-						
+						Intent intent = new Intent();
+						intent.setType("message/rfc822");
+						intent.setAction(Intent.ACTION_SEND);
+						intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zcloud00@gmail.com"});
+						intent.putExtra(Intent.EXTRA_SUBJECT, "用户反馈");
+						intent.putExtra(Intent.EXTRA_TEXT, msg);
+						startActivity(Intent.createChooser(intent, "sending mail"));
 						((EditText) findViewById(R.id.feedback_edit))
 								.setText("");
-						Toast.makeText(FeedbackUI.this, "感谢你的建议！", Toast.LENGTH_SHORT).show();
+						finish();
 					}
 				});
 

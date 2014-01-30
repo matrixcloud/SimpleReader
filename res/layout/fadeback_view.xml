@@ -25,6 +25,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="反馈"
+            android:textColor="@color/white"
             android:textSize="20sp" />
     </RelativeLayout>
 
@@ -54,15 +55,15 @@
         </FrameLayout>
     <Button
         android:id="@+id/feedback_btn"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/FrameLayout"
         android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:layout_margin="5dp"
         android:text="提交"
-        android:textColor="@color/blue"
-        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/blue"
           />
 
 </RelativeLayout>

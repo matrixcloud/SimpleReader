@@ -37,20 +37,20 @@
 		    android:alpha="0.5"
 		    android:visibility="gone"
 		    >
-			    <TextView
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:layout_alignParentLeft="true"
-			        android:layout_centerVertical="true"
-			        android:textColor="@color/white"
-			        android:text="加载中……" />
-			    <ProgressBar
-			        style="@android:style/Widget.ProgressBar.Small"
-			        android:layout_alignParentRight="true"
-			        android:layout_centerVertical="true"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			         />
+		    <ProgressBar
+		        style="@android:style/Widget.ProgressBar.Small"
+		        android:layout_alignParentLeft="true"
+		        android:layout_centerVertical="true"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		         />
+	   	  <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:textColor="@color/white"
+	        android:text="加载中……" />
 		</RelativeLayout>
 	
    	<RelativeLayout
