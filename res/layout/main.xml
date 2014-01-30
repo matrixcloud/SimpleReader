@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:layout_margin="20dip">
+        android:layout_margin="5dip">
         <TextView
             android:id="@+id/home_page_tv"
             android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
         android:layout_height="57.33333333333333dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/composer_button" >
+        android:background="@drawable/composer_button_center" >
 
         <ImageView
             android:id="@+id/composer_show_hide_button_icon"

@@ -26,7 +26,8 @@
 	<com.dreamteam.custom.ui.PullToRefreshListView
 	    android:id="@+id/fil_lv_feed_item"
 	    android:divider="@color/transparent"
-	    android:padding="10dp"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
 	    android:dividerHeight="10dp"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
