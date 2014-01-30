@@ -1,6 +1,5 @@
 package com.dreamteam.app.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
+import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.Appcontext;
 import com.dreateam.app.ui.R;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -24,22 +24,19 @@ import com.umeng.socialize.controller.listener.SocializeListeners.SocializeClien
  * @author zcloud
  * @date Dec 7, 2013
  */
-@SuppressLint("NewApi")
 public class LoginDialog extends DialogFragment
 {
 
 	public static final String tag = "LoginDialog";
-	
+	public static final String UM_USER_KEY = AppConfig.UM_BASE_KEY + "user";
 	private Activity mActivity;
-	
-	private UMSocialService mController = UMServiceFactory.getUMSocialService("com.dreamteam.umeng.user",
-			RequestType.SOCIAL);
-	
 	private static final int POS_SINA_WEIBO = 0;
 	private static final int POS_QQZONE = 1;
 	private static final int POS_RENREN = 2;
-	
+	private UMSocialService mController = UMServiceFactory.getUMSocialService(UM_USER_KEY,
+			RequestType.SOCIAL);
 
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
@@ -55,7 +52,6 @@ public class LoginDialog extends DialogFragment
 					Toast.makeText(mActivity, "请检查网络设置！", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				
 				
 				ScializeMonitor monitor = new ScializeMonitor();
 				switch(which)
@@ -86,11 +82,11 @@ public class LoginDialog extends DialogFragment
 		{
 			if(status == 200)
 			{
-				Toast.makeText(mActivity, "��½�ɹ�", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mActivity, "登陆成功！", Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
-				Toast.makeText(mActivity, "�����쳣", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mActivity, "网络异常！", Toast.LENGTH_SHORT).show();
 			}
 		}
 		

@@ -39,6 +39,7 @@ import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.app.utils.ImageUtils;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
+import com.umeng.socialize.controller.UMInfoAgent;
 
 public class Main extends FragmentActivity
 {
@@ -262,6 +263,11 @@ public class Main extends FragmentActivity
 	//登陆
 	private void login()
 	{
+		if(UMInfoAgent.isLogin(this))
+		{
+			Toast.makeText(this, "你已登陆！", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		new LoginDialog().show(getSupportFragmentManager(), tag);
 	}
 	
