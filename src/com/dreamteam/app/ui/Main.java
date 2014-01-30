@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.GridAdapter;
 import com.dreamteam.app.adapter.MPagerAdapter;
-import com.dreamteam.app.commons.Appcontext;
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
 import com.dreamteam.app.db.DBHelper;
@@ -357,7 +357,7 @@ public class Main extends FragmentActivity
 				}
 				else
 				{
-					if(!Appcontext.isNetworkAvailable(Main.this))
+					if(!AppContext.isNetworkAvailable(Main.this))
 					{
 						Toast.makeText(Main.this, "请检查网络设置", Toast.LENGTH_SHORT).show();
 						return;

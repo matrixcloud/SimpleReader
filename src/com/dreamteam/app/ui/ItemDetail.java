@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dreamteam.app.commons.Appcontext;
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.HtmlFilter;
 import com.dreamteam.app.db.DBHelper;
 import com.dreamteam.app.utils.MD5;
@@ -44,7 +44,7 @@ public class ItemDetail extends FragmentActivity
 	private ImageButton shareBtn;
 	private ImageButton commentBtn;
 	private TextView countTv;//评论列表
-	private WebView mWebView;
+	private static WebView mWebView;
 	
 	private SpeechSynthesizer tts;
 	private SynthesizerListener mTtsListener;
@@ -101,7 +101,6 @@ public class ItemDetail extends FragmentActivity
 		}, -1);
 	}
 
-	@SuppressWarnings("deprecation")
 	@SuppressLint({ "SetJavaScriptEnabled", "NewApi" })
 	private void initView()
 	{
@@ -189,7 +188,7 @@ public class ItemDetail extends FragmentActivity
 		 itemDetail = itemDetail.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 					"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
 		//是否加载图片
-		SharedPreferences pref = Appcontext.getPrefrences(this);
+		SharedPreferences pref = AppContext.getPrefrences(this);
 		if(!pref.getBoolean("pref_imageLoad", false))
 		{
 			itemDetail = itemDetail.replaceAll("(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)", "");

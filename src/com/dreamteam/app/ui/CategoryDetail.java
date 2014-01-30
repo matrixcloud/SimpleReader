@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.CategoryDetailAdapter;
-import com.dreamteam.app.commons.Appcontext;
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.db.FeedDBHelper;
 import com.dreamteam.app.entity.Feed;
 import com.dreamteam.app.utils.CategoryNameExchange;
@@ -94,7 +94,7 @@ public class CategoryDetail extends Activity
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3)
 			{
-				if(!Appcontext.isNetworkAvailable(CategoryDetail.this))
+				if(!AppContext.isNetworkAvailable(CategoryDetail.this))
 				{
 					Toast.makeText(CategoryDetail.this, "请检查网络设置！", Toast.LENGTH_SHORT).show();
 					return;

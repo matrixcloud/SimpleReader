@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
  * @author zcloud
  * @date Dec 8, 2013
  */
-public class Appcontext extends Application
+public class AppContext extends Application
 {
 	
 	public static boolean isNetworkAvailable(Context context)

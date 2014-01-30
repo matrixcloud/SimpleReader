@@ -10,7 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
 import com.dreamteam.app.commons.AppConfig;
-import com.dreamteam.app.commons.Appcontext;
+import com.dreamteam.app.commons.AppContext;
 import com.dreateam.app.ui.R;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -47,7 +47,7 @@ public class LoginDialog extends DialogFragment
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				if(!Appcontext.isNetworkAvailable(mActivity))	
+				if(!AppContext.isNetworkAvailable(mActivity))	
 				{
 					Toast.makeText(mActivity, "请检查网络设置！", Toast.LENGTH_SHORT).show();
 					return;

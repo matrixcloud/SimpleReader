@@ -4,17 +4,21 @@ import java.io.File;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.view.ViewGroup;
+import android.webkit.CacheManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
+@SuppressWarnings("deprecation")
 public class Setting extends PreferenceActivity
 {
 	private SharedPreferences mPreferences;
@@ -54,34 +58,72 @@ public class Setting extends PreferenceActivity
 			{
 				if(mPreferences.getBoolean("imageLoad", true))
 				{
-					imageLoadCb.setSummary("������ͼƬ��Ĭ��WIFI���أ�");
+					//显示图片
+					imageLoadCb.setSummary("加载图片（WIFI默认加载图片）");
 				}
 				else
 				{
-					imageLoadCb.setSummary("����ͼƬ��Ĭ��WIFI���أ�");
+					imageLoadCb.setSummary("不加载图片（WIFI默认加载图片）");
 				}
 				return false;
 			}
 		});
 		//缓存
-		final File cache = getCacheDir();
+		// 计算缓存大小
+		long fileSize = 0;
+		String cacheSize = "0KB";
+		File cacheFile = getCacheDir();
+		
+		fileSize = FileUtils.getDirSize(cacheFile);
+		if(fileSize > 0)
+			cacheSize = FileUtils.formatFileSize(fileSize);
+		
 		clearCachePref = findPreference("pref_clearCache");
-		clearCachePref.setSummary("0KB");
+		clearCachePref.setSummary(cacheSize);
 		clearCachePref.setOnPreferenceClickListener(new OnPreferenceClickListener()
 		{
 			@Override
 			public boolean onPreferenceClick(Preference preference)
 			{
-				clearCache(cache);
-				Toast.makeText(Setting.this, "清理完毕！", Toast.LENGTH_SHORT).show();
+				new AsyncTask<Integer, Integer, Integer>()
+				{
+
+					@Override
+					protected void onPostExecute(Integer result)
+					{
+						Toast.makeText(Setting.this, "清理完毕！", Toast.LENGTH_SHORT).show();
+						clearCachePref.setSummary("0KB");
+					}
+
+					@Override
+					protected Integer doInBackground(Integer... params)
+					{
+						clearWebViewCache();
+						return 0;
+					}
+
+				};
 				return false;
 			}
 
 		});
 	}
 	
-	private void clearCache(File cache)
+	//清除webview缓存
+	public void clearWebViewCache()
 	{
-		cache.delete();
-	}
+		File file = CacheManager.getCacheFileBaseDir();  
+		if (file != null && file.exists() && file.isDirectory()) {  
+		    for (File item : file.listFiles()) {  
+		    	item.delete();  
+		    }  
+		    file.delete();  
+		}  		  
+		deleteDatabase("webview.db");  
+		deleteDatabase("webview.db-shm");  
+		deleteDatabase("webview.db-wal");  
+		deleteDatabase("webviewCache.db");  
+		deleteDatabase("webviewCache.db-shm");  
+		deleteDatabase("webviewCache.db-wal");  
+	}	
 }
