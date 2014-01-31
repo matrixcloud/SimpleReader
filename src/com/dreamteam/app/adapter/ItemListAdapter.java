@@ -30,26 +30,18 @@ import com.dreateam.app.ui.R;
 public class ItemListAdapter extends BaseAdapter
 {
 	public static final String tag = "ItemListAdapter";
-	
 	private LayoutInflater inflater;
-	private Context context;
-	private ArrayList<FeedItem> items = new ArrayList<FeedItem>();
+	private ArrayList<FeedItem> items;
 	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageLoader loader = new ImageLoader();
 	
 	
-	public ItemListAdapter(Context context)
+	public ItemListAdapter(Context context, ArrayList<FeedItem> items)
 	{
-		this.context = context;
+		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		Bitmap defBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.loading_default);
 		loader.setDefBitmap(defBitmap);
-	}
-
-	public void updateData(ArrayList<FeedItem> items)
-	{
-		this.items = items;
-		notifyDataSetChanged();
 	}
 	
 	@Override
@@ -79,9 +71,9 @@ public class ItemListAdapter extends BaseAdapter
 		{
 			convertView = inflater.inflate(R.layout.feed_item, null);
 			viewHolder = new ViewHolder();
-			viewHolder.ITEM_IMAGE = (ImageView) convertView.findViewById(R.id.feeditem_image);
-			viewHolder.ITEM_TITLE = (TextView) convertView.findViewById(R.id.feeditem_title);
-			viewHolder.ITEM_PUBDATE = (TextView) convertView.findViewById(R.id.feeditem_pubdate);
+			viewHolder.itemIv = (ImageView) convertView.findViewById(R.id.feeditem_image);
+			viewHolder.titleTv = (TextView) convertView.findViewById(R.id.feeditem_title);
+			viewHolder.pubdateTv = (TextView) convertView.findViewById(R.id.feeditem_pubdate);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -93,36 +85,26 @@ public class ItemListAdapter extends BaseAdapter
 		String title = item.getTitle();
 		if(title.length() > 24)
 			title = title.substring(0, 21) + "...";
-		viewHolder.ITEM_TITLE.setText(title);
+		viewHolder.titleTv.setText(title);
 		imageUrls = item.getImageUrls();
 		if(imageUrls.isEmpty())
 		{
-			viewHolder.ITEM_IMAGE.setVisibility(View.GONE);
+			viewHolder.itemIv.setVisibility(View.GONE);
 		}
 		else
 		{
-			loader.loadImage(imageUrls.get(0), viewHolder.ITEM_IMAGE, 100, viewHolder.ITEM_TITLE.getHeight());
+			loader.loadImage(imageUrls.get(0), viewHolder.itemIv, 100, viewHolder.titleTv.getHeight());
 		}
-		viewHolder.ITEM_PUBDATE.setText(item.getPubdate());
+		viewHolder.pubdateTv.setText(item.getPubdate());
 		
 		return convertView;
 	}
 
-	public ArrayList<FeedItem> getItems()
-	{
-		return items;
-	}
-
-	public void setItems(ArrayList<FeedItem> items)
-	{
-		this.items = items;
-	}
-
 	private static final class ViewHolder
 	{
-		ImageView ITEM_IMAGE;
-		TextView ITEM_TITLE;
-		TextView ITEM_PUBDATE;
+		ImageView itemIv;
+		TextView titleTv;
+		TextView pubdateTv;
 	}
 
 	public void addItems(ArrayList<FeedItem> newItems)

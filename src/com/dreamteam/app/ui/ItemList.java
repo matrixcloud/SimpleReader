@@ -40,7 +40,6 @@ public class ItemList extends Activity
 	private TextView feedTitleTv;
 	private ItemListAdapter mAdapter;
 	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
-	private Intent intent;
 	private String sectionTitle; 
 	private String sectionUrl;
 	
@@ -57,7 +56,7 @@ public class ItemList extends Activity
 	private void initView()
 	{
 		setContentView(R.layout.feed_item_list);
-		
+		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
 		backBtn.setOnClickListener(new OnClickListener()
 		{
@@ -67,13 +66,7 @@ public class ItemList extends Activity
 				ItemList.this.finish();
 			}
 		});
-		
-		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
 		itemLv = (PullToRefreshListView) findViewById(R.id.fil_lv_feed_item);
-		mAdapter = new ItemListAdapter(this);
-		
-		itemLv.setAdapter(mAdapter);
-		
 		itemLv.setOnRefreshListener(new OnRefreshListener()
 		{
 			public void onRefresh()
@@ -117,8 +110,8 @@ public class ItemList extends Activity
 
 	private void initData()
 	{
-		intent = getIntent();
-		sectionTitle = intent.getStringExtra("section_title") + "";
+		Intent intent = getIntent();
+		sectionTitle = intent.getStringExtra("section_title");
 		sectionUrl = intent.getStringExtra("url");
 		feedTitleTv.setText(sectionTitle);
 		
@@ -128,7 +121,11 @@ public class ItemList extends Activity
 			SerializationHelper seriaHelper = SerializationHelper.newInstance();
 			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper.readObject(file);
 			mItems = itemListEntity.getItemList();
-			mAdapter.updateData(mItems);
+			if(mItems != null)
+			{
+				mAdapter = new ItemListAdapter(this, mItems);
+				itemLv.setAdapter(mAdapter);
+			}
 		}
 	}
 	
@@ -155,7 +152,7 @@ public class ItemList extends Activity
 				if(i.getPubdate().equals(oldFirstDate))
 				{
 					itemLv.onRefreshComplete();
-					Toast.makeText(ItemList.this, "暂无更新", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ItemList.this, R.string.no_update, Toast.LENGTH_SHORT).show();
 					return;
 				}
 				newCount++;
@@ -176,5 +173,4 @@ public class ItemList extends Activity
 		}
 		
 	}
-	
 }

@@ -15,6 +15,7 @@ import android.webkit.CacheManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
@@ -87,7 +88,6 @@ public class Setting extends PreferenceActivity
 			{
 				new AsyncTask<Integer, Integer, Integer>()
 				{
-
 					@Override
 					protected void onPostExecute(Integer result)
 					{
@@ -98,32 +98,12 @@ public class Setting extends PreferenceActivity
 					@Override
 					protected Integer doInBackground(Integer... params)
 					{
-						clearWebViewCache();
+						new AppContext().clearWebViewCache();
 						return 0;
 					}
-
 				};
 				return false;
 			}
-
 		});
 	}
-	
-	//清除webview缓存
-	public void clearWebViewCache()
-	{
-		File file = CacheManager.getCacheFileBaseDir();  
-		if (file != null && file.exists() && file.isDirectory()) {  
-		    for (File item : file.listFiles()) {  
-		    	item.delete();  
-		    }  
-		    file.delete();  
-		}  		  
-		deleteDatabase("webview.db");  
-		deleteDatabase("webview.db-shm");  
-		deleteDatabase("webview.db-wal");  
-		deleteDatabase("webviewCache.db");  
-		deleteDatabase("webviewCache.db-shm");  
-		deleteDatabase("webviewCache.db-wal");  
-	}	
 }

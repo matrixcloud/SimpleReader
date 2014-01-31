@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.util.TimeUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.GridAdapter;
 import com.dreamteam.app.adapter.MPagerAdapter;
+import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
@@ -76,6 +78,7 @@ public class Main extends FragmentActivity
 		initPathMenu();
 		initPager();
 		initBroadcast();
+		checkDeprecated();
 	}
 
 	private void initBroadcast()
@@ -553,6 +556,24 @@ public class Main extends FragmentActivity
 			Toast.makeText(Main.this, "再按下返回退出程序", Toast.LENGTH_SHORT).show();
 			exit = true;
 			return false;
+		}
+	}
+	
+	private void checkDeprecated()
+	{
+		String fileName = getFilesDir().getAbsolutePath() + File.separator 
+							+ AppConfig.PREF_DEPRECATED;
+		File file = new File(fileName);
+		int day = (int) (System.currentTimeMillis() - file.lastModified())/(24*60*60*1000);
+		Log.d(tag, "day = " + day);
+		if(day >= 7)
+		{
+			//删除sd
+			File sdCache = new File(AppConfig.APP_CACHE_DIR);
+			FileUtils.clearCache(sdCache);
+			//删除webview缓存
+			new AppContext().clearWebViewCache();
+			file.setLastModified(System.currentTimeMillis());
 		}
 	}
  }

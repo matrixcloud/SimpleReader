@@ -26,7 +26,6 @@
         <item>fun</item>
     </string-array>
     
-    
      <string-array name="login_accounts">
         <item>新浪微博登陆</item>
         <item>QQ账号登陆</item>
@@ -39,5 +38,17 @@
 	
 	<string name="no_network">请检查网络设置！</string>
 	<string name="network_exception">网络异常，请稍后再试</string>
+	<string name="no_update">暂无更新！</string>
+	
+	<string-array name="save_days">
+	    <item>3天</item>
+	    <item>4天</item>
+	    <item>5天</item>
+	    <item>6天</item>
+	    <item>7天</item>
+	    <item>8天</item>
+	    <item>9天</item>
+	    <item>10天</item>
+	</string-array>
 	
 </resources>
