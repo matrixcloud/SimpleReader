@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.ItemListAdapter;
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
 import com.dreamteam.app.entity.FeedItem;
@@ -77,6 +78,12 @@ public class ItemList extends Activity
 		{
 			public void onRefresh()
 			{
+				if(!AppContext.isNetworkAvailable(ItemList.this))
+				{
+					itemLv.onRefreshComplete();
+					Toast.makeText(ItemList.this, R.string.no_network, Toast.LENGTH_SHORT).show();
+					return;
+				}
 				new RefreshTask().execute(sectionUrl);
 			}
 		});
@@ -130,34 +137,35 @@ public class ItemList extends Activity
 		@Override
 		protected void onPostExecute(ItemListEntity result)
 		{
-			ArrayList<FeedItem> newItems = null;
-			
-			if(result != null)
+			if(result == null)
 			{
-				File cache = FileUtils.UrlToFile(sectionUrl);
-				SerializationHelper helper = SerializationHelper.newInstance();
-				ArrayList<FeedItem> items = result.getItemList();
-				ItemListEntity old = (ItemListEntity) helper.readObject(cache);
-				String oldFirstDate = old.getFirstItem().getPubdate();
-				int newCount = 0;
-				for(FeedItem i : items)
-				{
-					if(i.getPubdate().equals(oldFirstDate))
-					{
-						Toast.makeText(ItemList.this, "暂无更新", Toast.LENGTH_SHORT).show();
-						return;
-					}
-					newCount++;
-					newItems = new ArrayList<FeedItem>();
-					newItems.add(i);
-				}
-				//追加新对象
-				helper.saveObject(result, cache);
-				mAdapter.addItem(newItems);
-				Toast.makeText(ItemList.this, "更新了" + newCount + "条", 
-								Toast.LENGTH_SHORT).show();
 				itemLv.onRefreshComplete();
+				Toast.makeText(ItemList.this, R.string.network_exception, Toast.LENGTH_SHORT).show();
+				return;
 			}
+			ArrayList<FeedItem> newItems = new ArrayList<FeedItem>();
+			File cache = FileUtils.UrlToFile(sectionUrl);
+			SerializationHelper helper = SerializationHelper.newInstance();
+			ArrayList<FeedItem> items = result.getItemList();
+			ItemListEntity old = (ItemListEntity) helper.readObject(cache);
+			String oldFirstDate = old.getFirstItem().getPubdate();
+			int newCount = 0;
+			for(FeedItem i : items)
+			{
+				if(i.getPubdate().equals(oldFirstDate))
+				{
+					itemLv.onRefreshComplete();
+					Toast.makeText(ItemList.this, "暂无更新", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				newCount++;
+				newItems.add(i);
+			}
+			helper.saveObject(result, cache);
+			mAdapter.addItems(newItems);
+			Toast.makeText(ItemList.this, "更新了" + newCount + "条", 
+							Toast.LENGTH_SHORT).show();
+			itemLv.onRefreshComplete();
 		}
 
 		@Override

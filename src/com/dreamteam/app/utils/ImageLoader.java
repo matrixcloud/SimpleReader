@@ -61,7 +61,6 @@ public class ImageLoader
 		}
 		else
 		{
-			Log.d(tag, "loadfromFile");
 			File file = FileUtils.getImageSDFile(url);
 			if(file.exists())
 			{

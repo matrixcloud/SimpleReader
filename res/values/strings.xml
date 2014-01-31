@@ -36,4 +36,8 @@
     <string name="ani_time">250</string>
 	<string name="ani_time2">500</string>
 	<string name="ani_timestartof">150</string>
+	
+	<string name="no_network">请检查网络设置！</string>
+	<string name="network_exception">网络异常，请稍后再试</string>
+	
 </resources>
