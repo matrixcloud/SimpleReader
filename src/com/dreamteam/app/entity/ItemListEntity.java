@@ -18,4 +18,8 @@ public class ItemListEntity implements Serializable
 		this.itemList = itemList;
 	}
 	
+	public FeedItem getFirstItem()
+	{
+		return itemList.get(0);
+	}
 }

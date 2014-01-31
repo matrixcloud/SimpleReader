@@ -24,13 +24,9 @@ public class SerializationHelper
 	
 	private SerializationHelper(){}
 	
-	/**
-	 * @param file
-	 * @return Serializable|null
-	 */
 	public Serializable readObject(File file)
 	{
-		if(file.exists() == false)
+		if(!file.exists())
 			return null;
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
@@ -103,10 +99,8 @@ public class SerializationHelper
 	 * true:save successful
 	 * false:save failed
 	 */
-	public boolean saveObject(Serializable seria, File file)
+	public void saveObject(Serializable seria, File file)
 	{
-		if(file.exists() == false)
-			return false;
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		
@@ -115,17 +109,14 @@ public class SerializationHelper
 			fos = new FileOutputStream(file);
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(seria);
-			return true;
 		}
 		catch(FileNotFoundException e)
 		{
 			e.printStackTrace();
-			return false;
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
-			return false;
 		}
 		finally
 		{

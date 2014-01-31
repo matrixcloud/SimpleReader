@@ -94,7 +94,6 @@ public class Main extends FragmentActivity
 					GridAdapter lastGridAdapter = getLastGridAdapter();
 					if (lastGridAdapter == null || lastGridAdapter.isFull())
 					{
-						Log.i(tag, "here");
 						addGridView();
 					} else
 					{
@@ -348,6 +347,7 @@ public class Main extends FragmentActivity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
+				
 				GridAdapter adapter = gridAdapters.get(
 							mPager.getCurrentItem());
 				Section section = (Section) adapter.getItem(position);
@@ -555,4 +555,4 @@ public class Main extends FragmentActivity
 			return false;
 		}
 	}
-}
+ }

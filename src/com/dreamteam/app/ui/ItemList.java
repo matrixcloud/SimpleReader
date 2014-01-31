@@ -1,19 +1,14 @@
-package com.dreamteam.app.ui;
+package com.dreamteam.app.ui; 
 
 import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
@@ -21,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.ItemListAdapter;
+import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
@@ -38,93 +34,59 @@ public class ItemList extends Activity
 {
 	public static final String tag = "ItemList";
 	
-	private PullToRefreshListView itemList;
-	private View footer;
+	private PullToRefreshListView itemLv;
 	private ImageButton backBtn;
 	private TextView feedTitleTv;
 	private ItemListAdapter mAdapter;
-	private ArrayList<FeedItem> items = new ArrayList<FeedItem>();
-	private Handler handler;
+	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
 	private Intent intent;
+	private String sectionTitle; 
+	private String sectionUrl;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		initView();
-		initHandler();
 		initData();
 	}
 
-	private void initHandler()
-	{
-		handler = new Handler()
-		{
-			@Override
-			public void handleMessage(Message msg)
-			{
-				switch(msg.what)
-				{
-				case 0:
-					itemList.onRefreshComplete();
-					Toast.makeText(ItemList.this, "暂无更新", Toast.LENGTH_SHORT).show();
-					break;
-				case 1:
-					footer.setVisibility(View.GONE);
-					break;
-				}
-			}
-		};
-	}
 
 	private void initView()
 	{
 		setContentView(R.layout.feed_item_list);
 		
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
-		ButtonMonitor btnMonitor = new ButtonMonitor();
-		backBtn.setOnClickListener(btnMonitor);
+		backBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				ItemList.this.finish();
+			}
+		});
 		
 		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
-		itemList = (PullToRefreshListView) findViewById(R.id.fil_lv_feed_item);
+		itemLv = (PullToRefreshListView) findViewById(R.id.fil_lv_feed_item);
 		mAdapter = new ItemListAdapter(this);
 		
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		footer = inflater.inflate(R.layout.list_footer, null);
-		itemList.addFooterView(footer);
-		itemList.setAdapter(mAdapter);
+		itemLv.setAdapter(mAdapter);
 		
-		itemList.setOnRefreshListener(new OnRefreshListener()
+		itemLv.setOnRefreshListener(new OnRefreshListener()
 		{
 			public void onRefresh()
 			{
-				new Thread()
-				{
-					@Override
-					public void run()
-					{
-						try
-						{
-							Thread.sleep(3000);
-						}
-						catch(InterruptedException e)
-						{
-							e.printStackTrace();
-						}
-						Message msg = handler.obtainMessage();
-						msg.what = 0;
-						handler.sendMessage(msg);
-					}
-				}.start();
+				new RefreshTask().execute(sectionUrl);
 			}
 		});
-		itemList.setOnItemClickListener(new OnItemClickListener()
+		itemLv.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				Intent intent = new Intent();
-				FeedItem item = items.get(position - 1);
+				FeedItem item = mItems.get(position - 1);
 				String title = item.getTitle();
 				String contentEncoded = item.getContentEncoded();
 				String pubdate = item.getPubdate();
@@ -134,86 +96,75 @@ public class ItemList extends Activity
 				}
 				else
 				{
-					intent.putExtra("item_detail", items.get(position - 1).getDescription());
+					intent.putExtra("item_detail", mItems.get(position - 1).getDescription());
 				}
 				intent.putExtra("title", title);
 				intent.putExtra("pubdate", pubdate);
-				
+				intent.putExtra("section_title", sectionTitle);
 				intent.setClass(ItemList.this, ItemDetail.class);
 				ItemList.this.startActivity(intent);
 			}
 			
-		});
-		itemList.setOnScrollListener(new OnScrollListener()
-		{
-			private int lastItemIndex;
-			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState)
-			{
-
-				if(scrollState == OnScrollListener.SCROLL_STATE_IDLE 
-							&& lastItemIndex == mAdapter.getCount())
-				{
-					footer.setVisibility(View.VISIBLE);
-					new Thread()
-					{
-						@Override
-						public void run()
-						{
-							try
-							{
-								sleep(3000);
-							}
-							catch(InterruptedException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							Message msg = handler.obtainMessage();
-							msg.what = 1;
-							handler.sendMessage(msg);
-						}
-					}.start();
-				}
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount)
-			{
-				lastItemIndex = firstVisibleItem + visibleItemCount - 1 - 1;
-			}
 		});
 	}
 
 	private void initData()
 	{
 		intent = getIntent();
-		String title = intent.getStringExtra("section_title") + "";
-		feedTitleTv.setText(title);
-		File file = FileUtils.getSectionCacheFile(
-							intent.getStringExtra("url"));
+		sectionTitle = intent.getStringExtra("section_title") + "";
+		sectionUrl = intent.getStringExtra("url");
+		feedTitleTv.setText(sectionTitle);
+		
+		File file = FileUtils.getSectionCacheFile(sectionUrl);
 		if(file.exists())
 		{
 			SerializationHelper seriaHelper = SerializationHelper.newInstance();
 			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper.readObject(file);
-			items = itemListEntity.getItemList();
-			mAdapter.updateData(items);
+			mItems = itemListEntity.getItemList();
+			mAdapter.updateData(mItems);
 		}
 	}
-
-	private class ButtonMonitor implements OnClickListener
+	
+	private class RefreshTask extends AsyncTask<String, Integer, ItemListEntity>
 	{
 		@Override
-		public void onClick(View v)
+		protected void onPostExecute(ItemListEntity result)
 		{
-			switch(v.getId())
+			ArrayList<FeedItem> newItems = null;
+			
+			if(result != null)
 			{
-			case R.id.fil_back_btn:
-				finish();
-				break;
+				File cache = FileUtils.UrlToFile(sectionUrl);
+				SerializationHelper helper = SerializationHelper.newInstance();
+				ArrayList<FeedItem> items = result.getItemList();
+				ItemListEntity old = (ItemListEntity) helper.readObject(cache);
+				String oldFirstDate = old.getFirstItem().getPubdate();
+				int newCount = 0;
+				for(FeedItem i : items)
+				{
+					if(i.getPubdate().equals(oldFirstDate))
+					{
+						Toast.makeText(ItemList.this, "暂无更新", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					newCount++;
+					newItems = new ArrayList<FeedItem>();
+					newItems.add(i);
+				}
+				//追加新对象
+				helper.saveObject(result, cache);
+				mAdapter.addItem(newItems);
+				Toast.makeText(ItemList.this, "更新了" + newCount + "条", 
+								Toast.LENGTH_SHORT).show();
+				itemLv.onRefreshComplete();
 			}
+		}
+
+		@Override
+		protected ItemListEntity doInBackground(String... params)
+		{
+			ItemListEntityParser parser = new ItemListEntityParser();
+			return parser.parse(params[0]);
 		}
 		
 	}

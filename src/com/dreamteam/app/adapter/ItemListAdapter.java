@@ -124,4 +124,10 @@ public class ItemListAdapter extends BaseAdapter
 		TextView ITEM_TITLE;
 		TextView ITEM_PUBDATE;
 	}
+
+	public void addItem(ArrayList<FeedItem> newItems)
+	{
+		items.addAll(newItems);
+		notifyDataSetChanged();
+	}
 }

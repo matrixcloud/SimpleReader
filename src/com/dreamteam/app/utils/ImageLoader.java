@@ -103,8 +103,7 @@ public class ImageLoader
 				{
 					InputStream is = HttpUtils.getInputStream(url);
 					Bitmap bmp = BitmapFactory.decodeStream(is);
-					Bitmap mBmp = ImageUtils.zoomBitmap(bmp, width, height);
-					cache.put(url, new SoftReference<Bitmap>(mBmp));
+					cache.put(url, new SoftReference<Bitmap>(bmp));
 					
 					Message msg = handler.obtainMessage();
 					msg.obj = bmp;

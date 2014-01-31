@@ -44,6 +44,7 @@ public class ItemDetail extends FragmentActivity
 	private ImageButton shareBtn;
 	private ImageButton commentBtn;
 	private TextView countTv;//评论列表
+	private TextView topTitleTv;
 	private static WebView mWebView;
 	
 	private SpeechSynthesizer tts;
@@ -93,7 +94,7 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onComplete(int status, List<UMComment> comments, SocializeEntity entity)
 			{
-				if(status == 200 && comments != null)
+				if(status == 200 && comments != null && !comments.isEmpty())
 				{
 					countTv.setText(comments.size() + "");
 				}
@@ -106,6 +107,7 @@ public class ItemDetail extends FragmentActivity
 	{
 		setContentView(R.layout.feed_item_detail);
 
+		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
 //		speechBtn = (ImageButton) findViewById(R.id.fid_btn_speech);
 //		speechBtn.setOnClickListener(new OnClickListener(){
 //			@Override
@@ -176,6 +178,10 @@ public class ItemDetail extends FragmentActivity
 	private void loadData()
 	{
 		Intent intent = getIntent();
+		String sectionTitle = intent.getStringExtra("section_title");
+		topTitleTv.setText(sectionTitle);
+		
+		
 		StringBuffer sb = new StringBuffer();
 		title = intent.getStringExtra("title");
 		pubdate = intent.getStringExtra("pubdate");

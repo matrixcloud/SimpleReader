@@ -138,6 +138,13 @@ public class FileUtils
 		return file;
 	}
 
+	public static File UrlToFile(String url)
+	{
+		String fileName = AppConfig.APP_SECTION_DIR + File.separator
+				+ MD5.Md5(url);
+		return new File(fileName);
+	}
+	
 	public static File createSectionCacheFile(String url)
 	{
 		String fileName = AppConfig.APP_SECTION_DIR + File.separator
