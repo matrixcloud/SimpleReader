@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.TimeUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -23,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -374,7 +374,7 @@ public class Main extends FragmentActivity
 				{
 					if(!AppContext.isNetworkAvailable(Main.this))
 					{
-						Toast.makeText(Main.this, "请检查网络设置", Toast.LENGTH_SHORT).show();
+						Toast.makeText(Main.this, R.string.no_network, Toast.LENGTH_SHORT).show();
 						return;
 					}
 					//异步加载数据
@@ -383,6 +383,20 @@ public class Main extends FragmentActivity
 				}
 			}
 		});
+		//长按删除操作
+		grid.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id)
+			{
+				
+				Toast.makeText(Main.this, "long_click" + position, Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
+		
+		
 		
 		ArrayList<Section> sections = null;
 		try

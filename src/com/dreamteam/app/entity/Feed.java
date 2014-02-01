@@ -31,13 +31,20 @@ public class Feed
 		this.url = url;
 	}
 	
-	public int getSelectStatus()
+	public boolean isSelected()
 	{
-		return selectStatus;
+		if(selectStatus == 1)
+			return true;
+		return false;
 	}
+	
 	public void setSelectStatus(int selectStatus)
 	{
 		this.selectStatus = selectStatus;
+	}
+	public int getSelectStatus()
+	{
+		return selectStatus;
 	}
 	
 }
