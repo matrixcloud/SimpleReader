@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 
 import com.dreamteam.app.adapter.GuideViewPagerAdapter;
 import com.dreamteam.app.commons.AppConfig;
-import com.dreamteam.app.db.FeedDBHelper;
+import com.dreamteam.app.db.FeedDBManager;
 import com.dreateam.app.ui.R;
 
 /**
@@ -85,7 +85,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener
 		try
 		{
 			inputStream = getAssets().open("feed.db");
-			FeedDBHelper helper = new FeedDBHelper(this, FeedDBHelper.DB_NAME, null, 1);
+			FeedDBManager helper = new FeedDBManager(this, FeedDBManager.DB_NAME, null, 1);
 			SQLiteDatabase db = helper.getWritableDatabase();
 			File dbFile = new File(db.getPath());
 			if(dbFile.exists())

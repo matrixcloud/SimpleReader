@@ -35,7 +35,7 @@ import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SerializationHelper;
-import com.dreamteam.app.db.DBHelper;
+import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.utils.FileUtils;
@@ -68,6 +68,7 @@ public class Main extends FragmentActivity
 	public static final int PAGE_SIZE_DECREASE = -1;
 	private Intent mIntent;
 	private boolean exit = false;//双击退出
+	private boolean isEdting = false;//是否编辑section中
 	
 	
 	@Override
@@ -144,7 +145,6 @@ public class Main extends FragmentActivity
 					}
 				}else if(action.equals(SwitchBg.SWITCH_HOME_BG))
 				{
-					Log.d(tag, "ok");
 					int resid = intent.getIntExtra("home_bg_id", R.drawable.home_bg_default);
 					bgLayout.setBackgroundResource(resid);
 				}
@@ -161,9 +161,9 @@ public class Main extends FragmentActivity
 	private Section getNewSection()
 	{
 		Section section = new Section();
-		DBHelper helper = new DBHelper(Main.this, DBHelper.DB_NAME, null, 1);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null,
+		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
+		SQLiteDatabase db = mgr.getWritableDatabase();
+		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, null, null, null,
 				null, null, null);
 		if (cursor.moveToLast())
 		{
@@ -362,7 +362,6 @@ public class Main extends FragmentActivity
 				mIntent.putExtra("url", url);
 				mIntent.setClass(Main.this, ItemList.class);
 				
-				
 				//读取缓存
 				File cache = FileUtils.getSectionCacheFile(url);
 				if(cache.exists())
@@ -383,20 +382,17 @@ public class Main extends FragmentActivity
 				}
 			}
 		});
-		//长按删除操作
+		//长按进入删除section状态
 		grid.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				
-				Toast.makeText(Main.this, "long_click" + position, Toast.LENGTH_SHORT).show();
+				inSectionEdit();
 				return false;
 			}
 		});
-		
-		
 		
 		ArrayList<Section> sections = null;
 		try
@@ -412,6 +408,38 @@ public class Main extends FragmentActivity
 		return grid;
 	}
 
+	private void inSectionEdit()
+	{
+		isEdting = true;
+		int isVisble = 1;
+		//section不可再点击
+		for(int i = 0; i < gridViews.size(); i++)
+		{
+			gridViews.get(i).setEnabled(false);
+		}
+		for(int i = 0; i < gridAdapters.size(); i++)
+		{
+			gridAdapters.get(i).changeDelBtnState(isVisble);
+		}
+		Toast.makeText(this, "按下返回键可退出编辑模式", Toast.LENGTH_SHORT).show();
+	}
+	
+	//退出编辑模式
+	private void outSectionEdit()
+	{
+		isEdting = false;
+		int isVisble = 0;
+		
+		for(int i = 0; i < gridViews.size(); i++)
+		{
+			gridViews.get(i).setEnabled(true);
+		}
+		for(int i = 0; i < gridAdapters.size(); i++)
+		{
+			gridAdapters.get(i).changeDelBtnState(isVisble);
+		}
+	}
+	
 	private ArrayList<Section> readSections(int page) throws Exception
 	{
 		ArrayList<Section> sections = null;
@@ -420,11 +448,13 @@ public class Main extends FragmentActivity
 		int end = 0;// 结尾
 		Log.i(tag, "page = " + page);
 		// 从数据库读数据
-		DBHelper helper = new DBHelper(this, DBHelper.DB_NAME, null, 1);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null,
-				null, null, null);
+		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
+		SQLiteDatabase db = mgr.getWritableDatabase();
+		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, 
+								null, null, null, null, null, null);
 		len = cursor.getCount();
+		db.close();
+		
 		start = page * Main.PAGE_SECTION_SIZE;
 		if (cursor.moveToPosition(start))
 		{
@@ -443,7 +473,6 @@ public class Main extends FragmentActivity
 				cursor.moveToNext();
 			}
 		}
-		db.close();
 		return sections;
 	}
 
@@ -489,15 +518,15 @@ public class Main extends FragmentActivity
 	private int getPageSize()
 	{
 		// 从数据库读数据
-		DBHelper helper = new DBHelper(this, DBHelper.DB_NAME, null, 1);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query(DBHelper.SECTION_TABLE_NAME, null, null, null,
-				null, null, null);
-
+		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
+		SQLiteDatabase db = mgr.getWritableDatabase();
+		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, 
+					null, null, null, null, null, null);
 		// pager分页
 		int pageSize = 0;
 		int sectionCount = cursor.getCount();
 		db.close();
+		
 		if (sectionCount % PAGE_SECTION_SIZE == 0)
 			pageSize = sectionCount / PAGE_SECTION_SIZE;
 		else
@@ -555,22 +584,23 @@ public class Main extends FragmentActivity
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if(exit)
+		if (!isEdting)
 		{
-			finish();
-			return true;
-		}
-		else
-		{
-			if(mIntent != null)
+			if (exit)
 			{
-				mIntent = null;
+				finish();
+				return true;
+			} else
+			{
+				Toast.makeText(Main.this, "再按下返回退出程序", Toast.LENGTH_SHORT)
+						.show();
+				exit = true;
 				return false;
 			}
-			Toast.makeText(Main.this, "再按下返回退出程序", Toast.LENGTH_SHORT).show();
-			exit = true;
-			return false;
 		}
+		//在编辑，取消编辑
+		outSectionEdit();
+		return false;
 	}
 	
 	private void checkDeprecated()

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.CategoryDetailAdapter;
 import com.dreamteam.app.commons.AppContext;
-import com.dreamteam.app.db.FeedDBHelper;
+import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Feed;
 import com.dreamteam.app.utils.CategoryNameExchange;
 import com.dreateam.app.ui.R;
@@ -58,7 +58,7 @@ public class CategoryDetail extends Activity
 		CategoryNameExchange exchange = new CategoryNameExchange(this);
 		titleTv.setText(exchange.en2zh(tableName) + "");
 		//读取数据库
-		FeedDBHelper helper = new FeedDBHelper(this, FeedDBHelper.DB_NAME, null, 1);
+		FeedDBManager helper = new FeedDBManager(this, FeedDBManager.DB_NAME, null, 1);
 		SQLiteDatabase db = helper.getWritableDatabase();
 		Cursor cursor = db.query(tableName, null, null, null, null, null, null);
 		if (cursor.moveToFirst())

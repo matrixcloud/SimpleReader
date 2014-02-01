@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dreamteam.app.db.DbManager;
+import com.dreamteam.app.db.SectionDbHelper;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
@@ -17,6 +21,9 @@ public class GridAdapter extends BaseAdapter
 {
 	private Context context;
 	private ArrayList<Section> sections;
+	//deleteButton是否可见
+	private int isVisible = 0;//deleteButton是否可见
+	private int[] visibleStates = {View.GONE,View.VISIBLE};
 	
 	
 	public GridAdapter(Context context, ArrayList<Section> sections)
@@ -45,7 +52,7 @@ public class GridAdapter extends BaseAdapter
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView, ViewGroup parent)
 	{
 		ViewHolder holder = null;
 		
@@ -55,23 +62,43 @@ public class GridAdapter extends BaseAdapter
 			convertView = inflater.inflate(R.layout.section_item, null);
 			holder = new ViewHolder();
 			holder.itemTitle = (TextView) convertView.findViewById(R.id.item_text);
+			holder.delteBtn = (ImageView) convertView.findViewById(R.id.item_btn_delte);
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		Section section = sections.get(position);
+		
+		
+		final Section section = sections.get(position);
 		if(section != null)
 		{
 			holder.itemTitle.setText(section.getTitle());
 		}
+		holder.delteBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				//删除当前section
+				sections.remove(position);
+				notifyDataSetChanged();
+				//移除数据库中的记录
+				DbManager mgr = new DbManager(context, DbManager.DB_NAME, null, 1);
+				SectionDbHelper.removeRecoder(mgr.getWritableDatabase(), section.getUrl());
+				//移除缓存
+				 
+			}
+		});
+		holder.delteBtn.setVisibility(visibleStates[isVisible]);
 		return convertView;
 	}
 	
 	private static final class ViewHolder
 	{
 		TextView itemTitle;
+		ImageView delteBtn;
 	}
 	
 	public void addItem(Section section)
@@ -95,17 +122,24 @@ public class GridAdapter extends BaseAdapter
 		return false;
 	}
 	
+	/**
+	 * @param 0:不可见
+	 */
+	public void changeDelBtnState(int isVisble)
+	{
+		this.isVisible = isVisble;
+		notifyDataSetChanged();
+	}
+	
 	public boolean isEmpty()
 	{
 		return sections.isEmpty();
 	}
 
-
 	public Section getLastItem()
 	{
 		return sections.get(sections.size() - 1);
 	}
-
 
 	public boolean isFull()
 	{

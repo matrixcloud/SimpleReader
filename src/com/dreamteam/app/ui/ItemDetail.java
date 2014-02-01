@@ -20,7 +20,8 @@ import android.widget.Toast;
 
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.HtmlFilter;
-import com.dreamteam.app.db.DBHelper;
+import com.dreamteam.app.db.DbManager;
+import com.dreamteam.app.db.FavoItemDbHelper;
 import com.dreamteam.app.utils.MD5;
 import com.dreateam.app.ui.R;
 import com.iflytek.speech.SpeechConstant;
@@ -153,22 +154,16 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
-				DBHelper helper = new DBHelper(ItemDetail.this, "reader.db", null, 1);
+				DbManager helper = new DbManager(ItemDetail.this, DbManager.DB_NAME, null, 1);
 				SQLiteDatabase db = helper.getWritableDatabase();
-				ContentValues values = new ContentValues();
-				values.put("title", title);
-				values.put("pubdate", pubdate);
-				values.put("item_detail", itemDetail);
-				db.insert("favorite_item", null, values);
-				db.close();
-				Toast.makeText(ItemDetail.this, "�ղسɹ�!", Toast.LENGTH_SHORT).show();
+				FavoItemDbHelper.insert(db, title, pubdate, itemDetail);
+				Toast.makeText(ItemDetail.this, "添加成功", Toast.LENGTH_SHORT).show();
 			}
 		});
 
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
 		
 		mWebView = (WebView) findViewById(R.id.my_web_view);
-//		mWebView.getSettings().setSupportZoom(true);
 		mWebView.getSettings().setBuiltInZoomControls(true);
 		mWebView.getSettings().setDisplayZoomControls(false);
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);

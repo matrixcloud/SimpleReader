@@ -11,15 +11,14 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.view.ViewGroup;
-import android.webkit.CacheManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
-@SuppressWarnings("deprecation")
 public class Setting extends PreferenceActivity
 {
 	private SharedPreferences mPreferences;
@@ -73,9 +72,11 @@ public class Setting extends PreferenceActivity
 		// 计算缓存大小
 		long fileSize = 0;
 		String cacheSize = "0KB";
-		File cacheFile = getCacheDir();
+		File cacheDir = getCacheDir();
+		File sdCacheDir = new File(AppConfig.APP_CACHE_DIR);
 		
-		fileSize = FileUtils.getDirSize(cacheFile);
+		fileSize += FileUtils.getDirSize(cacheDir);
+		fileSize += FileUtils.getDirSize(sdCacheDir);
 		if(fileSize > 0)
 			cacheSize = FileUtils.formatFileSize(fileSize);
 		
@@ -98,7 +99,7 @@ public class Setting extends PreferenceActivity
 					@Override
 					protected Integer doInBackground(Integer... params)
 					{
-						new AppContext().clearWebViewCache();
+						new AppContext().clearCache();
 						return 0;
 					}
 				};

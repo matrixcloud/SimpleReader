@@ -2,6 +2,8 @@ package com.dreamteam.app.commons;
 
 import java.io.File;
 
+import com.dreamteam.app.utils.FileUtils;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -33,6 +35,15 @@ public class AppContext extends Application
 	public static SharedPreferences getPrefrences(Context context)
 	{
 		return PreferenceManager.getDefaultSharedPreferences(context);
+	}
+	
+	//清楚缓存
+	public void clearCache()
+	{
+		//sd
+		File sdCache = new File(AppConfig.APP_CACHE_DIR);
+		FileUtils.clearCache(sdCache);
+		clearWebViewCache();
 	}
 	
 	//清除webview缓存
