@@ -612,11 +612,7 @@ public class Main extends FragmentActivity
 		Log.d(tag, "day = " + day);
 		if(day >= 7)
 		{
-			//删除sd
-			File sdCache = new File(AppConfig.APP_CACHE_DIR);
-			FileUtils.clearCache(sdCache);
-			//删除webview缓存
-			new AppContext().clearWebViewCache();
+			AppContext.clearCache(this);
 			file.setLastModified(System.currentTimeMillis());
 		}
 	}

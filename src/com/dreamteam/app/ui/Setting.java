@@ -10,6 +10,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -73,10 +74,11 @@ public class Setting extends PreferenceActivity
 		long fileSize = 0;
 		String cacheSize = "0KB";
 		File cacheDir = getCacheDir();
-		File sdCacheDir = new File(AppConfig.APP_CACHE_DIR);
-		
+		File imageCacheDir = new File(AppConfig.APP_IMAGE_CACHE_DIR);
+		File sectionCacheDir = new File(AppConfig.APP_SECTION_DIR);
 		fileSize += FileUtils.getDirSize(cacheDir);
-		fileSize += FileUtils.getDirSize(sdCacheDir);
+		fileSize += FileUtils.getDirSize(imageCacheDir);
+		fileSize += FileUtils.getDirSize(sectionCacheDir);
 		if(fileSize > 0)
 			cacheSize = FileUtils.formatFileSize(fileSize);
 		
@@ -99,10 +101,10 @@ public class Setting extends PreferenceActivity
 					@Override
 					protected Integer doInBackground(Integer... params)
 					{
-						new AppContext().clearCache();
+						AppContext.clearCache(Setting.this);
 						return 0;
 					}
-				};
+				}.execute(0);
 				return false;
 			}
 		});

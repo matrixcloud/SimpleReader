@@ -9,12 +9,11 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.ImageView;
 
 
@@ -76,6 +75,7 @@ public class ImageLoader
 		}
 	}
 	
+	@SuppressLint("HandlerLeak")
 	private void loadNetImage(final String url, final ImageView imageView, final int width, final int height)
 	{
 		final Handler handler = new Handler()

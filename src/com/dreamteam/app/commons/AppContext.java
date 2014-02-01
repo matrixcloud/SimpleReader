@@ -2,9 +2,6 @@ package com.dreamteam.app.commons;
 
 import java.io.File;
 
-import com.dreamteam.app.utils.FileUtils;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -12,13 +9,15 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.webkit.CacheManager;
 
+import com.dreamteam.app.utils.FileUtils;
+
 /**
  * @description TODO
  * @author zcloud
  * @date Dec 8, 2013
  */
 @SuppressWarnings("deprecation")
-public class AppContext extends Application
+public class AppContext
 {
 	
 	public static boolean isNetworkAvailable(Context context)
@@ -38,16 +37,16 @@ public class AppContext extends Application
 	}
 	
 	//清楚缓存
-	public void clearCache()
+	public static void clearCache(Context context)
 	{
 		//sd
-		File sdCache = new File(AppConfig.APP_CACHE_DIR);
-		FileUtils.clearCache(sdCache);
-		clearWebViewCache();
+		FileUtils.deleteDirectory(AppConfig.APP_SECTION_DIR);
+		FileUtils.deleteDirectory(AppConfig.APP_IMAGE_CACHE_DIR);
+		clearWebViewCache(context);
 	}
 	
 	//清除webview缓存
-	public void clearWebViewCache()
+	public static void clearWebViewCache(Context context)
 	{
 		File file = CacheManager.getCacheFileBaseDir();  
 		if (file != null && file.exists() && file.isDirectory()) {  
@@ -55,12 +54,12 @@ public class AppContext extends Application
 		    	item.delete();  
 		    }  
 		    file.delete();  
-		}  		  
-		deleteDatabase("webview.db");  
-		deleteDatabase("webview.db-shm");  
-		deleteDatabase("webview.db-wal");  
-		deleteDatabase("webviewCache.db");  
-		deleteDatabase("webviewCache.db-shm");  
-		deleteDatabase("webviewCache.db-wal");  
+		}
+		context.deleteDatabase("webview.db");  
+		context.deleteDatabase("webview.db-shm");  
+		context.deleteDatabase("webview.db-wal");  
+		context.deleteDatabase("webviewCache.db");  
+		context.deleteDatabase("webviewCache.db-shm");  
+		context.deleteDatabase("webviewCache.db-wal");  
 	}	
 }

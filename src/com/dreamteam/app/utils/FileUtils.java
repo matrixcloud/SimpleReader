@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.dreamteam.app.commons.AppConfig;
 
@@ -120,11 +121,6 @@ public class FileUtils
 		return MD5.Md5(url);
 	}
 
-	public static boolean clearCache(File file)
-	{
-		return file.delete();
-	}
-
 	/**
 	 * @description TODO
 	 * @param url
@@ -144,7 +140,7 @@ public class FileUtils
 				+ MD5.Md5(url);
 		return new File(fileName);
 	}
-	
+
 	public static File createSectionCacheFile(String url)
 	{
 		String fileName = AppConfig.APP_SECTION_DIR + File.separator
@@ -234,4 +230,46 @@ public class FileUtils
 		return fileSizeString;
 	}
 
+	/**
+	 * 删除目录(包括：目录里的所有文件)
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static boolean deleteDirectory(String fileName)
+	{
+		boolean status;
+		SecurityManager checker = new SecurityManager();
+
+		if (!fileName.equals(""))
+		{
+
+			File path = Environment.getExternalStorageDirectory();
+			File newPath = new File(path.toString() + fileName);
+			checker.checkDelete(newPath.toString());
+			if (newPath.isDirectory())
+			{
+				String[] listfile = newPath.list();
+				try
+				{
+					for (int i = 0; i < listfile.length; i++)
+					{
+						File deletedFile = new File(newPath.toString() + "/"
+								+ listfile[i].toString());
+						deletedFile.delete();
+					}
+					newPath.delete();
+					status = true;
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+					status = false;
+				}
+
+			} else
+				status = false;
+		} else
+			status = false;
+		return status;
+	}
 }

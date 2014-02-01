@@ -10,6 +10,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content">
 		<ImageButton
+		    android:layout_alignParentLeft="true"
 		    android:id="@+id/fil_back_btn"
 		    style="@style/img_btn_style"
 		    android:src="@drawable/btn_back" 
@@ -22,6 +23,12 @@
 		    android:textSize="20sp"
 		    android:textColor="@color/white"
 		    android:text="@string/app_name" />
+		<ImageButton
+		    android:layout_alignParentRight="true"
+		    android:id="@+id/fil_play_btn"
+		    style="@style/img_btn_style"
+		    android:src="@drawable/btn_play" 
+			/>
 	</RelativeLayout>
 	<com.dreamteam.custom.ui.PullToRefreshListView
 	    android:id="@+id/fil_lv_feed_item"

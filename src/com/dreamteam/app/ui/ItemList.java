@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -25,6 +26,9 @@ import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.custom.ui.PullToRefreshListView;
 import com.dreamteam.custom.ui.PullToRefreshListView.OnRefreshListener;
 import com.dreateam.app.ui.R;
+import com.iflytek.speech.SpeechConstant;
+import com.iflytek.speech.SpeechSynthesizer;
+import com.iflytek.speech.SynthesizerListener;
 
 /**
  * @description TODO
@@ -37,11 +41,14 @@ public class ItemList extends Activity
 	
 	private PullToRefreshListView itemLv;
 	private ImageButton backBtn;
+	private ImageButton playBtn;
 	private TextView feedTitleTv;
 	private ItemListAdapter mAdapter;
 	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
 	private String sectionTitle; 
 	private String sectionUrl;
+	private SpeechSynthesizer tts;
+	private SynthesizerListener mTtsListener;
 	
 	
 	@Override
@@ -50,13 +57,70 @@ public class ItemList extends Activity
 		super.onCreate(savedInstanceState);
 		initView();
 		initData();
+		initTts();
 	}
 
-
+	private void initTts()
+	{
+		tts = new SpeechSynthesizer(this, null);
+		tts.setParameter(SpeechConstant.ENGINE_TYPE, "local");
+		tts.setParameter(SpeechSynthesizer.SPEED, "50");
+		tts.setParameter(SpeechSynthesizer.PITCH, "50");
+		
+		mTtsListener = new SynthesizerListener.Stub()
+		{
+			
+			@Override
+			public void onSpeakResumed() throws RemoteException
+			{
+				
+			}
+			
+			@Override
+			public void onSpeakProgress(int arg0) throws RemoteException
+			{
+				
+			}
+			
+			@Override
+			public void onSpeakPaused() throws RemoteException
+			{
+				
+			}
+			
+			@Override
+			public void onSpeakBegin() throws RemoteException
+			{
+				
+			}
+			
+			@Override
+			public void onCompleted(int arg0) throws RemoteException
+			{
+				
+			}
+			
+			@Override
+			public void onBufferProgress(int arg0) throws RemoteException
+			{
+				
+			}
+		};
+	}
+	
 	private void initView()
 	{
 		setContentView(R.layout.feed_item_list);
 		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
+		playBtn = (ImageButton) findViewById(R.id.fil_play_btn);
+		playBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Toast.makeText(ItemList.this, "语音播放功能即将实现，请期待", Toast.LENGTH_SHORT).show();
+			}
+		});
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
 		backBtn.setOnClickListener(new OnClickListener()
 		{
