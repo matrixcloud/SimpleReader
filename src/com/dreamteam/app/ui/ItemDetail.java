@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FavoItemDbHelper;
@@ -64,9 +65,8 @@ public class ItemDetail extends FragmentActivity
 
 	private void initComments()
 	{
-		String key = MD5.Md5(title);
-
-		mController = UMServiceFactory.getUMSocialService("com.umeng.share" + key,
+		String key = MD5.Md5(title + pubdate);
+		mController = UMServiceFactory.getUMSocialService(AppConfig.UM_BASE_KEY + key,
 					RequestType.SOCIAL);
 		mController.getComments(this, new FetchCommetsListener()
 		{
@@ -74,7 +74,6 @@ public class ItemDetail extends FragmentActivity
 			public void onStart()
 			{
 			}
-			
 			@Override
 			public void onComplete(int status, List<UMComment> comments, SocializeEntity entity)
 			{
@@ -113,10 +112,11 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
+				//判断是否已收藏
 				DbManager helper = new DbManager(ItemDetail.this, DbManager.DB_NAME, null, 1);
 				SQLiteDatabase db = helper.getWritableDatabase();
 				FavoItemDbHelper.insert(db, title, pubdate, itemDetail);
-				Toast.makeText(ItemDetail.this, "添加成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ItemDetail.this, "添加成功!", Toast.LENGTH_SHORT).show();
 			}
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
@@ -132,7 +132,6 @@ public class ItemDetail extends FragmentActivity
 		Intent intent = getIntent();
 		String sectionTitle = intent.getStringExtra("section_title");
 		topTitleTv.setText(sectionTitle);
-		
 		
 		StringBuffer sb = new StringBuffer();
 		title = intent.getStringExtra("title");
@@ -153,8 +152,6 @@ public class ItemDetail extends FragmentActivity
 		}
 		sb.append("<h1>" + title + "</h1>"
 				  + "<p>" + pubdate + "</p>");
-		
-
 		sb.append("<body>" + itemDetail + "<body>");
 		mWebView.loadDataWithBaseURL(null, WEB_STYLE + sb.toString(), "text/html", "UTF-8", null);
 	}

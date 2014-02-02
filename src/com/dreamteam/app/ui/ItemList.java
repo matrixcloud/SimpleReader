@@ -1,13 +1,17 @@
 package com.dreamteam.app.ui; 
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -18,8 +22,9 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.ItemListAdapter;
 import com.dreamteam.app.commons.AppContext;
+import com.dreamteam.app.commons.HtmlFilter;
 import com.dreamteam.app.commons.ItemListEntityParser;
-import com.dreamteam.app.commons.SerializationHelper;
+import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.utils.FileUtils;
@@ -37,6 +42,7 @@ import com.iflytek.speech.SynthesizerListener;
  */
 public class ItemList extends Activity
 {
+
 	public static final String tag = "ItemList";
 	
 	private PullToRefreshListView itemLv;
@@ -45,10 +51,15 @@ public class ItemList extends Activity
 	private TextView feedTitleTv;
 	private ItemListAdapter mAdapter;
 	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
+	private ArrayList<String> speechTextList = new ArrayList<String>();
 	private String sectionTitle; 
 	private String sectionUrl;
 	private SpeechSynthesizer tts;
 	private SynthesizerListener mTtsListener;
+	//开始词
+	private static final String START_WORDS = "欢迎收听";
+	private static int speechCount = 0;
+	private boolean existSpeech = false;//退出tts
 	
 	
 	@Override
@@ -66,44 +77,42 @@ public class ItemList extends Activity
 		tts.setParameter(SpeechConstant.ENGINE_TYPE, "local");
 		tts.setParameter(SpeechSynthesizer.SPEED, "50");
 		tts.setParameter(SpeechSynthesizer.PITCH, "50");
-		
 		mTtsListener = new SynthesizerListener.Stub()
 		{
-			
 			@Override
 			public void onSpeakResumed() throws RemoteException
 			{
-				
 			}
 			
 			@Override
 			public void onSpeakProgress(int arg0) throws RemoteException
 			{
-				
 			}
 			
 			@Override
 			public void onSpeakPaused() throws RemoteException
 			{
-				
 			}
 			
 			@Override
 			public void onSpeakBegin() throws RemoteException
 			{
-				
+				Log.d(tag, "------------->>onSpeakBegin");
 			}
 			
 			@Override
 			public void onCompleted(int arg0) throws RemoteException
 			{
-				
+				Log.d(tag, "--------->>onCompleted()");
+				speechCount ++;
+				if(speechCount > speechTextList.size())
+					return;
+				tts.startSpeaking(speechTextList.get(speechCount), mTtsListener);
 			}
 			
 			@Override
 			public void onBufferProgress(int arg0) throws RemoteException
 			{
-				
 			}
 		};
 	}
@@ -118,7 +127,15 @@ public class ItemList extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				Toast.makeText(ItemList.this, "语音播放功能即将实现，请期待", Toast.LENGTH_SHORT).show();
+				if(existSpeech)
+				{
+					tts.stopSpeaking(mTtsListener);
+					existSpeech = false;
+					return;
+				}
+				startSpeech();
+				existSpeech = true;
+				Toast.makeText(ItemList.this, "再次按下该按钮可退出播放", Toast.LENGTH_SHORT).show();
 			}
 		});
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
@@ -182,13 +199,19 @@ public class ItemList extends Activity
 		File file = FileUtils.getSectionCacheFile(sectionUrl);
 		if(file.exists())
 		{
-			SerializationHelper seriaHelper = SerializationHelper.newInstance();
+			SeriaHelper seriaHelper = SeriaHelper.newInstance();
 			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper.readObject(file);
 			mItems = itemListEntity.getItemList();
 			if(mItems != null)
 			{
 				mAdapter = new ItemListAdapter(this, mItems);
 				itemLv.setAdapter(mAdapter);
+				for(int i = 0, n = mItems.size(); i < n; i++)
+				{
+					FeedItem item = mItems.get(i);
+					String input = item.getTitle() + item.getPubdate() + item.getDescription();
+					speechTextList.add(HtmlFilter.filterHtml(input));
+				}
 			}
 		}
 	}
@@ -206,7 +229,7 @@ public class ItemList extends Activity
 			}
 			ArrayList<FeedItem> newItems = new ArrayList<FeedItem>();
 			File cache = FileUtils.UrlToFile(sectionUrl);
-			SerializationHelper helper = SerializationHelper.newInstance();
+			SeriaHelper helper = SeriaHelper.newInstance();
 			ArrayList<FeedItem> items = result.getItemList();
 			ItemListEntity old = (ItemListEntity) helper.readObject(cache);
 			String oldFirstDate = old.getFirstItem().getPubdate();
@@ -235,6 +258,21 @@ public class ItemList extends Activity
 			ItemListEntityParser parser = new ItemListEntityParser();
 			return parser.parse(params[0]);
 		}
-		
+	}
+	
+	private void startSpeech()
+	{
+		DateFormat df = SimpleDateFormat.getTimeInstance();
+		String time = df.format(new Date());
+		String timeTip = "现在是：" + time;
+		tts.startSpeaking(START_WORDS + sectionTitle + "频道" + timeTip + speechTextList.get(0), mTtsListener);
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		tts.stopSpeaking(mTtsListener);
+		tts.destory();
+		super.onDestroy();
 	}
 }

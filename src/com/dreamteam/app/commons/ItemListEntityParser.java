@@ -28,15 +28,13 @@ import android.util.Log;
 public class ItemListEntityParser extends DefaultHandler
 {
 	private String tag = "ItemListEntityParser";
-	
 	private ItemListEntity itemListEntity;
 	private FeedItem feedItem;
 	private ArrayList<FeedItem> items = new ArrayList<FeedItem>();
-	
 	private StringBuffer sb = new StringBuffer();
-	
 	private boolean isFeedTitle = true;
 	private boolean isFeedDesc = true;
+	private boolean isFeedLink = true;
 	
 	
 	@Override
@@ -64,6 +62,7 @@ public class ItemListEntityParser extends DefaultHandler
 			items.add(feedItem);
 			isFeedTitle = false;
 			isFeedDesc = false;
+			isFeedLink = false;
 		}
 	}
 	
@@ -73,6 +72,10 @@ public class ItemListEntityParser extends DefaultHandler
 	{
 		String content = sb.toString();
 		
+		if(!isFeedLink && qName.equalsIgnoreCase("link"))
+		{
+			feedItem.setLink(content);
+		}
 		if(!isFeedTitle && qName.equalsIgnoreCase("title"))
 		{
 			feedItem.setTitle(content);

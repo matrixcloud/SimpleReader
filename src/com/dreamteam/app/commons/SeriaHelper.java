@@ -18,11 +18,11 @@ import com.dreamteam.app.entity.ItemListEntity;
  * @author zcloud
  * @date 2013/11/15
  */
-public class SerializationHelper
+public class SeriaHelper
 {
-	private static SerializationHelper helper;
+	private static SeriaHelper helper;
 	
-	private SerializationHelper(){}
+	private SeriaHelper(){}
 	
 	public Serializable readObject(File file)
 	{
@@ -147,11 +147,11 @@ public class SerializationHelper
 		}
 	}
 	
-	public static SerializationHelper newInstance()
+	public static SeriaHelper newInstance()
 	{
 		if(helper == null)
 		{
-			helper = new SerializationHelper();
+			helper = new SeriaHelper();
 		}
 		return helper;
 	}

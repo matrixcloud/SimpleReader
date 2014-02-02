@@ -34,7 +34,7 @@ import com.dreamteam.app.adapter.MPagerAdapter;
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
-import com.dreamteam.app.commons.SerializationHelper;
+import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
@@ -572,7 +572,7 @@ public class Main extends FragmentActivity
 			ItemListEntity entity = parser.parse(params[0]);
 			if(entity != null)
 			{
-				SerializationHelper helper = SerializationHelper.newInstance();
+				SeriaHelper helper = SeriaHelper.newInstance();
 				File file = FileUtils.createSectionCacheFile(params[0]);
 				helper.saveObject(entity, file);
 			}
