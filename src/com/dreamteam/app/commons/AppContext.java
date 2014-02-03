@@ -40,10 +40,14 @@ public class AppContext
 	//清楚缓存
 	public static void clearCache(Context context)
 	{
-		//sd
+		clearSdCache();
+		clearWebViewCache(context);
+	}
+	
+	public static void clearSdCache()
+	{
 		FileUtils.deleteDirectory(AppConfig.APP_SECTION_DIR);
 		FileUtils.deleteDirectory(AppConfig.APP_IMAGE_CACHE_DIR);
-		clearWebViewCache(context);
 	}
 	
 	//清除webview缓存

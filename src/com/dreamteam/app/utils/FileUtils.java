@@ -147,16 +147,14 @@ public class FileUtils
 	 * @param fileName
 	 * @return
 	 */
-	public static boolean deleteDirectory(String fileName)
+	public static boolean deleteDirectory(String dirName)
 	{
 		boolean status;
 		SecurityManager checker = new SecurityManager();
 
-		if (!fileName.equals(""))
+		if (!dirName.equals(""))
 		{
-
-			File path = Environment.getExternalStorageDirectory();
-			File newPath = new File(path.toString() + fileName);
+			File newPath = new File(dirName);
 			checker.checkDelete(newPath.toString());
 			if (newPath.isDirectory())
 			{
@@ -165,7 +163,7 @@ public class FileUtils
 				{
 					for (int i = 0; i < listfile.length; i++)
 					{
-						File deletedFile = new File(newPath.toString() + "/"
+						File deletedFile = new File(newPath.toString() + File.separator
 								+ listfile[i].toString());
 						deletedFile.delete();
 					}

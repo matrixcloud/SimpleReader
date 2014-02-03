@@ -53,6 +53,4 @@ public class HttpUtils
 			conn.disconnect();
 		}
 	}
-	
-	
 }

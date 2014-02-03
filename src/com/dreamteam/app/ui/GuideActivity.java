@@ -20,7 +20,9 @@ import android.widget.LinearLayout;
 
 import com.dreamteam.app.adapter.GuideViewPagerAdapter;
 import com.dreamteam.app.commons.AppConfig;
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.db.FeedDBManager;
+import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
 /**
@@ -63,6 +65,8 @@ public class GuideActivity extends Activity implements OnPageChangeListener
 		writeDB();
 		//写入计算缓存天数的文件
 		writeSaveDaysFile();
+		//删除之前的缓存文件
+		AppContext.clearSdCache();
 	}
 
 	private void writeSaveDaysFile()
