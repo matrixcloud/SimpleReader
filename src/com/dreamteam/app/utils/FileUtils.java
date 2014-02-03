@@ -6,14 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.os.Environment;
-import android.util.Log;
-
-import com.dreamteam.app.commons.AppConfig;
 
 /**
  * @author: zcloud
  * 
- * @description: sd操作
  * 
  * @date: 2013/10/9
  * 
@@ -34,37 +30,14 @@ public class FileUtils
 		}
 	}
 
-	public static void createDir(String path, String dirName)
-	{
-		File file = new File(path + dirName);
-		file.mkdirs();
-	}
-
-	public static void createFile(String path, String fileName)
-	{
-		File file = new File(path + fileName);
-		try
-		{
-			file.createNewFile();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public static boolean isFileExists(String path, String fileName)
-	{
-		File file = new File(path + fileName);
-		return file.exists();
-	}
-
 	/**
+	 * @description 将二进制流写入文件
 	 * @param in
 	 * @param path
 	 * @param fileName
 	 * @return boolean
 	 */
-	public static boolean writeToFile(InputStream in, String path,
+	public static boolean saveToFile(InputStream in, String path,
 			String fileName)
 	{
 		FileOutputStream out = null;
@@ -108,68 +81,6 @@ public class FileUtils
 				}
 			}
 		}
-	}
-
-	public static boolean deleteFile(String path, String fileName)
-	{
-		File file = new File(path + fileName);
-		return file.delete();
-	}
-
-	public static String urlToPath(String url)
-	{
-		return MD5.Md5(url);
-	}
-
-	/**
-	 * @description TODO
-	 * @param url
-	 * @return File
-	 */
-	public static File getSectionCacheFile(String url)
-	{
-		String fileName = AppConfig.APP_SECTION_DIR + File.separator
-				+ MD5.Md5(url);
-		File file = new File(fileName);
-		return file;
-	}
-
-	public static File UrlToFile(String url)
-	{
-		String fileName = AppConfig.APP_SECTION_DIR + File.separator
-				+ MD5.Md5(url);
-		return new File(fileName);
-	}
-
-	public static File createSectionCacheFile(String url)
-	{
-		String fileName = AppConfig.APP_SECTION_DIR + File.separator
-				+ MD5.Md5(url);
-		File file = new File(fileName);
-
-		file.delete();
-		new File(file.getParent()).mkdirs();
-		try
-		{
-			file.createNewFile();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return file;
-	}
-
-	/**
-	 * @description TODO
-	 * @param url
-	 * @return File
-	 */
-	public static File getImageSDFile(String url)
-	{
-		String fileName = AppConfig.APP_IMAGE_CACHE_DIR + File.separator
-				+ MD5.Md5(url);
-		File file = new File(fileName);
-		return file;
 	}
 
 	/**

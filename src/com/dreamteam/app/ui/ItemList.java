@@ -24,10 +24,10 @@ import com.dreamteam.app.adapter.ItemListAdapter;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.HtmlFilter;
 import com.dreamteam.app.commons.ItemListEntityParser;
+import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
-import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.custom.ui.PullToRefreshListView;
 import com.dreamteam.custom.ui.PullToRefreshListView.OnRefreshListener;
 import com.dreateam.app.ui.R;
@@ -179,13 +179,12 @@ public class ItemList extends Activity
 						public void run()
 						{
 							SeriaHelper helper = SeriaHelper.newInstance();
-							File cache = FileUtils.UrlToFile(sectionUrl);
+							File cache = SectionHelper.getSdCache(sectionUrl);
 							ItemListEntity entity = new ItemListEntity();
 							for (FeedItem i : mItems)
 							{
 								if (i.getLink().equals(link))
 								{
-									Log.d(tag, "here is link equals");
 									i.setReaded(true);
 								}
 							}
@@ -224,7 +223,7 @@ public class ItemList extends Activity
 		sectionUrl = intent.getStringExtra("url");
 		feedTitleTv.setText(sectionTitle);
 		
-		File file = FileUtils.getSectionCacheFile(sectionUrl);
+		File file = SectionHelper.getSdCache(sectionUrl);
 		if(file.exists())
 		{
 			seriaHelper = SeriaHelper.newInstance();
@@ -256,7 +255,7 @@ public class ItemList extends Activity
 				return;
 			}
 			ArrayList<FeedItem> newItems = new ArrayList<FeedItem>();
-			File cache = FileUtils.UrlToFile(sectionUrl);
+			File cache = SectionHelper.getSdCache(sectionUrl);
 			SeriaHelper helper = SeriaHelper.newInstance();
 			ArrayList<FeedItem> items = result.getItemList();
 			ItemListEntity old = (ItemListEntity) helper.readObject(cache);

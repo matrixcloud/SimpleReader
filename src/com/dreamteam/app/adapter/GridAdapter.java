@@ -11,8 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
-import com.dreamteam.app.db.SectionDbHelper;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
@@ -86,7 +86,7 @@ public class GridAdapter extends BaseAdapter
 				notifyDataSetChanged();
 				//移除数据库中的记录
 				DbManager mgr = new DbManager(context, DbManager.DB_NAME, null, 1);
-				SectionDbHelper.removeRecoder(mgr.getWritableDatabase(), section.getUrl());
+				SectionHelper.removeRecoder(mgr.getWritableDatabase(), section.getUrl());
 				//移除缓存
 				 
 			}

@@ -10,7 +10,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;

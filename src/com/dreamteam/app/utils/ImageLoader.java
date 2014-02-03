@@ -9,12 +9,15 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
+
+import com.dreamteam.app.commons.AppContext;
 
 
 /**
@@ -25,7 +28,6 @@ import android.widget.ImageView;
 public class ImageLoader
 {
 	public static final String tag = "ImageLoader";
-	
 	private static HashMap<String, SoftReference<Bitmap>> cache;
 	private static Map<ImageView, String> imageViews;
 	private static ExecutorService pool;
@@ -60,7 +62,7 @@ public class ImageLoader
 		}
 		else
 		{
-			File file = FileUtils.getImageSDFile(url);
+			File file = AppContext.getSdImgCache(url);
 			if(file.exists())
 			{
 				bmp = BitmapFactory.decodeFile(file.getAbsolutePath());

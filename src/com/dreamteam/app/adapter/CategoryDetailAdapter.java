@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
-import com.dreamteam.app.db.SectionDbHelper;
 import com.dreamteam.app.entity.Feed;
 import com.dreamteam.app.ui.Main;
 import com.dreateam.app.ui.R;
@@ -111,7 +111,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 					intent.setAction(Main.DELETE_SECTION);
 					context.sendBroadcast(intent);
 					//删除section表中记录的数据
-					SectionDbHelper.removeRecoder(mgr.getWritableDatabase(), url);
+					SectionHelper.removeRecoder(mgr.getWritableDatabase(), url);
 					//更新feed.db中所对应表的状态为0
 					new FeedDBManager(context, FeedDBManager.DB_NAME, null, 1)
 								.updateState(tableName, state, url);
@@ -125,7 +125,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 				intent.setAction(Main.ADD_SECTION);
 				context.sendBroadcast(intent);
 				//加入section表
-				SectionDbHelper.insert(mgr.getWritableDatabase(), tableName, title, url);
+				SectionHelper.insert(mgr.getWritableDatabase(), tableName, title, url);
 				//更新feed.db中所对应表的状态为1
 				FeedDBManager feedHelper = new FeedDBManager(context, FeedDBManager.DB_NAME, null, 1);
 				feedHelper.updateState(tableName,state, url);

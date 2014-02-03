@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.webkit.CacheManager;
 
 import com.dreamteam.app.utils.FileUtils;
+import com.dreamteam.app.utils.MD5;
 
 /**
  * @description TODO
@@ -62,4 +63,10 @@ public class AppContext
 		context.deleteDatabase("webviewCache.db-shm");  
 		context.deleteDatabase("webviewCache.db-wal");  
 	}	
+	
+	public static File getSdImgCache(String url)
+	{
+		return new File(AppConfig.APP_IMAGE_CACHE_DIR
+				+ File.separator + MD5.Md5(url));
+	}
 }

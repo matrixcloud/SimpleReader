@@ -34,11 +34,11 @@ import com.dreamteam.app.adapter.MPagerAdapter;
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
+import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
-import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.app.utils.ImageUtils;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
@@ -363,7 +363,7 @@ public class Main extends FragmentActivity
 				mIntent.setClass(Main.this, ItemList.class);
 				
 				//读取缓存
-				File cache = FileUtils.getSectionCacheFile(url);
+				File cache = SectionHelper.getSdCache(url);
 				if(cache.exists())
 				{
 					
@@ -573,8 +573,8 @@ public class Main extends FragmentActivity
 			if(entity != null)
 			{
 				SeriaHelper helper = SeriaHelper.newInstance();
-				File file = FileUtils.createSectionCacheFile(params[0]);
-				helper.saveObject(entity, file);
+				File cache = SectionHelper.newSdCache(params[0]);
+				helper.saveObject(entity, cache);
 			}
 			return entity;
 		}

@@ -41,7 +41,7 @@ public class ImageUtils
 	
 	public static void saveImageToSD(InputStream is, String path, String fileName)
 	{
-		FileUtils.writeToFile(is, path, fileName);
+		FileUtils.saveToFile(is, path, fileName);
 	}
 	
 	public static void saveImageToSD(Bitmap bmp, String url)
@@ -73,10 +73,4 @@ public class ImageUtils
 	        final float scale = context.getResources().getDisplayMetrics().density;  
 	        return (int) (pxValue / scale + 0.5f);  
 	 }
-
-
-	public static Bitmap getNetImage()
-	{
-		return null;
-	}  
 }

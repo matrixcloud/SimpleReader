@@ -31,7 +31,6 @@ import com.dreateam.app.ui.R;
 public class ItemListAdapter extends BaseAdapter
 {
 	public static final String tag = "ItemListAdapter";
-	private Context context;
 	private LayoutInflater inflater;
 	private ArrayList<FeedItem> items;
 	private ArrayList<String> imageUrls = new ArrayList<String>();
@@ -41,7 +40,6 @@ public class ItemListAdapter extends BaseAdapter
 	
 	public ItemListAdapter(Context context, ArrayList<FeedItem> items)
 	{
-		this.context = context;
 		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		Bitmap defBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.loading_default);
