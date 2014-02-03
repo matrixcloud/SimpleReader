@@ -6,6 +6,7 @@ package com.dreamteam.app.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -30,18 +31,26 @@ import com.dreateam.app.ui.R;
 public class ItemListAdapter extends BaseAdapter
 {
 	public static final String tag = "ItemListAdapter";
+	private Context context;
 	private LayoutInflater inflater;
 	private ArrayList<FeedItem> items;
 	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageLoader loader = new ImageLoader();
+	private static int[] colors;//是否已阅读显示的颜色
 	
 	
 	public ItemListAdapter(Context context, ArrayList<FeedItem> items)
 	{
+		this.context = context;
 		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		Bitmap defBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.loading_default);
 		loader.setDefBitmap(defBitmap);
+		Resources res = context.getResources();
+		colors = new int[]{
+				res.getColor(R.color.black),
+				res.getColor(R.color.dark_gray)
+		};
 	}
 	
 	@Override
@@ -66,6 +75,7 @@ public class ItemListAdapter extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		ViewHolder viewHolder = null;
+		int colorState = 0;
 		
 		if(convertView == null)
 		{
@@ -80,12 +90,17 @@ public class ItemListAdapter extends BaseAdapter
 		{
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		
 		FeedItem item = items.get(position);
 		String title = item.getTitle();
 		if(title.length() > 24)
-			title = title.substring(0, 21) + "...";
+			title = title.substring(0, 25) + "...";
+		if(item.isReaded())
+			colorState = 1;
+//		else
+//			colorState = 0;
+		viewHolder.titleTv.setTextColor(colors[colorState]);
 		viewHolder.titleTv.setText(title);
+		viewHolder.pubdateTv.setText(item.getPubdate());
 		imageUrls = item.getImageUrls();
 		if(imageUrls.isEmpty())
 		{
@@ -95,8 +110,6 @@ public class ItemListAdapter extends BaseAdapter
 		{
 			loader.loadImage(imageUrls.get(0), viewHolder.itemIv, 100, viewHolder.titleTv.getHeight());
 		}
-		viewHolder.pubdateTv.setText(item.getPubdate());
-		
 		return convertView;
 	}
 
@@ -107,9 +120,9 @@ public class ItemListAdapter extends BaseAdapter
 		TextView pubdateTv;
 	}
 
-	public void addItems(ArrayList<FeedItem> newItems)
+	public void addItemsToHead(ArrayList<FeedItem> newItems)
 	{
-		items.addAll(newItems);
+		items.addAll(0, newItems);
 		notifyDataSetChanged();
 	}
 }

@@ -44,12 +44,12 @@ public class ItemList extends Activity
 {
 
 	public static final String tag = "ItemList";
-	
 	private PullToRefreshListView itemLv;
 	private ImageButton backBtn;
 	private ImageButton playBtn;
 	private TextView feedTitleTv;
 	private ItemListAdapter mAdapter;
+	private SeriaHelper seriaHelper;
 	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
 	private ArrayList<String> speechTextList = new ArrayList<String>();
 	private String sectionTitle; 
@@ -135,7 +135,7 @@ public class ItemList extends Activity
 				}
 				startSpeech();
 				existSpeech = true;
-				Toast.makeText(ItemList.this, "再次按下该按钮可退出播放", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ItemList.this, "再按一次退出播放", Toast.LENGTH_SHORT).show();
 			}
 		});
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
@@ -168,6 +168,33 @@ public class ItemList extends Activity
 			{
 				Intent intent = new Intent();
 				FeedItem item = mItems.get(position - 1);
+			
+				final String link = item.getLink();
+				//改变阅读状态
+				if (!item.isReaded())
+				{
+					new Thread()
+					{
+						@Override
+						public void run()
+						{
+							SeriaHelper helper = SeriaHelper.newInstance();
+							File cache = FileUtils.UrlToFile(sectionUrl);
+							ItemListEntity entity = new ItemListEntity();
+							for (FeedItem i : mItems)
+							{
+								if (i.getLink().equals(link))
+								{
+									Log.d(tag, "here is link equals");
+									i.setReaded(true);
+								}
+							}
+							entity.setItemList(mItems);
+							helper.saveObject(entity, cache);
+						}
+
+					}.start();
+				}
 				String title = item.getTitle();
 				String contentEncoded = item.getContentEncoded();
 				String pubdate = item.getPubdate();
@@ -182,6 +209,7 @@ public class ItemList extends Activity
 				intent.putExtra("title", title);
 				intent.putExtra("pubdate", pubdate);
 				intent.putExtra("section_title", sectionTitle);
+				intent.putExtra("link", link);
 				intent.setClass(ItemList.this, ItemDetail.class);
 				ItemList.this.startActivity(intent);
 			}
@@ -199,7 +227,7 @@ public class ItemList extends Activity
 		File file = FileUtils.getSectionCacheFile(sectionUrl);
 		if(file.exists())
 		{
-			SeriaHelper seriaHelper = SeriaHelper.newInstance();
+			seriaHelper = SeriaHelper.newInstance();
 			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper.readObject(file);
 			mItems = itemListEntity.getItemList();
 			if(mItems != null)
@@ -246,7 +274,7 @@ public class ItemList extends Activity
 				newItems.add(i);
 			}
 			helper.saveObject(result, cache);
-			mAdapter.addItems(newItems);
+			mAdapter.addItemsToHead(newItems);
 			Toast.makeText(ItemList.this, "更新了" + newCount + "条", 
 							Toast.LENGTH_SHORT).show();
 			itemLv.onRefreshComplete();

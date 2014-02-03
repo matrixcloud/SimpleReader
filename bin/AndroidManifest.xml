@@ -81,6 +81,7 @@
             android:name="UMENG_APPKEY"
             android:value="5269be4956240b2d8b048955" >
         </meta-data>
+        <activity android:name="com.dreamteam.app.ui.FavoriteItemList"></activity>
     
     </application>
 

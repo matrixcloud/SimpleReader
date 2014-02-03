@@ -86,14 +86,14 @@
             android:visibility="gone" />
 
         <ImageButton
-            android:id="@+id/composer_btn_feedback"
+            android:id="@+id/composer_btn_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="116.666dp"
             android:layout_marginRight="89.33333333333333dp"
-            android:background="@drawable/composer_feedback"
+            android:background="@drawable/composer_favorite"
             android:visibility="gone" />
 
         <ImageButton

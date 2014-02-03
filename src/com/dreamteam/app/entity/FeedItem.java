@@ -22,7 +22,10 @@ public class FeedItem implements Serializable
 	private String category;
 	private String firstImageUrl;
 	private String contentEncoded;
+	private boolean readed = false;
+	private boolean favorite = false;
 	private ArrayList<String> imageUrls = new ArrayList<String>();
+	
 	
 	public String getFirstImageUrl()
 	{
@@ -88,6 +91,22 @@ public class FeedItem implements Serializable
 	public void setImageUrls(ArrayList<String> imageUrls)
 	{
 		this.imageUrls = imageUrls;
+	}
+	public boolean isReaded()
+	{
+		return readed;
+	}
+	public void setReaded(boolean readed)
+	{
+		this.readed = readed;
+	}
+	public boolean isFavorite()
+	{
+		return favorite;
+	}
+	public void setFavorite(boolean favorite)
+	{
+		this.favorite = favorite;
 	}
 	
 }

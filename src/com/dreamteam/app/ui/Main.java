@@ -222,8 +222,8 @@ public class Main extends FragmentActivity
 							case R.id.composer_btn_setting:
 								openSetting();
 								break;
-							case R.id.composer_btn_feedback:
-								feedback();
+							case R.id.composer_btn_favorite:
+								openFavorite();
 								break;
 							case R.id.composer_btn_switch_bg:
 								swithBg();
@@ -254,11 +254,11 @@ public class Main extends FragmentActivity
 		Main.this.startActivity(intent);
 	}
 	
-	//反馈
-	private void feedback()
+	//收藏列表
+	private void openFavorite()
 	{
 		Intent intent = new Intent();
-		intent.setClass(Main.this, FeedbackUI.class);
+		intent.setClass(Main.this, FavoriteItemList.class);
 		Main.this.startActivity(intent);
 	}
 	

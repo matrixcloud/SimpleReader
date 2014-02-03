@@ -39,7 +39,7 @@
 	      	android:id="@+id/fid_btn_collecte"
 	        style="@style/img_btn_style"
 	        android:alpha="0.8"
-	        android:src="@drawable/fid_btn_collecte"
+	        android:src="@drawable/btn_favorite_empty"
 			/>
 	    <ImageButton
 	 	    android:id="@+id/fid_btn_share"

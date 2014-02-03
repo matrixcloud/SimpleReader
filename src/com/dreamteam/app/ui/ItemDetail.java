@@ -5,6 +5,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -41,15 +42,17 @@ public class ItemDetail extends FragmentActivity
 	//html全局属性
 	public final static String WEB_STYLE = "<style>* "
 			+ "{font-size:16px;line-height:20px;}"
-			+ "p {color:#333;backgroud-color:#0}"
-			+ "img {max-width:310px;} "
-			+ "pre {font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;} "
-			+ "a {text-decoration: none;color:#3E62A6}" 
-			+ "h1 {text-align:center;font-size:20px}"
+			+ "p{color:#000000;backgroud-color:#0;text-indent:2em}"
+			+ "img{max-width:310px} "
+			+ "p img{display:block;margin:0 auto}"
+			+ "pre{font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;} "
+			+ "a{text-decoration: none;color:#3E62A6}" 
+			+ "h1{text-align:center;font-size:20px}"
 			+ "</style>";
 	private String title;
 	private String pubdate;
 	private String itemDetail;
+	private String link;
 	private UMSocialService mController;
 	
 	
@@ -115,8 +118,17 @@ public class ItemDetail extends FragmentActivity
 				//判断是否已收藏
 				DbManager helper = new DbManager(ItemDetail.this, DbManager.DB_NAME, null, 1);
 				SQLiteDatabase db = helper.getWritableDatabase();
-				FavoItemDbHelper.insert(db, title, pubdate, itemDetail);
-				Toast.makeText(ItemDetail.this, "添加成功!", Toast.LENGTH_SHORT).show();
+				Cursor cursor = db.query(DbManager.FAVORITE_ITEM_TABLE_NAME, new String[]{},
+						"link=?", new String[]{link}, null, null, null);
+				if(cursor.moveToFirst())
+				{
+					Toast.makeText(ItemDetail.this, "已收藏！", Toast.LENGTH_SHORT).show();
+					db.close();
+					return;
+				}
+				FavoItemDbHelper.insert(db, title, pubdate, itemDetail, link);
+				db.close();
+				Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT).show();
 			}
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
@@ -137,6 +149,7 @@ public class ItemDetail extends FragmentActivity
 		title = intent.getStringExtra("title");
 		pubdate = intent.getStringExtra("pubdate");
 		itemDetail = intent.getStringExtra("item_detail");
+		link = intent.getStringExtra("link");
 		//过滤img宽和高
 		itemDetail = itemDetail.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 		itemDetail = itemDetail.replaceAll(
