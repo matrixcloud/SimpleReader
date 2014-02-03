@@ -1,11 +1,12 @@
 package com.dreamteam.app.ui;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -19,8 +20,11 @@ import android.widget.Toast;
 
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
+import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FavoItemDbHelper;
+import com.dreamteam.app.entity.FeedItem;
+import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.utils.MD5;
 import com.dreateam.app.ui.R;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -49,11 +53,15 @@ public class ItemDetail extends FragmentActivity
 			+ "a{text-decoration: none;color:#3E62A6}" 
 			+ "h1{text-align:center;font-size:20px}"
 			+ "</style>";
+	private String sectionTitle;
+	private String sectionUrl;
 	private String title;
 	private String pubdate;
 	private String itemDetail;
 	private String link;
+	private String firstImgUrl;
 	private UMSocialService mController;
+	private boolean isFavorite;//文章是否已收藏
 	
 	
 	@Override
@@ -68,7 +76,7 @@ public class ItemDetail extends FragmentActivity
 
 	private void initComments()
 	{
-		String key = MD5.Md5(title + pubdate);
+		String key = MD5.Md5(link);
 		mController = UMServiceFactory.getUMSocialService(AppConfig.UM_BASE_KEY + key,
 					RequestType.SOCIAL);
 		mController.getComments(this, new FetchCommetsListener()
@@ -91,6 +99,8 @@ public class ItemDetail extends FragmentActivity
 	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
 	private void initView()
 	{
+		isFavorite = getIntent().getBooleanExtra("is_favorite", false);
+		
 		setContentView(R.layout.feed_item_detail);
 		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
 		shareBtn = (ImageButton) findViewById(R.id.fid_btn_share);
@@ -111,24 +121,43 @@ public class ItemDetail extends FragmentActivity
 			}
 		});
 		collectBtn = (ImageButton) findViewById(R.id.fid_btn_collecte);
+		if(isFavorite)
+			collectBtn.setImageResource(R.drawable.btn_favorite_full);
 		collectBtn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v)
 			{
-				//判断是否已收藏
 				DbManager helper = new DbManager(ItemDetail.this, DbManager.DB_NAME, null, 1);
-				SQLiteDatabase db = helper.getWritableDatabase();
-				Cursor cursor = db.query(DbManager.FAVORITE_ITEM_TABLE_NAME, new String[]{},
-						"link=?", new String[]{link}, null, null, null);
-				if(cursor.moveToFirst())
+				final SQLiteDatabase db = helper.getWritableDatabase();
+				//已收藏，取消收藏
+				if(isFavorite)
 				{
-					Toast.makeText(ItemDetail.this, "已收藏！", Toast.LENGTH_SHORT).show();
-					db.close();
+					collectBtn.setImageResource(R.drawable.btn_favorite_empty);
+					Toast.makeText(ItemDetail.this, "取消了收藏", Toast.LENGTH_SHORT).show();
+					FavoItemDbHelper.removeRecord(db, link);
 					return;
 				}
-				FavoItemDbHelper.insert(db, title, pubdate, itemDetail, link);
-				db.close();
+				//加入收藏
+				collectBtn.setImageResource(R.drawable.btn_favorite_full);
 				Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+				new Thread(){
+					@Override
+					public void run()
+					{
+						FavoItemDbHelper.insert(db, title, pubdate, itemDetail, link, firstImgUrl, sectionTitle);
+						SeriaHelper helper = SeriaHelper.newInstance();
+						File cache = AppContext.getSectionCache(sectionUrl);
+						ItemListEntity entity = (ItemListEntity) helper.readObject(cache);
+						ArrayList<FeedItem> items = entity.getItemList();
+						for(FeedItem f : items)
+						{
+							if(f.getLink().equals(link))
+								f.setFavorite(true);
+						}
+						entity.setItemList(items);
+						helper.saveObject(entity, cache);
+					}
+				}.start();
 			}
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
@@ -142,7 +171,9 @@ public class ItemDetail extends FragmentActivity
 	private void loadData()
 	{
 		Intent intent = getIntent();
-		String sectionTitle = intent.getStringExtra("section_title");
+		sectionTitle = intent.getStringExtra("section_title");
+		sectionUrl = intent.getStringExtra("section_url");
+		firstImgUrl = intent.getStringExtra("first_img_url");
 		topTitleTv.setText(sectionTitle);
 		
 		StringBuffer sb = new StringBuffer();

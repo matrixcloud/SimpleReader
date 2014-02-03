@@ -111,7 +111,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 					intent.setAction(Main.DELETE_SECTION);
 					context.sendBroadcast(intent);
 					//删除section表中记录的数据
-					SectionHelper.removeRecoder(mgr.getWritableDatabase(), url);
+					SectionHelper.removeRecord(mgr.getWritableDatabase(), url);
 					//更新feed.db中所对应表的状态为0
 					new FeedDBManager(context, FeedDBManager.DB_NAME, null, 1)
 								.updateState(tableName, state, url);

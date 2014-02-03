@@ -48,10 +48,8 @@ public class ImageUtils
 	{
 		try
 		{
-			File file = new File(AppConfig.APP_IMAGE_CACHE_DIR + File.separator + MD5.Md5(url));
-			File dir = file.getParentFile();
-			dir.mkdirs();
-			file.createNewFile();
+			File file = FileUtils.newAbsoluteFile(AppConfig.APP_IMAGE_CACHE_DIR 
+					+ File.separator + MD5.Md5(url));
 			FileOutputStream fos = new FileOutputStream(file);
 			bmp.compress(mCompressForamat, mQuality, fos);
 		}

@@ -86,7 +86,7 @@ public class GridAdapter extends BaseAdapter
 				notifyDataSetChanged();
 				//移除数据库中的记录
 				DbManager mgr = new DbManager(context, DbManager.DB_NAME, null, 1);
-				SectionHelper.removeRecoder(mgr.getWritableDatabase(), section.getUrl());
+				SectionHelper.removeRecord(mgr.getWritableDatabase(), section.getUrl());
 				//移除缓存
 				 
 			}

@@ -20,7 +20,8 @@ public class DbManager extends SQLiteOpenHelper
 			+ "(title text, url text, table_name text)";
 	private static final String CREATE_FAVORITE_TABLE = "create table"
 			+ " " + FAVORITE_ITEM_TABLE_NAME
-			+ "(title text, pubdate text, item_detail text, link text)";
+			+ "(title text, pubdate text, item_detail text, "
+			+ "link text, first_img_url, text, table_name text)";
 	
 
 	public DbManager(Context context, String name, CursorFactory factory,

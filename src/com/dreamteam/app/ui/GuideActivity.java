@@ -22,7 +22,6 @@ import com.dreamteam.app.adapter.GuideViewPagerAdapter;
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.db.FeedDBManager;
-import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
 /**

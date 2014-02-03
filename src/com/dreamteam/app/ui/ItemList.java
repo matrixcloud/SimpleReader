@@ -197,6 +197,8 @@ public class ItemList extends Activity
 				String title = item.getTitle();
 				String contentEncoded = item.getContentEncoded();
 				String pubdate = item.getPubdate();
+				boolean isFavorite = item.isFavorite();
+				String firstImgUrl = item.getFirstImageUrl();
 				if(contentEncoded != null && contentEncoded.length() != 0)
 				{
 					intent.putExtra("item_detail", contentEncoded);
@@ -205,10 +207,13 @@ public class ItemList extends Activity
 				{
 					intent.putExtra("item_detail", mItems.get(position - 1).getDescription());
 				}
+				intent.putExtra("section_title", sectionTitle);
+				intent.putExtra("section_url", sectionUrl);
 				intent.putExtra("title", title);
 				intent.putExtra("pubdate", pubdate);
-				intent.putExtra("section_title", sectionTitle);
 				intent.putExtra("link", link);
+				intent.putExtra("is_favorite", isFavorite);
+				intent.putExtra("first_img_url", firstImgUrl);
 				intent.setClass(ItemList.this, ItemDetail.class);
 				ItemList.this.startActivity(intent);
 			}

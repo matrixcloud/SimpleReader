@@ -181,4 +181,23 @@ public class FileUtils
 			status = false;
 		return status;
 	}
+	
+	/**
+	 * @description 根据文件绝对路径创建文件/布覆盖原文件
+	 * @param path
+	 * @return
+	 */
+	public static File newAbsoluteFile(String name)
+	{
+		File file = new File(name);
+		file.getParentFile().mkdirs();
+		try
+		{
+			file.createNewFile();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return file;
+	}
 }

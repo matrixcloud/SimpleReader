@@ -1,17 +1,17 @@
 package com.dreamteam.app.commons;
 
 import java.io.File;
-import java.io.IOException;
-
-import com.dreamteam.app.db.DbManager;
-import com.dreamteam.app.utils.MD5;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dreamteam.app.db.DbManager;
+import com.dreamteam.app.utils.FileUtils;
+import com.dreamteam.app.utils.MD5;
+
 public class SectionHelper
 {
-	public static void removeRecoder(SQLiteDatabase db, String url)
+	public static void removeRecord(SQLiteDatabase db, String url)
 	{
 		db.delete(DbManager.SECTION_TABLE_NAME, "url=?", new String[]{url});
 		db.close();
@@ -29,19 +29,13 @@ public class SectionHelper
 
 	public static File newSdCache(String url)
 	{
-		File cache = AppContext.getSdImgCache(url);
-		try
-		{
-			cache.createNewFile();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return cache;
+		String name = AppConfig.APP_SECTION_DIR + File.separator
+					+ MD5.Md5(url);
+		return FileUtils.newAbsoluteFile(name);
 	}
 
 	public static File getSdCache(String url)
 	{
-		return new File(AppConfig.APP_SECTION_DIR + MD5.Md5(url));
+		return new File(AppConfig.APP_SECTION_DIR + File.separator + MD5.Md5(url));
 	}
 }
