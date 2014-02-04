@@ -11,6 +11,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -66,6 +68,8 @@ public class ItemList extends Activity
 	private boolean existSpeech = false;//退出tts
 	public static final String ACTION_UPDATE_ITEM_LIST = 
 						"com.dreamteam.action.update_item_list";
+	private boolean isNight;//是否夜间
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -150,6 +154,11 @@ public class ItemList extends Activity
 	
 	private void initView()
 	{
+		SharedPreferences prefs = AppContext.getPrefrences(this);
+		isNight = prefs.getBoolean("day_night_mode", false);
+		if(isNight)
+			setTheme(R.style.AppNightTheme);
+			
 		setContentView(R.layout.feed_item_list);
 		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
 		playBtn = (ImageButton) findViewById(R.id.fil_play_btn);
@@ -267,7 +276,7 @@ public class ItemList extends Activity
 			mItems = itemListEntity.getItemList();
 			if(mItems != null)
 			{
-				mAdapter = new ItemListAdapter(this, mItems);
+				mAdapter = new ItemListAdapter(this, mItems, isNight);
 				itemLv.setAdapter(mAdapter);
 				for(int i = 0, n = mItems.size(); i < n; i++)
 				{

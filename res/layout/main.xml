@@ -2,7 +2,7 @@
     android:id="@+id/home_bg_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="@drawable/home_bg_default">
+    android:background="?attr/home_bg">
 	
 	<android.support.v4.view.ViewPager
 		android:id="@+id/home_pager"
@@ -126,7 +126,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="8.666666666666667dp"
             android:layout_marginRight="144dp"
-            android:background="@drawable/composer_moon"
+            android:background="?attr/switch_mode_btn"
             android:visibility="gone" />
     </RelativeLayout>
 

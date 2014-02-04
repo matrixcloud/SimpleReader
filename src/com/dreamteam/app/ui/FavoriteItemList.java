@@ -99,7 +99,7 @@ public class FavoriteItemList extends Activity
 				cursor.moveToNext();
 			}
 		}
-		mAdapter = new ItemListAdapter(this, items);
+		mAdapter = new ItemListAdapter(this, items, true);
 		favoriteLv.setAdapter(mAdapter);
 		db.close();
 	}

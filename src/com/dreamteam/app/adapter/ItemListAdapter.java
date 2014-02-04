@@ -38,7 +38,7 @@ public class ItemListAdapter extends BaseAdapter
 	private static int[] colors;//是否已阅读显示的颜色
 	
 	
-	public ItemListAdapter(Context context, ArrayList<FeedItem> items)
+	public ItemListAdapter(Context context, ArrayList<FeedItem> items, boolean isNight)
 	{
 		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -49,6 +49,13 @@ public class ItemListAdapter extends BaseAdapter
 				res.getColor(R.color.black),
 				res.getColor(R.color.dark_gray)
 		};
+		if(isNight)
+		{
+			colors = new int[]{
+					res.getColor(R.color.white),
+					res.getColor(R.color.gray)
+			};
+		}
 	}
 	
 	@Override

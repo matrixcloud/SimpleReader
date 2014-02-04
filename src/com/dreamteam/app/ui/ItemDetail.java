@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.SeriaHelper;
+import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FavoItemDbHelper;
 import com.dreamteam.app.entity.FeedItem;
@@ -45,16 +46,6 @@ public class ItemDetail extends FragmentActivity
 	private TextView countTv;//评论列表
 	private TextView topTitleTv;
 	private static WebView mWebView;
-	//html全局属性
-	public final static String WEB_STYLE = "<style>* "
-			+ "{font-size:16px;line-height:20px;}"
-			+ "p{color:#000000;backgroud-color:#0;text-indent:2em}"
-			+ "img{max-width:310px} "
-			+ "p img{display:block;margin:0 auto}"
-			+ "pre{font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;} "
-			+ "a{text-decoration: none;color:#3E62A6}" 
-			+ "h1{text-align:center;font-size:20px}"
-			+ "</style>";
 	private String sectionTitle;
 	private String sectionUrl;
 	private String title;
@@ -64,6 +55,11 @@ public class ItemDetail extends FragmentActivity
 	private String firstImgUrl;
 	private UMSocialService mController;
 	private boolean isFavorite;//文章是否已收藏
+	private String css = UIHelper.WEB_STYLE;
+	private int[] favoIcons = {
+			R.drawable.btn_favorite_empty,
+			R.drawable.btn_favorite_full
+	};//0为空
 	
 	
 	@Override
@@ -75,6 +71,7 @@ public class ItemDetail extends FragmentActivity
 		initComments();
 	}
 
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler(){
 
 		@Override
@@ -85,7 +82,6 @@ public class ItemDetail extends FragmentActivity
 			sendBroadcast(intent);
 			super.handleMessage(msg);
 		}
-		
 	};
 	
 	private void initComments()
@@ -113,8 +109,18 @@ public class ItemDetail extends FragmentActivity
 	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
 	private void initView()
 	{
-		isFavorite = getIntent().getBooleanExtra("is_favorite", false);
+		SharedPreferences prefs = AppContext.getPrefrences(this);
+		if(prefs.getBoolean("day_night_mode", false))
+		{
+			setTheme(R.style.AppNightTheme);
+			css = UIHelper.WEB_STYLE_NIGHT;
+			favoIcons = new int[]{
+					R.drawable.btn_favorite_empty_night,
+					R.drawable.btn_favorite_full_night
+			};
+		}
 		
+		isFavorite = getIntent().getBooleanExtra("is_favorite", false);
 		setContentView(R.layout.feed_item_detail);
 		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
 		shareBtn = (ImageButton) findViewById(R.id.fid_btn_share);
@@ -146,7 +152,7 @@ public class ItemDetail extends FragmentActivity
 				//已收藏，取消收藏
 				if(isFavorite)
 				{
-					collectBtn.setImageResource(R.drawable.btn_favorite_empty);
+					collectBtn.setImageResource(favoIcons[0]);
 					Toast.makeText(ItemDetail.this, "取消了收藏", Toast.LENGTH_SHORT).show();
 					FavoItemDbHelper.removeRecord(db, link);
 					isFavorite = false;
@@ -155,7 +161,7 @@ public class ItemDetail extends FragmentActivity
 				{
 					//加入收藏
 					isFavorite = true;
-					collectBtn.setImageResource(R.drawable.btn_favorite_full);
+					collectBtn.setImageResource(favoIcons[1]);
 					Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT)
 							.show();
 					new Thread()
@@ -190,6 +196,7 @@ public class ItemDetail extends FragmentActivity
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
 		mWebView = (WebView) findViewById(R.id.my_web_view);
+		mWebView.setBackgroundColor(0);
 		mWebView.getSettings().setBuiltInZoomControls(true);
 		mWebView.getSettings().setDisplayZoomControls(false);
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
@@ -225,7 +232,7 @@ public class ItemDetail extends FragmentActivity
 		sb.append("<h1>" + title + "</h1>"
 				  + "<p>" + pubdate + "</p>");
 		sb.append("<body>" + itemDetail + "<body>");
-		mWebView.loadDataWithBaseURL(null, WEB_STYLE + sb.toString(), "text/html", "UTF-8", null);
+		mWebView.loadDataWithBaseURL(null, css + sb.toString(), "text/html", "UTF-8", null);
 	}
 }
 

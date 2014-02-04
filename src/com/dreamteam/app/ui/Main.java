@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,7 +49,6 @@ import com.umeng.socialize.controller.UMInfoAgent;
 public class Main extends FragmentActivity
 {
 	public static final String tag = "Main";
-
 	private ViewPager mPager;
 	private MPagerAdapter mPagerAdapter;
 	private RelativeLayout composerWrapper;
@@ -55,6 +56,7 @@ public class Main extends FragmentActivity
 	private RelativeLayout bgLayout;
 	private ImageView composerShowHideIconIv;
 	private TextView pageTv;
+	private ImageButton switchModeBtn;
 	private RelativeLayout homeLoadingLayout;
 	private ArrayList<GridView> gridViews = new ArrayList<GridView>();
 	private ArrayList<GridAdapter> gridAdapters = new ArrayList<GridAdapter>();
@@ -69,6 +71,7 @@ public class Main extends FragmentActivity
 	private Intent mIntent;
 	private boolean exit = false;//双击退出
 	private boolean isEdting = false;//是否编辑section中
+	private boolean isNight;//是否为夜间模式
 	
 	
 	@Override
@@ -147,6 +150,10 @@ public class Main extends FragmentActivity
 				{
 					int resid = intent.getIntExtra("home_bg_id", R.drawable.home_bg_default);
 					bgLayout.setBackgroundResource(resid);
+					SharedPreferences prefs = AppContext.getPrefrences(Main.this);
+					Editor editor = prefs.edit();
+					editor.putInt("home_bg_id", resid);
+					editor.commit();
 				}
 			}
 		};
@@ -232,6 +239,7 @@ public class Main extends FragmentActivity
 								openSubscribeCenter();
 								break;
 							case R.id.composer_btn_moon:
+								switchMode();
 								break;
 							}
 							hidePathMenu();
@@ -243,6 +251,31 @@ public class Main extends FragmentActivity
 				360, 200));
 	}
 
+	private void switchMode()
+	{
+		SharedPreferences prefs = AppContext.getPrefrences(this);
+		Editor editor = prefs.edit();
+		//切回日间模式
+		if(isNight)
+		{
+			isNight = false;
+			bgLayout.setBackgroundResource(R.drawable.home_bg_default);
+			switchModeBtn.setImageResource(R.drawable.composer_sun);
+			Toast.makeText(Main.this, "已切回日间模式", Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			//切回夜间模式
+			isNight = true;
+			bgLayout.setBackgroundResource(
+					prefs.getInt("home_bg_id", R.drawable.home_bg_night));
+			switchModeBtn.setImageResource(R.drawable.composer_moon);
+			Toast.makeText(Main.this, "夜间模式已启用", Toast.LENGTH_SHORT).show();
+		}
+		editor.putBoolean("day_night_mode", isNight);
+		editor.commit();
+	}
+	
 	private void hidePathMenu()
 	{
 		arePathMenuShowing = false;
@@ -306,11 +339,19 @@ public class Main extends FragmentActivity
 
 	private void initView()
 	{
+		//true为日间模式
+		SharedPreferences prefs = AppContext.getPrefrences(this);
+		isNight = prefs.getBoolean("day_night_mode", false);
+		if(isNight)
+		{
+			setTheme(R.style.AppNightTheme);
+		}
+		
 		setContentView(R.layout.main);
+		switchModeBtn = (ImageButton) findViewById(R.id.composer_btn_moon);
 		pageTv = (TextView) findViewById(R.id.home_page_tv);
 		homeLoadingLayout = (RelativeLayout) findViewById(R.id.home_loading_layout);
 		bgLayout = (RelativeLayout) findViewById(R.id.home_bg_layout);
-		SharedPreferences prefs = AppContext.getPrefrences(this);
 		int bgId = prefs.getInt("home_bg", R.drawable.home_bg_default);
 		bgLayout.setBackgroundResource(bgId);
 		mPager = (ViewPager) findViewById(R.id.home_pager);
@@ -540,7 +581,6 @@ public class Main extends FragmentActivity
 			pageSize = sectionCount / PAGE_SECTION_SIZE + 1;
 		return pageSize;
 	}
-
 	
 	private class LoadDataTask extends AsyncTask<String, Integer, ItemListEntity>
 	{
@@ -586,7 +626,6 @@ public class Main extends FragmentActivity
 			return entity;
 		}
 	}
-
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)

@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffeef1f3">
+    android:background="?attr/item_bg_color"
+    >
  	<RelativeLayout
  	    android:id="@+id/feeditem_right"
  	    android:layout_toLeftOf="@+id/feeditem_image"

@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 	<RelativeLayout
-	    android:background="@drawable/detail_title_bg"
+	    android:background="?attr/item_detail_title_bar_bg"
 	    android:layout_width="match_parent"
 	    android:layout_height="40dp">
 	    <TextView 
@@ -23,6 +23,7 @@
 	    android:layerType="software"
 	    android:id="@+id/my_web_view"
 	    android:layout_weight="1"
+	    android:background="?attr/detail_webview_bg"
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"/>
 	<View 
@@ -31,7 +32,7 @@
 	    android:background="#f4f4f4"
   		/>
 	<LinearLayout
-	    android:background="@color/white"
+	    android:background="?attr/item_detail_bottom_bar_bg"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content">
 	    <ImageButton
@@ -39,14 +40,14 @@
 	      	android:id="@+id/fid_btn_collecte"
 	        style="@style/img_btn_style"
 	        android:alpha="0.8"
-	        android:src="@drawable/btn_favorite_empty"
+	        android:src="?attr/detail_btn_favorite"
 			/>
 	    <ImageButton
 	 	    android:id="@+id/fid_btn_share"
 	 	   	android:layout_weight="1"
 	        style="@style/img_btn_style"
 	        android:alpha="0.8"
-	        android:src="@drawable/btn_to_share"
+	        android:src="?attr/detail_btn_share"
 			/>
 		<RelativeLayout
 		   	android:layout_weight="1" 
@@ -58,7 +59,7 @@
 		        android:layout_centerInParent="true"
 		        style="@style/img_btn_style"
 	        	android:alpha="0.8"
-		        android:src="@drawable/btn_to_comment"
+		        android:src="?attr/detail_btn_comment"
 		        />
 		    <TextView
 		        android:id="@+id/fid_tv_comment_count"
@@ -73,7 +74,7 @@
 	        android:layout_weight="1"
 	        style="@style/img_btn_style"
 	        android:alpha="0.8"
-	        android:src="@drawable/btn_more"
+	        android:src="?attr/detail_btn_more"
 	        />
 	</LinearLayout>
 </LinearLayout>
