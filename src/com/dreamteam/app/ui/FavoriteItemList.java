@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -67,7 +68,14 @@ public class FavoriteItemList extends Activity
 				intent.setClass(FavoriteItemList.this, ItemDetail.class);
 				FavoriteItemList.this.startActivity(intent);
 			}
-			
+		});
+		findViewById(R.id.favorite_list_btn_back).setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				finish();
+			}
 		});
 	}
 	

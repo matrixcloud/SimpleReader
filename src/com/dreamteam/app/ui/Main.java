@@ -59,7 +59,7 @@ public class Main extends FragmentActivity
 	private ArrayList<GridView> gridViews = new ArrayList<GridView>();
 	private ArrayList<GridAdapter> gridAdapters = new ArrayList<GridAdapter>();
 	private BroadcastReceiver mReceiver;
-	private boolean areButtonsShowing;
+	private boolean arePathMenuShowing;
 	public static final int PAGE_SECTION_SIZE = 8;// 一页8个section
 	public static final String ACTION_ADD_SECTION = "com.dreamteam.app.action.add_section";
 	public static final String ACTION_DELETE_SECTION = "com.dreamteam.app.action.delete_section";
@@ -190,7 +190,7 @@ public class Main extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
-				if (!areButtonsShowing)
+				if (!arePathMenuShowing)
 				{
 					PathAnimations.startAnimationsIn(composerWrapper, 300);
 					composerShowHideIconIv.startAnimation(PathAnimations
@@ -201,7 +201,7 @@ public class Main extends FragmentActivity
 					composerShowHideIconIv.startAnimation(PathAnimations
 							.getRotateAnimation(-270, 0, 300));
 				}
-				areButtonsShowing = !areButtonsShowing;
+				arePathMenuShowing = !arePathMenuShowing;
 			}
 		});
 
@@ -245,6 +245,7 @@ public class Main extends FragmentActivity
 
 	private void hidePathMenu()
 	{
+		arePathMenuShowing = false;
 		PathAnimations.startAnimationsOut(composerWrapper, 300);
 		composerShowHideIconIv.startAnimation(PathAnimations
 				.getRotateAnimation(-270, 0, 300));

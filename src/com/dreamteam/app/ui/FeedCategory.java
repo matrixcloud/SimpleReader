@@ -1,8 +1,5 @@
 package com.dreamteam.app.ui;
 
-import com.dreamteam.app.adapter.FeedCategoryAdapter;
-import com.dreateam.app.ui.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +10,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.dreamteam.app.adapter.FeedCategoryAdapter;
+import com.dreateam.app.ui.R;
 
 public class FeedCategory extends Activity
 {
@@ -46,7 +46,15 @@ public class FeedCategory extends Activity
 						.show();
 			}
 		});
-
+		findViewById(R.id.feed_category_btn_back).setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		
 		final FeedCategoryAdapter adapter = new FeedCategoryAdapter(this);
 		categoryList.setAdapter(adapter);
 		categoryList.setOnItemClickListener(new OnItemClickListener()

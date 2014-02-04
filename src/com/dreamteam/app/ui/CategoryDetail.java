@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -41,17 +42,10 @@ public class CategoryDetail extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		initView();
-		try
-		{
-			initData();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		initData();
 	}
 
-	private void initData() throws Exception
+	private void initData()
 	{
 		Intent intent = getIntent();
 		String tableName = intent.getStringExtra("category");
@@ -86,8 +80,16 @@ public class CategoryDetail extends Activity
 	private void initView()
 	{
 		setContentView(R.layout.category_detail);
-		detailList = (ListView) findViewById(R.id.catagory_detail_lv_feed);
 		titleTv = (TextView) findViewById(R.id.cd_title_tv);
+		findViewById(R.id.category_detail_btn_back).setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				finish();
+			}
+		});
+		detailList = (ListView) findViewById(R.id.catagory_detail_lv_feed);
 		detailList.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override

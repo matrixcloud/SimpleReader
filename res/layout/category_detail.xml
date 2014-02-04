@@ -10,7 +10,7 @@
         android:layout_height="40dp"
         android:background="@drawable/shap_title_bar">
         <ImageButton
-            android:id="@+id/feed_category_btn_back"
+            android:id="@+id/category_detail_btn_back"
             style="@style/img_btn_style"
             android:src="@drawable/btn_back" />
         <TextView

@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shap_title_bar">
         <ImageButton
+            android:id="@+id/favorite_list_btn_back"
             style="@style/img_btn_style"
             android:src="@drawable/btn_back" />
         <TextView
