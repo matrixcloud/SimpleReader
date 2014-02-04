@@ -3,6 +3,7 @@ package com.dreamteam.app.ui;
 import java.io.File;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class Setting extends PreferenceActivity
 	private SharedPreferences mPreferences;
 	private CheckBoxPreference imageLoadCb;
 	private Preference clearCachePref;
+	private Preference feedbackPref;
 	
 	
 	protected void onCreate(Bundle savedInstanceState)
@@ -50,6 +52,18 @@ public class Setting extends PreferenceActivity
 	private void initPreference()
 	{
 		mPreferences = getPreferences(Context.MODE_PRIVATE);
+		feedbackPref = findPreference("pref_feedback");
+		feedbackPref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
+			@Override
+			public boolean onPreferenceClick(Preference preference)
+			{
+				Intent intent = new Intent();
+				intent.setClass(Setting.this, FeedbackUI.class);
+				Setting.this.startActivity(intent);
+				return false;
+			}
+		});
 		imageLoadCb = (CheckBoxPreference) findPreference("pref_imageLoad");
 		imageLoadCb.setOnPreferenceClickListener(new OnPreferenceClickListener()
 		{

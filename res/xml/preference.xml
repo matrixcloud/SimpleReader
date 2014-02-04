@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    <PreferenceCategory android:title="流量控制">	
-        <CheckBoxPreference 
-            android:title="自动接收图片" 
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="流量控制" >
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="pref_imageLoad"
-            android:summary="默认WIFI自动加载图片" 
-            android:defaultValue="true" />       
-    	<PreferenceScreen android:title="离线下载">
-    	    <PreferenceCategory android:title="时间设置">
-	    	    <CheckBoxPreference
-	    	         android:title="开启离线下载"
-	    	         android:summary="定时离线下载仅在WIFI下有效"
-	    	         android:defaultValue="false"
-	    	         />
-	    	</PreferenceCategory>
-    </PreferenceScreen>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="缓存设置">
-        <Preference 
-            android:title="清除缓存"
-            android:key="pref_clearCache"
-            android:summary="0KB">
-        </Preference>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="其他">
-        <Preference 
-            android:title="更新版本" 
-            android:key="pref_checkVesion"
-            android:summary="当前版本：v1.0"/>
-        <PreferenceScreen 
-            android:title="关于我们" 
-            android:summary="DreamTeam介绍">
-            <intent android:targetPackage="com.dreamteam.reader.ui" 
-                	android:targetClass="com.dreamteam.reader.ui.About" />
+            android:summary="默认WIFI自动加载图片"
+            android:title="自动接收图片" />
+        <PreferenceScreen android:title="离线下载" >
+            <PreferenceCategory android:title="时间设置" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:summary="定时离线下载仅在WIFI下有效"
+                    android:title="开启离线下载" />
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
+    <PreferenceCategory android:title="缓存设置" >
+        <Preference
+            android:key="pref_clearCache"
+            android:summary="0KB"
+            android:title="清除缓存" >
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="语音设置">
+    </PreferenceCategory>
+    <PreferenceCategory android:title="其他" >
+        <Preference android:title="意见反馈"
+            android:key="pref_feedback"/>
+        <Preference
+            android:key="pref_checkVesion"
+            android:summary="当前版本：v1.0"
+            android:title="更新版本" />
+        <PreferenceScreen
+            android:summary="DreamTeam介绍"
+            android:title="关于我们" >
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 </PreferenceScreen>
