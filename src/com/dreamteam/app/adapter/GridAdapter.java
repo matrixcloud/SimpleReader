@@ -3,6 +3,8 @@ package com.dreamteam.app.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,10 +13,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
+import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.ui.Main;
+import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
 public class GridAdapter extends BaseAdapter
@@ -81,14 +86,32 @@ public class GridAdapter extends BaseAdapter
 			@Override
 			public void onClick(View v)
 			{
+				final String url = section.getUrl();
+				final String tableName = section.getTableName();
+				Log.d("GridAdapter", url);
+				Log.d("GridAdapter", tableName);
 				//删除当前section
-				sections.remove(position);
-				notifyDataSetChanged();
-				//移除数据库中的记录
-				DbManager mgr = new DbManager(context, DbManager.DB_NAME, null, 1);
-				SectionHelper.removeRecord(mgr.getWritableDatabase(), section.getUrl());
-				//移除缓存
-				 
+				Intent intent = new Intent();
+				intent.setAction(Main.ACTION_DELETE_SECTION);
+				intent.putExtra("url", url);
+				context.sendBroadcast(intent);
+				new Thread()
+				{
+					public void run()
+					{
+						//移除数据库中的记录
+						DbManager mgr = new DbManager(context,
+								DbManager.DB_NAME, null, 1);
+						SectionHelper.removeRecord(mgr.getWritableDatabase(),
+								url);
+						//修改数据库feed.db的状态
+						new FeedDBManager(context, FeedDBManager.DB_NAME, null,
+								1).updateState(tableName, 0, url);
+						//移除缓存
+						FileUtils.deleteDirectory(AppContext.getSectionCache(
+								url).getAbsolutePath());
+					}
+				}.start();
 			}
 		});
 		holder.delteBtn.setVisibility(visibleStates[isVisible]);

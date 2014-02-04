@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -56,11 +59,13 @@ public class ItemList extends Activity
 	private String sectionUrl;
 	private SpeechSynthesizer tts;
 	private SynthesizerListener mTtsListener;
+	private BroadcastReceiver mReceiver;
 	//开始词
 	private static final String START_WORDS = "欢迎收听";
 	private static int speechCount = 0;
 	private boolean existSpeech = false;//退出tts
-	
+	public static final String ACTION_UPDATE_ITEM_LIST = 
+						"com.dreamteam.action.update_item_list";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -69,6 +74,32 @@ public class ItemList extends Activity
 		initView();
 		initData();
 		initTts();
+		initBroadeCast();
+	}
+
+	private void initBroadeCast()
+	{
+		mReceiver = new BroadcastReceiver()
+		{
+			
+			@Override
+			public void onReceive(Context context, Intent intent)
+			{
+				String link = intent.getStringExtra("link");
+				boolean isFavorite = intent.getBooleanExtra("is_favorite", false);
+				for(FeedItem i : mItems)
+				{
+					if(i.getLink().equals(link))
+					{
+						i.setFavorite(isFavorite);
+						break;
+					}
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ACTION_UPDATE_ITEM_LIST);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initTts()
@@ -305,6 +336,7 @@ public class ItemList extends Activity
 	{
 		tts.stopSpeaking(mTtsListener);
 		tts.destory();
+		unregisterReceiver(mReceiver);
 		super.onDestroy();
 	}
 }

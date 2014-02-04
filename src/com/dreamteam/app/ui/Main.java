@@ -61,8 +61,8 @@ public class Main extends FragmentActivity
 	private BroadcastReceiver mReceiver;
 	private boolean areButtonsShowing;
 	public static final int PAGE_SECTION_SIZE = 8;// 一页8个section
-	public static final String ADD_SECTION = "com.dreamteam.app.action.add_section";
-	public static final String DELETE_SECTION = "com.dreamteam.app.action.delete_section";
+	public static final String ACTION_ADD_SECTION = "com.dreamteam.app.action.add_section";
+	public static final String ACTION_DELETE_SECTION = "com.dreamteam.app.action.delete_section";
 	public static final int PAGE_SIZE_INCREASE = 1;
 	public static final int PAGE_SIZE_NOT_CHANGE = 0;
 	public static final int PAGE_SIZE_DECREASE = -1;
@@ -90,7 +90,7 @@ public class Main extends FragmentActivity
 			public void onReceive(Context context, Intent intent)
 			{
 				String action = intent.getAction();
-				if (action.equals(ADD_SECTION))
+				if (action.equals(ACTION_ADD_SECTION))
 				{
 					// 最后一个adapter为空或已满，新生一个gridView
 					Log.d(tag, gridAdapters.size() + "adapters");
@@ -104,7 +104,7 @@ public class Main extends FragmentActivity
 						// 最后一个gridAdapter添加section
 						lastGridAdapter.addItem(getNewSection());
 					}
-				} else if (action.equals(DELETE_SECTION))
+				} else if (action.equals(ACTION_DELETE_SECTION))
 				{
 					// 根据移除此section
 					GridAdapter deCreaseAdapter = null;
@@ -151,8 +151,8 @@ public class Main extends FragmentActivity
 			}
 		};
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(ADD_SECTION);
-		filter.addAction(DELETE_SECTION);
+		filter.addAction(ACTION_ADD_SECTION);
+		filter.addAction(ACTION_DELETE_SECTION);
 		filter.addAction(SwitchBg.SWITCH_HOME_BG);
 		registerReceiver(mReceiver, filter);
 	}
@@ -467,8 +467,10 @@ public class Main extends FragmentActivity
 				Section s = new Section();
 				String title = cursor.getString(cursor.getColumnIndex("title"));
 				String url = cursor.getString(cursor.getColumnIndex("url"));
+				String tableName = cursor.getString(cursor.getColumnIndex("table_name"));
 				s.setTitle(title);
 				s.setUrl(url);
+				s.setTableName(tableName);
 				sections.add(s);
 				cursor.moveToNext();
 			}

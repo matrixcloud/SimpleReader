@@ -34,6 +34,12 @@ public class FeedDBManager extends SQLiteOpenHelper
 
 	}
 
+	/**
+	 * @description 1为选中
+	 * @param tableName
+	 * @param state
+	 * @param url
+	 */
 	public void updateState(String tableName, int state, String url)
 	{
 		SQLiteDatabase db = getWritableDatabase();

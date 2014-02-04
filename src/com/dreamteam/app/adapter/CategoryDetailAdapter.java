@@ -96,7 +96,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 				String title = feed.getTitle();
 				String url = feed.getUrl();
 				Intent intent = new Intent();
-				int state = 0;//初始为选中
+				int state = 0;//初始未选中
 				DbManager mgr = new DbManager(context, DbManager.DB_NAME, null, 1);
 
 				
@@ -108,7 +108,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 					holder.addBtn.setImageResource(imgIds[0]);
 					//更新主界面
 					intent.putExtra("url", feed.getUrl());
-					intent.setAction(Main.DELETE_SECTION);
+					intent.setAction(Main.ACTION_DELETE_SECTION);
 					context.sendBroadcast(intent);
 					//删除section表中记录的数据
 					SectionHelper.removeRecord(mgr.getWritableDatabase(), url);
@@ -122,7 +122,7 @@ public class CategoryDetailAdapter extends BaseAdapter
 				feed.setSelectStatus(state);
 				holder.addBtn.setImageResource(imgIds[1]);
 				//更新主界面
-				intent.setAction(Main.ADD_SECTION);
+				intent.setAction(Main.ACTION_ADD_SECTION);
 				context.sendBroadcast(intent);
 				//加入section表
 				SectionHelper.insert(mgr.getWritableDatabase(), tableName, title, url);

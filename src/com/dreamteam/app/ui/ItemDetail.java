@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,12 +70,24 @@ public class ItemDetail extends FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		
 		initView();
 		loadData();
 		initComments();
 	}
 
+	private Handler mHandler = new Handler(){
+
+		@Override
+		public void handleMessage(Message msg)
+		{
+			Intent intent = new Intent();
+			intent.setAction(ItemList.ACTION_UPDATE_ITEM_LIST);
+			sendBroadcast(intent);
+			super.handleMessage(msg);
+		}
+		
+	};
+	
 	private void initComments()
 	{
 		String key = MD5.Md5(link);
@@ -135,29 +149,43 @@ public class ItemDetail extends FragmentActivity
 					collectBtn.setImageResource(R.drawable.btn_favorite_empty);
 					Toast.makeText(ItemDetail.this, "取消了收藏", Toast.LENGTH_SHORT).show();
 					FavoItemDbHelper.removeRecord(db, link);
-					return;
+					isFavorite = false;
 				}
-				//加入收藏
-				collectBtn.setImageResource(R.drawable.btn_favorite_full);
-				Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT).show();
-				new Thread(){
-					@Override
-					public void run()
+				else
+				{
+					//加入收藏
+					isFavorite = true;
+					collectBtn.setImageResource(R.drawable.btn_favorite_full);
+					Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT)
+							.show();
+					new Thread()
 					{
-						FavoItemDbHelper.insert(db, title, pubdate, itemDetail, link, firstImgUrl, sectionTitle);
-						SeriaHelper helper = SeriaHelper.newInstance();
-						File cache = AppContext.getSectionCache(sectionUrl);
-						ItemListEntity entity = (ItemListEntity) helper.readObject(cache);
-						ArrayList<FeedItem> items = entity.getItemList();
-						for(FeedItem f : items)
+						@Override
+						public void run()
 						{
-							if(f.getLink().equals(link))
-								f.setFavorite(true);
+							FavoItemDbHelper
+									.insert(db, title, pubdate, itemDetail,
+											link, firstImgUrl, sectionTitle);
+							SeriaHelper helper = SeriaHelper.newInstance();
+							File cache = AppContext.getSectionCache(sectionUrl);
+							ItemListEntity entity = (ItemListEntity) helper
+									.readObject(cache);
+							ArrayList<FeedItem> items = entity.getItemList();
+							for (FeedItem f : items)
+							{
+								if (f.getLink().equals(link))
+									f.setFavorite(true);
+							}
+							entity.setItemList(items);
+							helper.saveObject(entity, cache);
 						}
-						entity.setItemList(items);
-						helper.saveObject(entity, cache);
-					}
-				}.start();
+					}.start();
+				}
+				Intent intent = new Intent();
+				intent.putExtra("link", link);
+				intent.putExtra("is_favorite", isFavorite);
+				intent.setAction(ItemList.ACTION_UPDATE_ITEM_LIST);
+				sendBroadcast(intent);
 			}
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
