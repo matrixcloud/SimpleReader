@@ -234,18 +234,22 @@ public class Main extends FragmentActivity
 							case R.id.composer_btn_moon:
 								break;
 							}
-							overridePendingTransition(
-									R.anim.anim_fromright_toup6,
-									R.anim.anim_down_toleft6);
+							hidePathMenu();
 						}
 
 					});
 		}
-
 		composerShowHideBtn.startAnimation(PathAnimations.getRotateAnimation(0,
 				360, 200));
 	}
 
+	private void hidePathMenu()
+	{
+		PathAnimations.startAnimationsOut(composerWrapper, 300);
+		composerShowHideIconIv.startAnimation(PathAnimations
+				.getRotateAnimation(-270, 0, 300));
+	}
+	
 	//切换壁纸
 	private void swithBg()
 	{
@@ -350,7 +354,7 @@ public class Main extends FragmentActivity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				
+				hidePathMenu();
 				GridAdapter adapter = gridAdapters.get(
 							mPager.getCurrentItem());
 				Section section = (Section) adapter.getItem(position);
@@ -421,7 +425,7 @@ public class Main extends FragmentActivity
 		{
 			gridAdapters.get(i).changeDelBtnState(isVisble);
 		}
-		Toast.makeText(this, "按下返回键可退出编辑模式", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "按下返回键退出编辑模式", Toast.LENGTH_SHORT).show();
 	}
 	
 	//退出编辑模式
