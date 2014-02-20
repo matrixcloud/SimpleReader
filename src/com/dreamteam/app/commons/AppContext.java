@@ -79,13 +79,4 @@ public class AppContext
 		return new File(AppConfig.APP_SECTION_DIR 
 				+ File.separator + MD5.Md5(url));
 	}
-
-	/**
-	 *@description 初始了缓存目录以及图片保存目录 
-	 */
-	public static void initSdDir()
-	{
-		FileUtils.newAbsoluteFile(AppConfig.APP_CACHE_DIR);
-		FileUtils.newAbsoluteFile(AppConfig.APP_IMAGE_DIR);
-	}
 }

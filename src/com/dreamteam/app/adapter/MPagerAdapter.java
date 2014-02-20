@@ -10,6 +10,12 @@ import android.widget.GridView;
 
 public class MPagerAdapter extends PagerAdapter
 {
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object)
+	{
+		((ViewPager) container).removeView(views.get(position));
+	}
+
 	public static final String tag = "MPagerAdapter";
 	private ArrayList<GridView> views;
 	

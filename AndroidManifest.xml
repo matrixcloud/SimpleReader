@@ -94,6 +94,16 @@
 
         <activity android:name="com.dreamteam.app.ui.FavoriteItemList" >
         </activity>
+        <receiver android:name="com.dreamteam.app.ui.WidgetProvider"
+            	android:label="SimpleReader">
+             <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            	<action android:name="com.dreamteam.action.widget.play"/>
+            </intent-filter>
+            <meta-data 
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget"/>
+        </receiver>
     </application>
 
 </manifest>

@@ -44,7 +44,7 @@ public class ItemDetail extends FragmentActivity
 	private ImageButton shareBtn;
 	private ImageButton commentBtn;
 	private TextView countTv;//评论列表
-	private TextView topTitleTv;
+//	private TextView topTitleTv;
 	private static WebView mWebView;
 	private String sectionTitle;
 	private String sectionUrl;
@@ -106,7 +106,7 @@ public class ItemDetail extends FragmentActivity
 		}, -1);
 	}
 
-	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
+	@SuppressLint("SetJavaScriptEnabled")
 	private void initView()
 	{
 		SharedPreferences prefs = AppContext.getPrefrences(this);
@@ -122,7 +122,7 @@ public class ItemDetail extends FragmentActivity
 		
 		isFavorite = getIntent().getBooleanExtra("is_favorite", false);
 		setContentView(R.layout.feed_item_detail);
-		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
+//		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
 		shareBtn = (ImageButton) findViewById(R.id.fid_btn_share);
 		shareBtn.setOnClickListener(new OnClickListener(){
 			@Override
@@ -164,41 +164,40 @@ public class ItemDetail extends FragmentActivity
 					collectBtn.setImageResource(favoIcons[1]);
 					Toast.makeText(ItemDetail.this, "收藏成功!", Toast.LENGTH_SHORT)
 							.show();
-					new Thread()
-					{
-						@Override
-						public void run()
-						{
-							FavoItemDbHelper
-									.insert(db, title, pubdate, itemDetail,
-											link, firstImgUrl, sectionTitle);
-							SeriaHelper helper = SeriaHelper.newInstance();
-							File cache = AppContext.getSectionCache(sectionUrl);
-							ItemListEntity entity = (ItemListEntity) helper
-									.readObject(cache);
-							ArrayList<FeedItem> items = entity.getItemList();
-							for (FeedItem f : items)
-							{
-								if (f.getLink().equals(link))
-									f.setFavorite(true);
-							}
-							entity.setItemList(items);
-							helper.saveObject(entity, cache);
-						}
-					}.start();
+					FavoItemDbHelper
+							.insert(db, title, pubdate, itemDetail,
+									link, firstImgUrl, sectionTitle);
 				}
 				Intent intent = new Intent();
 				intent.putExtra("link", link);
 				intent.putExtra("is_favorite", isFavorite);
 				intent.setAction(ItemList.ACTION_UPDATE_ITEM_LIST);
 				sendBroadcast(intent);
+				
+				new Thread()
+				{
+					@Override
+					public void run()
+					{
+						SeriaHelper helper = SeriaHelper.newInstance();
+						File cache = AppContext.getSectionCache(sectionUrl);
+						ItemListEntity entity = (ItemListEntity) helper
+								.readObject(cache);
+						ArrayList<FeedItem> items = entity.getItemList();
+						for (FeedItem f : items)
+						{
+							if (f.getLink().equals(link))
+								f.setFavorite(isFavorite);
+						}
+						entity.setItemList(items);
+						helper.saveObject(entity, cache);
+					}
+				}.start();
 			}
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
 		mWebView = (WebView) findViewById(R.id.my_web_view);
-		mWebView.setBackgroundColor(0);
-		mWebView.getSettings().setBuiltInZoomControls(true);
-		mWebView.getSettings().setDisplayZoomControls(false);
+//		mWebView.getSettings().setBuiltInZoomControls(true);
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 		mWebView.getSettings().setJavaScriptEnabled(true);
 	}
@@ -209,7 +208,7 @@ public class ItemDetail extends FragmentActivity
 		sectionTitle = intent.getStringExtra("section_title");
 		sectionUrl = intent.getStringExtra("section_url");
 		firstImgUrl = intent.getStringExtra("first_img_url");
-		topTitleTv.setText(sectionTitle);
+//		topTitleTv.setText(sectionTitle);
 		
 		StringBuffer sb = new StringBuffer();
 		title = intent.getStringExtra("title");
@@ -229,9 +228,9 @@ public class ItemDetail extends FragmentActivity
 		{
 			itemDetail = itemDetail.replaceAll("(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)", "");
 		}
-		sb.append("<h1>" + title + "</h1>"
-				  + "<p>" + pubdate + "</p>");
-		sb.append("<body>" + itemDetail + "<body>");
+		sb.append("<h1>" + title + "</h1>");
+//				  + "<p>" + pubdate + "</p>");
+		sb.append("<body>" + itemDetail + "</body>");
 		mWebView.loadDataWithBaseURL(null, css + sb.toString(), "text/html", "UTF-8", null);
 	}
 }
