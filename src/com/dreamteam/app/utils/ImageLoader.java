@@ -65,8 +65,14 @@ public class ImageLoader
 			File file = AppContext.getSdImgCache(url);
 			if(file.exists())
 			{
-				bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-				imageView.setImageBitmap(bmp);
+				try
+				{
+					bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
+					imageView.setImageBitmap(bmp);
+				} catch (OutOfMemoryError e)
+				{
+					e.printStackTrace();
+				}
 			}
 			else
 			{
@@ -104,6 +110,7 @@ public class ImageLoader
 				{
 					InputStream is = HttpUtils.getInputStream(url);
 					Bitmap bmp = BitmapFactory.decodeStream(is);
+					bmp = Bitmap.createScaledBitmap(bmp, width, height, true);
 					cache.put(url, new SoftReference<Bitmap>(bmp));
 					
 					Message msg = handler.obtainMessage();

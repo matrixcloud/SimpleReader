@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="97.0dip"
+    android:background="@color/blue" >
+
+    <TextView
+        android:id="@+id/player_music_image"
+        android:layout_width="85.0dip"
+        android:layout_height="85.0dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="6.0dip"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginTop="6.0dip"
+        android:gravity="center"
+        android:text="36氪"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/player_music_image" >
+
+        <TextView
+            android:id="@+id/player_music_tracktitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5.0dip"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingLeft="12.0dip"
+            android:paddingRight="12.0dip"
+            android:singleLine="true"
+            android:text="程序员的故事"
+            android:textColor="#ff667780"
+            android:textSize="14.0dip" />
+
+        <TextView
+            android:id="@+id/player_music_artist"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6.0dip"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingLeft="12.0dip"
+            android:paddingRight="12.0dip"
+            android:singleLine="true"
+            android:text="未知歌手"
+            android:textColor="#ff667780"
+            android:textSize="9.0dip"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/player_music_control_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:paddingTop="10.0dip" >
+
+            <ImageButton
+                android:id="@+id/widget_btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="28.0dip"
+                android:background="@null"
+                android:padding="4.0dip"
+                android:scaleType="center"
+                android:src="@drawable/bt_widget_play" />
+
+            <ImageButton
+                android:id="@+id/player_music_play_control"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/bt_widget_next_item" />
+
+            <ImageButton
+                android:id="@+id/player_music_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="28.0dip"
+                android:background="@null"
+                android:padding="4.0dip"
+                android:scaleType="center"
+                android:src="@drawable/bt_widget_next_channel" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

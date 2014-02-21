@@ -5,7 +5,7 @@ public class UIHelper
 	//webView的css
 	public final static String WEB_STYLE = "<style type=\"text/css\">"
 			+ "body{background-color:white}"
-			+ "{font-size:18px;line-height:25px;}"
+			+ "p{font-size:18px;line-height:25px;}"
 			+ "p{color:#0;text-indent:2em}"
 			+ "img{max-width:310px} "
 			+ "p img{display:block;margin:0 auto}"
@@ -14,7 +14,7 @@ public class UIHelper
 			+ "</style>";
 	public final static String WEB_STYLE_NIGHT = "<style type=\"text/css\">"
 			+ "body{background-color:black}"
-			+ "{font-size:18px;line-height:25px;}"
+			+ "p{font-size:18px;line-height:25px;}"
 			+ "p{color:#aaaaaa;text-indent:2em}"
 			+ "img{max-width:310px} "
 			+ "p img{display:block;margin:0 auto}"

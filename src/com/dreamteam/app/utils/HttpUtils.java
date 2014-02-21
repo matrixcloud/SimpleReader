@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.http.HttpStatus;
+
 /**
  * @author:	zcloud
  *
@@ -15,9 +17,6 @@ import java.net.URL;
 public class HttpUtils
 {
 	private static HttpURLConnection conn = null;
-
-	private static final int TIME_OUT = 10000;
-
 	public static final String tag = "HttpUtils";
 	
 	/**
@@ -31,19 +30,11 @@ public class HttpUtils
 		
 		httpURL = new URL(url);
 		conn = (HttpURLConnection) httpURL.openConnection();
-		return conn.getInputStream();
-		
-		//		conn.setRequestMethod("GET");
-////		conn.setReadTimeout(TIME_OUT);
-//		if(HttpURLConnection.HTTP_OK == conn.getResponseCode())
-//		{
-//			return conn.getInputStream();
-//		}
-//		else
-//		{
-//			disConnect();
-//			return null;
-//		}
+		if(conn.getResponseCode() == HttpStatus.SC_OK)
+		{
+			return conn.getInputStream();
+		}
+		return null;
 	}
 	
 	public static void disConnect()

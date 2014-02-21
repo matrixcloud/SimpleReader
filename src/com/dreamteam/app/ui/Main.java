@@ -242,7 +242,6 @@ public class Main extends FragmentActivity
 								switchMode();
 								break;
 							}
-							hidePathMenu();
 						}
 
 					});
