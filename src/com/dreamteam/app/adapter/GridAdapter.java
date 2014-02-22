@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.Intent.ShortcutIconResource;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +17,6 @@ import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Section;
-import com.dreamteam.app.ui.ItemList;
 import com.dreamteam.app.ui.Main;
 import com.dreamteam.app.ui.SplashActivity;
 import com.dreamteam.app.utils.FileUtils;

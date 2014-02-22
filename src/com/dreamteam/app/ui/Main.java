@@ -76,6 +76,7 @@ public class Main extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Log.d(tag, "---------->>onCreate()");
 		super.onCreate(savedInstanceState);
 		initView();
 		initPathMenu();
@@ -525,6 +526,7 @@ public class Main extends FragmentActivity
 	@Override
 	protected void onDestroy()
 	{
+		Log.d(tag, "----------->>onDestroy()");
 		super.onDestroy();
 		// 销毁广播接收器
 		unregisterReceiver(mReceiver);
@@ -625,25 +627,30 @@ public class Main extends FragmentActivity
 		}
 	}
 
+	//返回true时，表示已经完整地处理了这个事件，并不希望其他的回调方法再次进行处理，
+	//而当返回false时，表示并没有完全处理完该事件，更希望其他回调方法继续对其进行处理，
+	//例如Activity中的回调方法
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (!isEdting)
+		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			if (exit)
+			if(isEdting)
 			{
-				finish();
-				return true;
-			} else
+				//在编辑，取消编辑
+				outSectionEdit();
+			}
+			else
 			{
-				Toast.makeText(Main.this, "再按下返回退出程序", Toast.LENGTH_SHORT)
-						.show();
+				if(exit)
+				{
+					finish();
+					return true;
+				}
+				Toast.makeText(this, "再按下退出程序", Toast.LENGTH_SHORT).show();
 				exit = true;
-				return false;
 			}
 		}
-		//在编辑，取消编辑
-		outSectionEdit();
 		return false;
 	}
 	

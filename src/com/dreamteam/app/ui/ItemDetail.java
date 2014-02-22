@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
+import com.dreamteam.app.commons.HtmlFilter;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.db.DbManager;
@@ -215,6 +216,8 @@ public class ItemDetail extends FragmentActivity
 		pubdate = intent.getStringExtra("pubdate");
 		itemDetail = intent.getStringExtra("item_detail");
 		link = intent.getStringExtra("link");
+		//过滤style
+		itemDetail = itemDetail.replaceAll(HtmlFilter.regexpForStyle, "");
 		//过滤img宽和高
 		itemDetail = itemDetail.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 		itemDetail = itemDetail.replaceAll(

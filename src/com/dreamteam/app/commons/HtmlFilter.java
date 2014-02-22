@@ -12,11 +12,14 @@ import java.util.regex.Pattern;
 public class HtmlFilter
 {
 	//过滤所有标签
-	private static final String regexpForHtml = "<([^>]*)>";
+	public static final String regexpForHtml = "<([^>]*)>";
 	//过滤img标签
-	private static final String regexpForImg = "(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)";
+	public static final String regexpForImg = "(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)";
 	//获取img标签的url
-	private static final String regexpForImgUrl = "http://([^\"]+)\"";
+	public static final String regexpForImgUrl = "http://([^\"]+)\"";
+	//过滤<>中的style
+	public static final String regexpForStyle = "\\s*style=\"([^\"]*)\"";
+	
 	
 	/**
 	 * @description
