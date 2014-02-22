@@ -17,8 +17,17 @@
 	        android:scaleType="centerInside"/>
 <!-- 	TextView添加singLine属性后不能滑动？ -->
 
+	<ImageView
+	        android:id="@+id/item_btn_add_launcher"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:padding="5dp"
+	        android:src="@drawable/btn_add_to_launcher" />
+
 	    <ImageView
-	        android:id="@+id/item_btn_delte"
+	        android:id="@+id/item_btn_delete"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"

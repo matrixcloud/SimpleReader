@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.Intent.ShortcutIconResource;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Section;
+import com.dreamteam.app.ui.ItemList;
 import com.dreamteam.app.ui.Main;
+import com.dreamteam.app.ui.SplashActivity;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
@@ -29,6 +32,7 @@ public class GridAdapter extends BaseAdapter
 	//deleteButton是否可见
 	private int isVisible = 0;//deleteButton是否可见
 	private int[] visibleStates = {View.GONE,View.VISIBLE};
+	public static final String ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
 	
 	
 	public GridAdapter(Context context, ArrayList<Section> sections)
@@ -67,7 +71,8 @@ public class GridAdapter extends BaseAdapter
 			convertView = inflater.inflate(R.layout.section_item, null);
 			holder = new ViewHolder();
 			holder.itemTitle = (TextView) convertView.findViewById(R.id.item_text);
-			holder.delteBtn = (ImageView) convertView.findViewById(R.id.item_btn_delte);
+			holder.delteBtn = (ImageView) convertView.findViewById(R.id.item_btn_delete);
+			holder.addLauncherBtn = (ImageView) convertView.findViewById(R.id.item_btn_add_launcher);
 			convertView.setTag(holder);
 		}
 		else
@@ -88,8 +93,6 @@ public class GridAdapter extends BaseAdapter
 			{
 				final String url = section.getUrl();
 				final String tableName = section.getTableName();
-				Log.d("GridAdapter", url);
-				Log.d("GridAdapter", tableName);
 				//删除当前section
 				Intent intent = new Intent();
 				intent.setAction(Main.ACTION_DELETE_SECTION);
@@ -115,6 +118,15 @@ public class GridAdapter extends BaseAdapter
 			}
 		});
 		holder.delteBtn.setVisibility(visibleStates[isVisible]);
+		holder.addLauncherBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				addShortcut(section.getTitle(), section.getUrl());
+			}
+		});
+		holder.addLauncherBtn.setVisibility(visibleStates[isVisible]);
 		return convertView;
 	}
 	
@@ -122,6 +134,7 @@ public class GridAdapter extends BaseAdapter
 	{
 		TextView itemTitle;
 		ImageView delteBtn;
+		ImageView addLauncherBtn;
 	}
 	
 	public void addItem(Section section)
@@ -145,6 +158,24 @@ public class GridAdapter extends BaseAdapter
 		return false;
 	}
 	
+	//发送图标到桌面
+	private void addShortcut(String name, String sectionUrl)
+	{
+		Intent entryIntent = new Intent(Intent.ACTION_MAIN);
+		entryIntent.setClass(context, SplashActivity.class);
+		entryIntent.putExtra("section_title", name);
+		entryIntent.putExtra("url", sectionUrl);
+		entryIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
+		Intent shortcutIntent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, entryIntent);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, R.drawable.ic_launcher);
+		//只能创建一次
+		shortcutIntent.putExtra("duplicate", false);
+		context.sendBroadcast(shortcutIntent);
+	}
+
 	/**
 	 * @param 0:不可见
 	 */

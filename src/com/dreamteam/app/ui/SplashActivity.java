@@ -1,21 +1,13 @@
 package com.dreamteam.app.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.dreamteam.app.db.FeedDBManager;
 import com.dreateam.app.ui.R;
 
 /**
@@ -73,6 +65,16 @@ public class SplashActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		if(intent != null)
+		{
+			String title =intent.getStringExtra("section_title");
+			if(title != null)
+			{
+				intent.setClass(this, ItemList.class);
+				startActivity(intent);
+			}
+		}
 		setContentView(R.layout.splash_acitvity);
 		init();
 	}

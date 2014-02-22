@@ -73,7 +73,6 @@ public class Main extends FragmentActivity
 	private boolean isEdting = false;//是否编辑section中
 	private boolean isNight;//是否为夜间模式
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
