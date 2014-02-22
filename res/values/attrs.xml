@@ -11,4 +11,5 @@
     <attr name="detail_btn_share" format="reference"/>
     <attr name="detail_btn_comment" format="reference"/>
     <attr name="detail_btn_more" format="reference"/>
+    <attr name="detail_divide_line_bg" format="color"/>
 </resources>

@@ -9,4 +9,7 @@
 		<color name="blue">#3598db</color>
 		<color name="transparent">#00000000</color>
 		<color name="item_bg">#ffeef1f3</color>
+		<!-- feed detail line color -->
+		<color name="line_color">#f4f4f4</color>
+		<color name="line_color_night">#303030</color>
 </resources>

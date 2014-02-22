@@ -16,6 +16,7 @@
 		<item name="detail_btn_share">@drawable/btn_to_share</item>
 		<item name="detail_btn_comment">@drawable/btn_to_comment</item>
 		<item name="detail_btn_more">@drawable/btn_more</item>
+		<item name="detail_divide_line_bg">@color/line_color</item>
     </style>
 
     <!-- 夜间模式  -->
@@ -31,6 +32,7 @@
 		<item name="detail_btn_share">@drawable/btn_to_share_night</item>
 		<item name="detail_btn_comment">@drawable/btn_to_comment_night</item>
 		<item name="detail_btn_more">@drawable/btn_more_night</item>
+		<item name="detail_divide_line_bg">@color/line_color_night</item>
 	</style>
     
     <style name="img_btn_style">
