@@ -76,7 +76,6 @@ public class Main extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.d(tag, "---------->>onCreate()");
 		super.onCreate(savedInstanceState);
 		initView();
 		initPathMenu();
@@ -395,7 +394,6 @@ public class Main extends FragmentActivity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				hidePathMenu();
 				GridAdapter adapter = gridAdapters.get(
 							mPager.getCurrentItem());
 				Section section = (Section) adapter.getItem(position);

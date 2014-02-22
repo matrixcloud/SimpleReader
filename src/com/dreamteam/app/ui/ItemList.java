@@ -1,4 +1,4 @@
-package com.dreamteam.app.ui; 
+package com.dreamteam.app.ui;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.dreamteam.app.adapter.ItemListAdapter;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.HtmlFilter;
+import com.dreamteam.app.commons.IFlyHelper;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
@@ -56,20 +57,18 @@ public class ItemList extends Activity
 	private SeriaHelper seriaHelper;
 	private ArrayList<FeedItem> mItems = new ArrayList<FeedItem>();
 	private ArrayList<String> speechTextList = new ArrayList<String>();
-	private String sectionTitle; 
+	private String sectionTitle;
 	private String sectionUrl;
 	private SpeechSynthesizer tts;
 	private SynthesizerListener mTtsListener;
 	private BroadcastReceiver mReceiver;
-	//开始词
+	// 开始词
 	private static final String START_WORDS = "欢迎收听";
 	private static int speechCount = 0;
-	private boolean existSpeech = false;//退出tts
-	public static final String ACTION_UPDATE_ITEM_LIST = 
-						"com.dreamteam.action.update_item_list";
-	private boolean isNight;//是否夜间
-	
-	
+	private boolean existSpeech = false;// 退出tts
+	public static final String ACTION_UPDATE_ITEM_LIST = "com.dreamteam.action.update_item_list";
+	private boolean isNight;// 是否夜间
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -84,15 +83,16 @@ public class ItemList extends Activity
 	{
 		mReceiver = new BroadcastReceiver()
 		{
-			
+
 			@Override
 			public void onReceive(Context context, Intent intent)
 			{
 				String link = intent.getStringExtra("link");
-				boolean isFavorite = intent.getBooleanExtra("is_favorite", false);
-				for(FeedItem i : mItems)
+				boolean isFavorite = intent.getBooleanExtra("is_favorite",
+						false);
+				for (FeedItem i : mItems)
 				{
-					if(i.getLink().equals(link))
+					if (i.getLink().equals(link))
 					{
 						i.setFavorite(isFavorite);
 						break;
@@ -117,47 +117,47 @@ public class ItemList extends Activity
 			public void onSpeakResumed() throws RemoteException
 			{
 			}
-			
+
 			@Override
 			public void onSpeakProgress(int arg0) throws RemoteException
 			{
 			}
-			
+
 			@Override
 			public void onSpeakPaused() throws RemoteException
 			{
 			}
-			
+
 			@Override
 			public void onSpeakBegin() throws RemoteException
 			{
 				Log.d(tag, "------------->>onSpeakBegin");
 			}
-			
+
 			@Override
 			public void onCompleted(int arg0) throws RemoteException
 			{
 				Log.d(tag, "--------->>onCompleted()");
-				speechCount ++;
-				if(speechCount > speechTextList.size())
+				speechCount++;
+				if (speechCount > speechTextList.size())
 					return;
 				tts.startSpeaking(speechTextList.get(speechCount), mTtsListener);
 			}
-			
+
 			@Override
 			public void onBufferProgress(int arg0) throws RemoteException
 			{
 			}
 		};
 	}
-	
+
 	private void initView()
 	{
 		SharedPreferences prefs = AppContext.getPrefrences(this);
 		isNight = prefs.getBoolean("day_night_mode", false);
-		if(isNight)
+		if (isNight)
 			setTheme(R.style.AppNightTheme);
-			
+
 		setContentView(R.layout.feed_item_list);
 		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
 		playBtn = (ImageButton) findViewById(R.id.fil_play_btn);
@@ -166,7 +166,12 @@ public class ItemList extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				if(existSpeech)
+				if(!IFlyHelper.checkSpeechServiceInstall(ItemList.this))
+				{
+					IFlyHelper.openDownloadDialog(ItemList.this);
+					return;
+				}
+				if (existSpeech)
 				{
 					tts.stopSpeaking(mTtsListener);
 					existSpeech = false;
@@ -174,7 +179,8 @@ public class ItemList extends Activity
 				}
 				startSpeech();
 				existSpeech = true;
-				Toast.makeText(ItemList.this, "再按一次退出播放", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ItemList.this, "再按一次退出播放", Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 		backBtn = (ImageButton) findViewById(R.id.fil_back_btn);
@@ -191,10 +197,11 @@ public class ItemList extends Activity
 		{
 			public void onRefresh()
 			{
-				if(!AppContext.isNetworkAvailable(ItemList.this))
+				if (!AppContext.isNetworkAvailable(ItemList.this))
 				{
 					itemLv.onRefreshComplete();
-					Toast.makeText(ItemList.this, R.string.no_network, Toast.LENGTH_SHORT).show();
+					Toast.makeText(ItemList.this, R.string.no_network,
+							Toast.LENGTH_SHORT).show();
 					return;
 				}
 				new RefreshTask().execute(sectionUrl);
@@ -203,13 +210,14 @@ public class ItemList extends Activity
 		itemLv.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
 			{
 				Intent intent = new Intent();
 				FeedItem item = mItems.get(position - 1);
-			
+
 				final String link = item.getLink();
-				//改变阅读状态
+				// 改变阅读状态
 				if (!item.isReaded())
 				{
 					new Thread()
@@ -238,13 +246,13 @@ public class ItemList extends Activity
 				String pubdate = item.getPubdate();
 				boolean isFavorite = item.isFavorite();
 				String firstImgUrl = item.getFirstImageUrl();
-				if(contentEncoded != null && contentEncoded.length() != 0)
+				if (contentEncoded != null && contentEncoded.length() != 0)
 				{
 					intent.putExtra("item_detail", contentEncoded);
-				}
-				else
+				} else
 				{
-					intent.putExtra("item_detail", mItems.get(position - 1).getDescription());
+					intent.putExtra("item_detail", mItems.get(position - 1)
+							.getDescription());
 				}
 				intent.putExtra("section_title", sectionTitle);
 				intent.putExtra("section_url", sectionUrl);
@@ -256,7 +264,7 @@ public class ItemList extends Activity
 				intent.setClass(ItemList.this, ItemDetail.class);
 				ItemList.this.startActivity(intent);
 			}
-			
+
 		});
 	}
 
@@ -266,36 +274,40 @@ public class ItemList extends Activity
 		sectionTitle = intent.getStringExtra("section_title");
 		sectionUrl = intent.getStringExtra("url");
 		feedTitleTv.setText(sectionTitle);
-		
+
 		File file = SectionHelper.getSdCache(sectionUrl);
-		if(file.exists())
+		if (file.exists())
 		{
 			seriaHelper = SeriaHelper.newInstance();
-			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper.readObject(file);
+			ItemListEntity itemListEntity = (ItemListEntity) seriaHelper
+					.readObject(file);
 			mItems = itemListEntity.getItemList();
-			if(mItems != null)
+			if (mItems != null)
 			{
 				mAdapter = new ItemListAdapter(this, mItems, isNight);
 				itemLv.setAdapter(mAdapter);
-				for(int i = 0, n = mItems.size(); i < n; i++)
+				for (int i = 0, n = mItems.size(); i < n; i++)
 				{
 					FeedItem item = mItems.get(i);
-					String input = item.getTitle() + item.getPubdate() + item.getDescription();
+					String input = item.getTitle() + item.getPubdate()
+							+ item.getDescription();
 					speechTextList.add(HtmlFilter.filterHtml(input));
 				}
 			}
 		}
 	}
-	
-	private class RefreshTask extends AsyncTask<String, Integer, ItemListEntity>
+
+	private class RefreshTask extends
+			AsyncTask<String, Integer, ItemListEntity>
 	{
 		@Override
 		protected void onPostExecute(ItemListEntity result)
 		{
-			if(result == null)
+			if (result == null)
 			{
 				itemLv.onRefreshComplete();
-				Toast.makeText(ItemList.this, R.string.network_exception, Toast.LENGTH_SHORT).show();
+				Toast.makeText(ItemList.this, R.string.network_exception,
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			ArrayList<FeedItem> newItems = new ArrayList<FeedItem>();
@@ -305,12 +317,13 @@ public class ItemList extends Activity
 			ItemListEntity old = (ItemListEntity) helper.readObject(cache);
 			String oldFirstDate = old.getFirstItem().getPubdate();
 			int newCount = 0;
-			for(FeedItem i : items)
+			for (FeedItem i : items)
 			{
-				if(i.getPubdate().equals(oldFirstDate))
+				if (i.getPubdate().equals(oldFirstDate))
 				{
 					itemLv.onRefreshComplete();
-					Toast.makeText(ItemList.this, R.string.no_update, Toast.LENGTH_SHORT).show();
+					Toast.makeText(ItemList.this, R.string.no_update,
+							Toast.LENGTH_SHORT).show();
 					return;
 				}
 				newCount++;
@@ -318,8 +331,8 @@ public class ItemList extends Activity
 			}
 			helper.saveObject(result, cache);
 			mAdapter.addItemsToHead(newItems);
-			Toast.makeText(ItemList.this, "更新了" + newCount + "条", 
-							Toast.LENGTH_SHORT).show();
+			Toast.makeText(ItemList.this, "更新了" + newCount + "条",
+					Toast.LENGTH_SHORT).show();
 			itemLv.onRefreshComplete();
 		}
 
@@ -330,15 +343,16 @@ public class ItemList extends Activity
 			return parser.parse(params[0]);
 		}
 	}
-	
+
 	private void startSpeech()
 	{
 		DateFormat df = SimpleDateFormat.getTimeInstance();
 		String time = df.format(new Date());
 		String timeTip = "现在是：" + time;
-		tts.startSpeaking(START_WORDS + sectionTitle + "频道" + timeTip + speechTextList.get(0), mTtsListener);
+		tts.startSpeaking(START_WORDS + sectionTitle + "频道" + timeTip
+				+ speechTextList.get(0), mTtsListener);
 	}
-	
+
 	@Override
 	protected void onDestroy()
 	{
