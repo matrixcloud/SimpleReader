@@ -38,6 +38,7 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.FetchCommetsListener;
 
+@SuppressLint("JavascriptInterface")
 @SuppressWarnings("deprecation")
 public class ItemDetail extends FragmentActivity
 {
@@ -225,7 +226,8 @@ public class ItemDetail extends FragmentActivity
 		//图片双击
 		 itemDetail = itemDetail.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 					"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
-		//是否加载图片
+		 mWebView.addJavascriptInterface(this, "mWebViewImageListener");
+		 //是否加载图片
 		SharedPreferences pref = AppContext.getPrefrences(this);
 		if(!pref.getBoolean("pref_imageLoad", false))
 		{
@@ -235,6 +237,14 @@ public class ItemDetail extends FragmentActivity
 //				  + "<p>" + pubdate + "</p>");
 		sb.append("<body>" + itemDetail + "</body>");
 		mWebView.loadDataWithBaseURL(null, css + sb.toString(), "text/html", "UTF-8", null);
+	}
+	
+	public void onImageClick(String url)
+	{
+		Intent intent = new Intent();
+		intent.putExtra("url", url);
+		intent.setClass(this, ImageDialog.class);
+		startActivity(intent);
 	}
 }
 

@@ -30,11 +30,11 @@ public class HttpUtils
 		
 		httpURL = new URL(url);
 		conn = (HttpURLConnection) httpURL.openConnection();
-		if(conn.getResponseCode() == HttpStatus.SC_OK)
-		{
+//		if(conn.getResponseCode() == HttpStatus.SC_OK)
+//		{
 			return conn.getInputStream();
-		}
-		return null;
+//		}
+//		return null;
 	}
 	
 	public static void disConnect()
