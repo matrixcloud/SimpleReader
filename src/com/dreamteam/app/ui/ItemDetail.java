@@ -199,7 +199,6 @@ public class ItemDetail extends FragmentActivity
 		});
 		countTv = (TextView) findViewById(R.id.fid_tv_comment_count);
 		mWebView = (WebView) findViewById(R.id.my_web_view);
-//		mWebView.getSettings().setBuiltInZoomControls(true);
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 		mWebView.getSettings().setJavaScriptEnabled(true);
 	}
@@ -234,7 +233,6 @@ public class ItemDetail extends FragmentActivity
 			itemDetail = itemDetail.replaceAll("(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)", "");
 		}
 		sb.append("<h1>" + title + "</h1>");
-//				  + "<p>" + pubdate + "</p>");
 		sb.append("<body>" + itemDetail + "</body>");
 		mWebView.loadDataWithBaseURL(null, css + sb.toString(), "text/html", "UTF-8", null);
 	}
