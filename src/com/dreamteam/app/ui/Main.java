@@ -38,6 +38,7 @@ import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
+import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
@@ -72,6 +73,7 @@ public class Main extends FragmentActivity
 	private boolean exit = false;//双击退出
 	private boolean isEdting = false;//是否编辑section中
 	private boolean isNight;//是否为夜间模式
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -149,8 +151,7 @@ public class Main extends FragmentActivity
 				{
 					int resid = intent.getIntExtra("home_bg_id", R.drawable.home_bg_default);
 					bgLayout.setBackgroundResource(resid);
-					SharedPreferences prefs = AppContext.getPrefrences(Main.this);
-					Editor editor = prefs.edit();
+					Editor editor = AppContext.getPrefrences(Main.this).edit();
 					editor.putInt("home_bg_id", resid);
 					editor.commit();
 				}
@@ -252,7 +253,7 @@ public class Main extends FragmentActivity
 	private void switchMode()
 	{
 		SharedPreferences prefs = AppContext.getPrefrences(this);
-		Editor editor = prefs.edit();
+		Editor editor = AppContext.getPrefrences(this).edit();
 		//切回日间模式
 		if(isNight)
 		{
@@ -272,14 +273,6 @@ public class Main extends FragmentActivity
 		}
 		editor.putBoolean("day_night_mode", isNight);
 		editor.commit();
-	}
-	
-	private void hidePathMenu()
-	{
-		arePathMenuShowing = false;
-		PathAnimations.startAnimationsOut(composerWrapper, 300);
-		composerShowHideIconIv.startAnimation(PathAnimations
-				.getRotateAnimation(-270, 0, 300));
 	}
 	
 	//切换壁纸
@@ -337,21 +330,12 @@ public class Main extends FragmentActivity
 
 	private void initView()
 	{
-		//true为日间模式
-		SharedPreferences prefs = AppContext.getPrefrences(this);
-		isNight = prefs.getBoolean("day_night_mode", false);
-		if(isNight)
-		{
-			setTheme(R.style.AppNightTheme);
-		}
-		
+		UIHelper.initTheme(this);
 		setContentView(R.layout.main);
 		switchModeBtn = (ImageButton) findViewById(R.id.composer_btn_moon);
 		pageTv = (TextView) findViewById(R.id.home_page_tv);
 		homeLoadingLayout = (RelativeLayout) findViewById(R.id.home_loading_layout);
 		bgLayout = (RelativeLayout) findViewById(R.id.home_bg_layout);
-		int bgId = prefs.getInt("home_bg", R.drawable.home_bg_default);
-		bgLayout.setBackgroundResource(bgId);
 		mPager = (ViewPager) findViewById(R.id.home_pager);
 		mPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
@@ -524,7 +508,6 @@ public class Main extends FragmentActivity
 	@Override
 	protected void onDestroy()
 	{
-		Log.d(tag, "----------->>onDestroy()");
 		super.onDestroy();
 		// 销毁广播接收器
 		unregisterReceiver(mReceiver);
@@ -600,7 +583,7 @@ public class Main extends FragmentActivity
 		{
 			homeLoadingLayout.setVisibility(View.GONE);
 			//跳转界面
-			if(result != null && mIntent != null)
+			if(result != null && mIntent != null && !result.getItemList().isEmpty())
 			{
 				Main.this.startActivity(mIntent);
 			}
@@ -654,6 +637,9 @@ public class Main extends FragmentActivity
 		return false;
 	}
 	
+	/**
+	 * @description 检查缓存文件是否过期
+	 */
 	private void checkDeprecated()
 	{
 		String fileName = getFilesDir().getAbsolutePath() + File.separator 

@@ -11,7 +11,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -31,6 +30,7 @@ import com.dreamteam.app.commons.IFlyHelper;
 import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
+import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.custom.ui.PullToRefreshListView;
@@ -69,6 +69,7 @@ public class ItemList extends Activity
 	public static final String ACTION_UPDATE_ITEM_LIST = "com.dreamteam.action.update_item_list";
 	private boolean isNight;// 是否夜间
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -83,7 +84,6 @@ public class ItemList extends Activity
 	{
 		mReceiver = new BroadcastReceiver()
 		{
-
 			@Override
 			public void onReceive(Context context, Intent intent)
 			{
@@ -117,17 +117,14 @@ public class ItemList extends Activity
 			public void onSpeakResumed() throws RemoteException
 			{
 			}
-
 			@Override
 			public void onSpeakProgress(int arg0) throws RemoteException
 			{
 			}
-
 			@Override
 			public void onSpeakPaused() throws RemoteException
 			{
 			}
-
 			@Override
 			public void onSpeakBegin() throws RemoteException
 			{
@@ -153,11 +150,7 @@ public class ItemList extends Activity
 
 	private void initView()
 	{
-		SharedPreferences prefs = AppContext.getPrefrences(this);
-		isNight = prefs.getBoolean("day_night_mode", false);
-		if (isNight)
-			setTheme(R.style.AppNightTheme);
-
+		UIHelper.initTheme(this);
 		setContentView(R.layout.feed_item_list);
 		feedTitleTv = (TextView) findViewById(R.id.fil_feed_title);
 		playBtn = (ImageButton) findViewById(R.id.fil_play_btn);
@@ -289,8 +282,7 @@ public class ItemList extends Activity
 				for (int i = 0, n = mItems.size(); i < n; i++)
 				{
 					FeedItem item = mItems.get(i);
-					String input = item.getTitle() + item.getPubdate()
-							+ item.getDescription();
+					String input = item.getTitle() + item.getDescription();
 					speechTextList.add(HtmlFilter.filterHtml(input));
 				}
 			}
