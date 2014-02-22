@@ -42,11 +42,9 @@ public class SplashActivity extends Activity
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler()
 	{
-
 		@Override
 		public void handleMessage(Message msg)
 		{
-			goHome();
 			switch (msg.what)
 			{
 			case GO_HOME:

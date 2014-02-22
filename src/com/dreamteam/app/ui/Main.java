@@ -644,11 +644,13 @@ public class Main extends FragmentActivity
 			{
 				if(exit)
 				{
+					Log.d(tag, "exit");
 					finish();
 					return true;
 				}
 				Toast.makeText(this, "再按下退出程序", Toast.LENGTH_SHORT).show();
 				exit = true;
+				Log.d(tag, "after toast");
 			}
 		}
 		return false;
