@@ -83,7 +83,7 @@ public class Main extends FragmentActivity
 		initPathMenu();
 		initPager();
 		initBroadcast();
-//		checkDeprecated();
+		checkDeprecated();
 	}
 
 	private void initBroadcast()

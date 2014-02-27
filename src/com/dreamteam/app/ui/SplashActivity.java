@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
@@ -66,6 +67,7 @@ public class SplashActivity extends Activity
 //				goGuide();
 				writeDB();
 				initSection();
+				writeSaveDaysFile();
 				goHome();
 				break;
 			}
@@ -73,6 +75,20 @@ public class SplashActivity extends Activity
 		}
 	};
 
+
+	private void writeSaveDaysFile()
+	{
+		String fileName = getFilesDir().getAbsolutePath() + File.separator 
+				+ AppConfig.PREF_DEPRECATED;
+		File file = new File(fileName);
+		try
+		{
+			file.createNewFile();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

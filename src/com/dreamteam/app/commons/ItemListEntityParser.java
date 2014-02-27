@@ -53,7 +53,7 @@ public class ItemListEntityParser extends DefaultHandler
 			Attributes attributes) throws SAXException
 	{	
 		sb.setLength(0);
-		if(localName.equalsIgnoreCase("item"))
+		if(qName.equalsIgnoreCase("item"))
 		{
 			feedItem = new FeedItem();
 			items.add(feedItem);
@@ -68,17 +68,18 @@ public class ItemListEntityParser extends DefaultHandler
 			throws SAXException
 	{
 		String content = sb.toString();
-		if(!isFeedLink && localName.equalsIgnoreCase("link"))
+		if(!isFeedLink && qName.equalsIgnoreCase("link"))
 		{
 			feedItem.setLink(content);
 		}
-		if(!isFeedTitle && localName.equalsIgnoreCase("title"))
+		if(!isFeedTitle && qName.equalsIgnoreCase("title"))
 		{
 			feedItem.setTitle(content);
 			return;
 		}
-		if(!isFeedDesc && (localName.equalsIgnoreCase("description") || localName.equalsIgnoreCase("content:encoded")))
+		if(!isFeedDesc && (qName.equalsIgnoreCase("description") || qName.equalsIgnoreCase("content:encoded")))
 		{
+			Log.i(tag, content);
 			feedItem.setContent(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
 			if(!srcs.isEmpty())	
@@ -87,7 +88,7 @@ public class ItemListEntityParser extends DefaultHandler
 			isFeedDesc = false;
 			return;
 		}
-		if(localName.equalsIgnoreCase("pubDate"))
+		if(qName.equalsIgnoreCase("pubDate"))
 		{
 			content = DateUtils.rfcNormalDate(content);
 			if(feedItem != null)
