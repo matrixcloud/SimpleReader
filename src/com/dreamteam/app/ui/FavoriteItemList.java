@@ -52,15 +52,11 @@ public class FavoriteItemList extends Activity
 			{
 				FeedItem item = items.get(position);
 				String title = item.getTitle();
-				String contentEncoded = item.getContentEncoded();
+				String content = item.getContent();
 				String pubdate = item.getPubdate();
-				if(contentEncoded != null && contentEncoded.length() != 0)
+				if(content != null && content.length() != 0)
 				{
-					intent.putExtra("item_detail", contentEncoded);
-				}
-				else
-				{ 
-					intent.putExtra("item_detail", items.get(position).getDescription());
+					intent.putExtra("item_detail", content);
 				}
 				intent.putExtra("title", title);
 				intent.putExtra("pubdate", pubdate);
@@ -94,7 +90,7 @@ public class FavoriteItemList extends Activity
 				String itemDetail = cursor.getString(cursor.getColumnIndex("item_detail"));
 				item.setTitle(title);
 				item.setPubdate(pubdate);
-				item.setDescription(itemDetail);
+				item.setContent(itemDetail);
 				items.add(item);
 				cursor.moveToNext();
 			}

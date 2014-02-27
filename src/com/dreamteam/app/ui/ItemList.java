@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -128,7 +127,6 @@ public class ItemList extends Activity
 			@Override
 			public void onSpeakBegin() throws RemoteException
 			{
-				Log.d(tag, "------------->>onSpeakBegin");
 			}
 
 			@Override
@@ -237,17 +235,13 @@ public class ItemList extends Activity
 					}.start();
 				}
 				String title = item.getTitle();
-				String contentEncoded = item.getContentEncoded();
+				String contentEncoded = item.getContent();
 				String pubdate = item.getPubdate();
 				boolean isFavorite = item.isFavorite();
 				String firstImgUrl = item.getFirstImageUrl();
 				if (contentEncoded != null && contentEncoded.length() != 0)
 				{
 					intent.putExtra("item_detail", contentEncoded);
-				} else
-				{
-					intent.putExtra("item_detail", mItems.get(position - 1)
-							.getDescription());
 				}
 				intent.putExtra("section_title", sectionTitle);
 				intent.putExtra("section_url", sectionUrl);
@@ -284,7 +278,7 @@ public class ItemList extends Activity
 				for (int i = 0, n = mItems.size(); i < n; i++)
 				{
 					FeedItem item = mItems.get(i);
-					String input = item.getTitle() + item.getDescription();
+					String input = item.getTitle() + item.getContent();
 					speechTextList.add(HtmlFilter.filterHtml(input));
 				}
 			}

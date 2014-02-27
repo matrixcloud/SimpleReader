@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebSettings.LayoutAlgorithm;
@@ -46,7 +47,6 @@ public class ItemDetail extends FragmentActivity
 	private ImageButton shareBtn;
 	private ImageButton commentBtn;
 	private TextView countTv;//评论列表
-//	private TextView topTitleTv;
 	private static WebView mWebView;
 	private String sectionTitle;
 	private String sectionUrl;
@@ -124,7 +124,6 @@ public class ItemDetail extends FragmentActivity
 		
 		isFavorite = getIntent().getBooleanExtra("is_favorite", false);
 		setContentView(R.layout.feed_item_detail);
-//		topTitleTv = (TextView) findViewById(R.id.fid_top_title);
 		shareBtn = (ImageButton) findViewById(R.id.fid_btn_share);
 		shareBtn.setOnClickListener(new OnClickListener(){
 			@Override
@@ -139,6 +138,7 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
+				mController.setShareContent(title + "原文链接:" + link);
 				mController.openComment(ItemDetail.this, false);
 			}
 		});
@@ -209,12 +209,12 @@ public class ItemDetail extends FragmentActivity
 		sectionTitle = intent.getStringExtra("section_title");
 		sectionUrl = intent.getStringExtra("section_url");
 		firstImgUrl = intent.getStringExtra("first_img_url");
-//		topTitleTv.setText(sectionTitle);
 		
 		StringBuffer sb = new StringBuffer();
 		title = intent.getStringExtra("title");
 		pubdate = intent.getStringExtra("pubdate");
 		itemDetail = intent.getStringExtra("item_detail");
+		Log.e("ItemDetail", itemDetail);
 		link = intent.getStringExtra("link");
 		//过滤style
 		itemDetail = itemDetail.replaceAll(HtmlFilter.regexpForStyle, "");
@@ -222,10 +222,10 @@ public class ItemDetail extends FragmentActivity
 		itemDetail = itemDetail.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 		itemDetail = itemDetail.replaceAll(
 				"(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
-		//图片双击
-		 itemDetail = itemDetail.replaceAll("(<img[^>]+src=\")(\\S+)\"",
-					"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
-		 mWebView.addJavascriptInterface(this, "mWebViewImageListener");
+//		//图片双击
+//		 itemDetail = itemDetail.replaceAll("(<img[^>]+src=\")(\\S+)\"",
+//					"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
+//		 mWebView.addJavascriptInterface(this, "mWebViewImageListener");
 		 //是否加载图片
 		SharedPreferences pref = AppContext.getPrefrences(this);
 		if(!pref.getBoolean("pref_imageLoad", false))

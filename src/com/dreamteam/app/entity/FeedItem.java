@@ -16,12 +16,11 @@ import java.util.ArrayList;
 public class FeedItem implements Serializable
 {
 	private String title;
-	private String description;
+	private String content;
 	private String link;
 	private String pubdate;
 	private String category;
 	private String firstImageUrl;
-	private String contentEncoded;
 	private boolean readed = false;
 	private boolean favorite = false;
 	private ArrayList<String> imageUrls = new ArrayList<String>();
@@ -43,14 +42,6 @@ public class FeedItem implements Serializable
 	public void setTitle(String title) 
 	{
 		this.title = title;
-	}
-	public String getDescription() 
-	{
-		return description;
-	}
-	public void setDescription(String description)
-	{
-		this.description = description;
 	}
 	public String getLink() 
 	{
@@ -76,14 +67,6 @@ public class FeedItem implements Serializable
 	{
 		this.category = category;
 	}
-	public String getContentEncoded()
-	{
-		return contentEncoded;
-	}
-	public void setContentEncoded(String contentEncoded)
-	{
-		this.contentEncoded = contentEncoded;
-	}
 	public ArrayList<String> getImageUrls()
 	{
 		return imageUrls;
@@ -107,6 +90,12 @@ public class FeedItem implements Serializable
 	public void setFavorite(boolean favorite)
 	{
 		this.favorite = favorite;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 }

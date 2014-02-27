@@ -3,7 +3,6 @@ package com.dreamteam.app.commons;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,7 +53,7 @@ public class ItemListEntityParser extends DefaultHandler
 			Attributes attributes) throws SAXException
 	{	
 		sb.setLength(0);
-		if(localName.trim().equalsIgnoreCase("item"))
+		if(localName.equalsIgnoreCase("item"))
 		{
 			feedItem = new FeedItem();
 			items.add(feedItem);
@@ -69,19 +68,18 @@ public class ItemListEntityParser extends DefaultHandler
 			throws SAXException
 	{
 		String content = sb.toString();
-		Log.d(qName, content);
-		if(!isFeedLink && localName.trim().equalsIgnoreCase("link"))
+		if(!isFeedLink && localName.equalsIgnoreCase("link"))
 		{
 			feedItem.setLink(content);
 		}
-		if(!isFeedTitle && localName.trim().equalsIgnoreCase("title"))
+		if(!isFeedTitle && localName.equalsIgnoreCase("title"))
 		{
 			feedItem.setTitle(content);
 			return;
 		}
-		if(!isFeedDesc && localName.trim().equalsIgnoreCase("description"))
+		if(!isFeedDesc && (localName.equalsIgnoreCase("description") || localName.equalsIgnoreCase("content:encoded")))
 		{
-			feedItem.setDescription(content);
+			feedItem.setContent(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
 			if(!srcs.isEmpty())	
 				feedItem.setFirstImageUrl(srcs.get(0));
@@ -89,19 +87,11 @@ public class ItemListEntityParser extends DefaultHandler
 			isFeedDesc = false;
 			return;
 		}
-		if(localName.trim().equalsIgnoreCase("pubDate"))
+		if(localName.equalsIgnoreCase("pubDate"))
 		{
 			content = DateUtils.rfcNormalDate(content);
 			if(feedItem != null)
 				feedItem.setPubdate(content);
-		}
-		if(localName.trim().equalsIgnoreCase("content:encoded"))
-		{
-			feedItem.setContentEncoded(content);
-			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
-			if(!srcs.isEmpty())	
-				feedItem.setFirstImageUrl(srcs.get(0));
-			feedItem.setImageUrls(srcs);
 		}
 	}
 		

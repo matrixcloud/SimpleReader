@@ -83,7 +83,7 @@ public class Main extends FragmentActivity
 		initPathMenu();
 		initPager();
 		initBroadcast();
-		checkDeprecated();
+//		checkDeprecated();
 	}
 
 	private void initBroadcast()
@@ -383,6 +383,7 @@ public class Main extends FragmentActivity
 				Section section = (Section) adapter.getItem(position);
 				String title = section.getTitle();
 				String url = section.getUrl();
+				Log.d(tag, url);
 				//初始intent
 				mIntent = new Intent();
 				mIntent.putExtra("section_title", title);
