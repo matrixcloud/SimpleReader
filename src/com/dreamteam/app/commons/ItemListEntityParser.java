@@ -3,6 +3,7 @@ package com.dreamteam.app.commons;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,15 +16,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Log;
+
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.utils.DateUtils;
 import com.dreamteam.app.utils.HttpUtils;
-
-import android.util.Log;
-
-
-
 
 public class ItemListEntityParser extends DefaultHandler
 {
@@ -56,7 +54,7 @@ public class ItemListEntityParser extends DefaultHandler
 			Attributes attributes) throws SAXException
 	{	
 		sb.setLength(0);
-		if(qName.equalsIgnoreCase("item"))
+		if(localName.trim().equalsIgnoreCase("item"))
 		{
 			feedItem = new FeedItem();
 			items.add(feedItem);
@@ -71,17 +69,17 @@ public class ItemListEntityParser extends DefaultHandler
 			throws SAXException
 	{
 		String content = sb.toString();
-		
-		if(!isFeedLink && qName.equalsIgnoreCase("link"))
+		Log.d(qName, content);
+		if(!isFeedLink && localName.trim().equalsIgnoreCase("link"))
 		{
 			feedItem.setLink(content);
 		}
-		if(!isFeedTitle && qName.equalsIgnoreCase("title"))
+		if(!isFeedTitle && localName.trim().equalsIgnoreCase("title"))
 		{
 			feedItem.setTitle(content);
 			return;
 		}
-		if(!isFeedDesc && qName.equalsIgnoreCase("description"))
+		if(!isFeedDesc && localName.trim().equalsIgnoreCase("description"))
 		{
 			feedItem.setDescription(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
@@ -91,13 +89,13 @@ public class ItemListEntityParser extends DefaultHandler
 			isFeedDesc = false;
 			return;
 		}
-		if(qName.equalsIgnoreCase("pubDate"))
+		if(localName.trim().equalsIgnoreCase("pubDate"))
 		{
 			content = DateUtils.rfcNormalDate(content);
 			if(feedItem != null)
 				feedItem.setPubdate(content);
 		}
-		if(qName.equalsIgnoreCase("content:encoded"))
+		if(localName.trim().equalsIgnoreCase("content:encoded"))
 		{
 			feedItem.setContentEncoded(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
@@ -124,15 +122,18 @@ public class ItemListEntityParser extends DefaultHandler
 		SAXParserFactory saxpf = SAXParserFactory.newInstance();
 		SAXParser saxp = null;
 		InputStream inputStream = null;
+		InputSource inputSource = null;
 		
 		try
 		{
 			inputStream = HttpUtils.getInputStream(url);
-			
+//			String encoding = HtmlFilter.getEncoding(inputStream);
+//			Log.d(tag, encoding);
+//			InputStreamReader isr = new InputStreamReader(inputStream, encoding);不可用
+			inputSource = new InputSource(inputStream);
 			saxp = saxpf.newSAXParser();
 			XMLReader xmlr = saxp.getXMLReader();
 			xmlr.setContentHandler(this);
-			InputSource inputSource = new InputSource(inputStream);
 			xmlr.parse(inputSource);
 			return itemListEntity;
 		}
@@ -176,4 +177,5 @@ public class ItemListEntityParser extends DefaultHandler
 			}
 		}
 	}
+	
 }

@@ -24,7 +24,6 @@ public class SectionHelper
 		values.put("title", title);
 		values.put("url", url);
 		db.insert(DbManager.SECTION_TABLE_NAME, null, values);
-		db.close();
 	}
 
 	public static File newSdCache(String url)

@@ -134,7 +134,6 @@ public class ItemList extends Activity
 			@Override
 			public void onCompleted(int arg0) throws RemoteException
 			{
-				Log.d(tag, "--------->>onCompleted()");
 				speechCount++;
 				if (speechCount > speechTextList.size())
 					return;
@@ -213,6 +212,9 @@ public class ItemList extends Activity
 				// 改变阅读状态
 				if (!item.isReaded())
 				{
+					item.setReaded(true);
+					mAdapter.notifyDataSetChanged();
+					
 					new Thread()
 					{
 						@Override

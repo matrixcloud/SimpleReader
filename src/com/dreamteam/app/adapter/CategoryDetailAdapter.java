@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -125,7 +126,9 @@ public class CategoryDetailAdapter extends BaseAdapter
 				intent.setAction(Main.ACTION_ADD_SECTION);
 				context.sendBroadcast(intent);
 				//加入section表
-				SectionHelper.insert(mgr.getWritableDatabase(), tableName, title, url);
+				SQLiteDatabase db = mgr.getWritableDatabase();
+				SectionHelper.insert(db, tableName, title, url);
+				db.close();
 				//更新feed.db中所对应表的状态为1
 				FeedDBManager feedHelper = new FeedDBManager(context, FeedDBManager.DB_NAME, null, 1);
 				feedHelper.updateState(tableName,state, url);
