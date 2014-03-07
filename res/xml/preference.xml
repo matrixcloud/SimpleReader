@@ -29,13 +29,10 @@
     <PreferenceCategory android:title="其他" >
         <Preference android:title="意见反馈"
             android:key="pref_feedback"/>
-        <Preference
-            android:key="pref_checkVesion"
-            android:summary="当前版本：v1.0"
-            android:title="更新版本" />
         <PreferenceScreen
-            android:summary="DreamTeam介绍"
-            android:title="关于我们" >
+            android:key="pref_about"
+            android:summary="开源介绍"
+            android:title="关于开源" >
         </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

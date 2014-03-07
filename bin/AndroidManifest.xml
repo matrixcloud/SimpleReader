@@ -33,6 +33,9 @@
             </intent-filter>
         </activity>
         <activity android:name="com.dreamteam.app.ui.Main" >
+           <intent-filter>
+                <action android:name="com.dreateam.action.ENTER_BY_SHORTCUT"/>
+            </intent-filter>
         </activity>
         <activity android:name="com.dreamteam.app.ui.GuideActivity" >
         </activity>
@@ -107,6 +110,7 @@
                 android:resource="@xml/widget"/>
         </receiver>
         <activity android:name="com.dreamteam.app.ui.ImageDialog"></activity>
+        <activity android:name="com.dreamteam.app.ui.About"></activity>
     </application>
 
 </manifest>

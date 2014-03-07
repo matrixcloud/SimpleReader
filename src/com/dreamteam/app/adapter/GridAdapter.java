@@ -17,7 +17,6 @@ import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Section;
-import com.dreamteam.app.ui.ItemList;
 import com.dreamteam.app.ui.Main;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;

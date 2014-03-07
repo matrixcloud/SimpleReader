@@ -11,6 +11,8 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -47,6 +49,15 @@ public class Setting extends PreferenceActivity
 		((ViewGroup) localViewGroup.findViewById(R.id.setting_content))
 				.addView(mLv, -1, -1);
 		setContentView(localViewGroup);
+	
+		//return btn
+		localViewGroup.findViewById(R.id.setting_return_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});;
+		
 	}
 	
 	private void initPreference()
@@ -119,6 +130,17 @@ public class Setting extends PreferenceActivity
 					}
 				}.execute(0);
 				return false;
+			}
+		});
+		
+		//about
+		findPreference("pref_about").setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Intent intent = new Intent();
+				intent.setClass(Setting.this, About.class);
+				Setting.this.startActivity(intent);
+				return true;
 			}
 		});
 	}

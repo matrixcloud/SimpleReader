@@ -10,6 +10,7 @@
 	        android:layout_height="wrap_content"
 	        android:background="@drawable/shap_title_bar">
 	        <ImageButton
+	            android:id="@+id/setting_return_btn"
 	            style="@style/img_btn_style"
 	            android:src="@drawable/btn_back" />
 	        <TextView
