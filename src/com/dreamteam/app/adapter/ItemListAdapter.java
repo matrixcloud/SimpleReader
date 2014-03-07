@@ -6,6 +6,7 @@ package com.dreamteam.app.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.utils.ImageLoader;
 import com.dreateam.app.ui.R;
@@ -36,7 +38,7 @@ public class ItemListAdapter extends BaseAdapter
 	private ArrayList<String> imageUrls = new ArrayList<String>();
 	private ImageLoader loader = new ImageLoader();
 	private static int[] colors;//是否已阅读显示的颜色
-	
+	private boolean loadImg = false;
 	
 	public ItemListAdapter(Context context, ArrayList<FeedItem> items, boolean isNight)
 	{
@@ -56,6 +58,9 @@ public class ItemListAdapter extends BaseAdapter
 					res.getColor(R.color.gray)
 			};
 		}
+		//是否加载图片
+		SharedPreferences prefs = AppContext.getPrefrences(context);
+		loadImg = prefs.getBoolean("pref_imageLoad", false);
 	}
 	
 	@Override
@@ -107,7 +112,7 @@ public class ItemListAdapter extends BaseAdapter
 		viewHolder.titleTv.setText(title);
 		viewHolder.pubdateTv.setText(item.getPubdate());
 		imageUrls = item.getImageUrls();
-		if(imageUrls.isEmpty())
+		if(imageUrls.isEmpty() || !loadImg)
 		{
 			viewHolder.itemIv.setVisibility(View.GONE);
 		}
