@@ -17,8 +17,8 @@ import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.db.FeedDBManager;
 import com.dreamteam.app.entity.Section;
+import com.dreamteam.app.ui.ItemList;
 import com.dreamteam.app.ui.Main;
-import com.dreamteam.app.ui.SplashActivity;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
 
@@ -30,7 +30,7 @@ public class GridAdapter extends BaseAdapter
 	private int isVisible = 0;//deleteButton是否可见
 	private int[] visibleStates = {View.GONE,View.VISIBLE};
 	public static final String ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
-	
+	public static final String ACTION_ENTER_BY_SHORTCUT = "com.dreateam.action.ENTER_BY_SHORTCUT";
 	
 	public GridAdapter(Context context, ArrayList<Section> sections)
 	{
@@ -158,11 +158,13 @@ public class GridAdapter extends BaseAdapter
 	//发送图标到桌面
 	private void addShortcut(String name, String sectionUrl)
 	{
-		Intent entryIntent = new Intent(Intent.ACTION_MAIN);
-		entryIntent.setClass(context, SplashActivity.class);
+		Intent entryIntent = new Intent();
+		entryIntent.setAction(ACTION_ENTER_BY_SHORTCUT);
+		entryIntent.setClass(context, Main.class);
 		entryIntent.putExtra("section_title", name);
 		entryIntent.putExtra("url", sectionUrl);
 		entryIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
 		
 		Intent shortcutIntent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);

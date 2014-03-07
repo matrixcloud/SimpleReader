@@ -79,6 +79,7 @@ public class Main extends FragmentActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		checkShortcutMsg();
 		initView();
 		initPathMenu();
 		initPager();
@@ -86,6 +87,24 @@ public class Main extends FragmentActivity
 		checkDeprecated();
 	}
 
+	//检查是否来自shortcut的动作
+	private void checkShortcutMsg()
+	{
+		Intent intent = getIntent();
+		if(intent != null)
+		{
+			String action = intent.getAction();
+			if(action != null && action.equals(GridAdapter.ACTION_ENTER_BY_SHORTCUT))
+			{
+				Intent indirectIntent = new Intent();
+				indirectIntent.putExtra("section_title", intent.getStringExtra("section_title"));
+				indirectIntent.putExtra("url", intent.getStringExtra("url"));
+				indirectIntent.setClass(this, ItemList.class);
+				startActivity(indirectIntent);
+			}
+		}
+	}
+	
 	private void initBroadcast()
 	{
 		mReceiver = new BroadcastReceiver()

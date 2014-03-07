@@ -50,12 +50,12 @@
 		        android:textSize="16sp"
 		        android:textColor="#6b6b6b" />
 		</RelativeLayout>
-	     <ImageButton
-	        android:id="@+id/fid_btn_more"
-	        android:layout_weight="1"
-	        style="@style/img_btn_style"
-	        android:alpha="0.8"
-	        android:src="?attr/detail_btn_more"
-	        />
+<!-- 	     <ImageButton -->
+<!-- 	        android:id="@+id/fid_btn_more" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        style="@style/img_btn_style" -->
+<!-- 	        android:alpha="0.8" -->
+<!-- 	        android:src="?attr/detail_btn_more" -->
+<!-- 	        /> -->
 	</LinearLayout>
 </LinearLayout>

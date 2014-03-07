@@ -1,26 +1,14 @@
 package com.dreamteam.app.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
-import com.dreamteam.app.commons.AppConfig;
-import com.dreamteam.app.commons.SectionHelper;
-import com.dreamteam.app.db.DbManager;
-import com.dreamteam.app.db.FeedDBManager;
 import com.dreateam.app.ui.R;
 
 /**
@@ -64,32 +52,13 @@ public class SplashActivity extends Activity
 				goHome();
 				break;
 			case GO_GUIDE:
-//				goGuide();
-				writeDB();
-				initSection();
-				writeSaveDaysFile();
-				goHome();
+				goGuide();
 				break;
 			}
 			super.handleMessage(msg);
 		}
 	};
 
-
-	private void writeSaveDaysFile()
-	{
-		String fileName = getFilesDir().getAbsolutePath() + File.separator 
-				+ AppConfig.PREF_DEPRECATED;
-		File file = new File(fileName);
-		try
-		{
-			file.createNewFile();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -148,76 +117,4 @@ public class SplashActivity extends Activity
 		SplashActivity.this.finish();
 	}
 	
-	/**
-	 * 土办法
-	 */
-	private void initSection()
-	{
-		DbManager mgr = new DbManager(this, DbManager.DB_NAME, null, 1);
-		SQLiteDatabase db = mgr.getWritableDatabase();
-		SectionHelper.insert(db, "news", "国内新闻", "http://n.rss.qq.com/rss/qqmail_rss.php?id=2");
-		SectionHelper.insert(db, "news", "国际时事", "http://n.rss.qq.com/rss/qqmail_rss.php?id=3");
-		SectionHelper.insert(db, "science", "科技松鼠会", "http://songshuhui.net/feed");
-		SectionHelper.insert(db, "science", "36氪", "http://www.36kr.com/feed");
-		db.close();
-	}
-	
-	private void writeDB()
-	{
-		InputStream inputStream = null;
-		try
-		{
-			inputStream = getAssets().open("feed.db");
-			FeedDBManager helper = new FeedDBManager(this, FeedDBManager.DB_NAME, null, 1);
-			SQLiteDatabase db = helper.getWritableDatabase();
-			File dbFile = new File(db.getPath());
-			if(dbFile.exists())
-			{
-				dbFile.delete();
-			}
-			FileOutputStream fos = null;
-			
-			try
-			{
-				fos = new FileOutputStream(dbFile);
-				byte buffer[] = new byte[1024 * 4];
-				while((inputStream.read(buffer)) != -1)
-				{
-					fos.write(buffer);
-				}
-			}
-			catch(FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-			finally
-			{
-				try
-				{
-					if(inputStream != null)
-					{
-						inputStream.close();
-						inputStream = null;
-					}
-					if(fos != null)
-					{
-						fos.close();
-						fos = null;
-					}
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-				db.close();
-			}
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-	}	
 }
