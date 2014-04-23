@@ -79,7 +79,6 @@ public class ItemListEntityParser extends DefaultHandler
 		}
 		if(!isFeedDesc && (qName.equalsIgnoreCase("description") || qName.equalsIgnoreCase("content:encoded")))
 		{
-			Log.i(tag, content);
 			feedItem.setContent(content);
 			ArrayList<String> srcs = HtmlFilter.getImageSrcs(content);
 			if(!srcs.isEmpty())	

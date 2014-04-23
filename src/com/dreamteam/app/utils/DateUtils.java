@@ -1,5 +1,7 @@
 package com.dreamteam.app.utils;
 
+import java.util.Date;
+
 /**
  * @description 
  * @author zcloud
@@ -18,8 +20,8 @@ public class DateUtils
 	{
 		String[] strs = date.split("\\s+|:");
 		
-		return strs[3] + "/" + enNumberMonth(strs[2])
-					   + "/" + strs[1] + "-" + strs[4]
+		return enNumberMonth(strs[2])
+					   + "月" + strs[1] + "日" + ' ' + strs[4]
 					   + ":" + strs[5];
 	}
 	
@@ -34,10 +36,5 @@ public class DateUtils
 				return i + 1;
 		}
 		return 0;
-	}
-	
-	public static String getDistanceTime(String year, String month, String day)
-	{
-		return null;
 	}
 }

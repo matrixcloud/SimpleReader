@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebSettings.LayoutAlgorithm;
@@ -168,7 +167,7 @@ public class ItemDetail extends FragmentActivity
 							.show();
 					FavoItemDbHelper
 							.insert(db, title, pubdate, itemDetail,
-									link, firstImgUrl, sectionTitle);
+									link, firstImgUrl, sectionTitle, sectionUrl);
 				}
 				Intent intent = new Intent();
 				intent.putExtra("link", link);
@@ -214,7 +213,6 @@ public class ItemDetail extends FragmentActivity
 		title = intent.getStringExtra("title");
 		pubdate = intent.getStringExtra("pubdate");
 		itemDetail = intent.getStringExtra("item_detail");
-		Log.e("ItemDetail", itemDetail);
 		link = intent.getStringExtra("link");
 		//过滤style
 		itemDetail = itemDetail.replaceAll(HtmlFilter.regexpForStyle, "");

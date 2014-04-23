@@ -40,7 +40,7 @@
             <CheckBox
                 android:id="@+id/umeng_socialize_follow_check"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:button="@drawable/umeng_socialize_follow_check"

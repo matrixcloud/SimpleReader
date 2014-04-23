@@ -32,12 +32,32 @@
             android:visibility="gone" />
 
         <RelativeLayout
+            android:id="@+id/umeng_socialize_follow_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true" >
+
+            <CheckBox
+                android:id="@+id/umeng_socialize_follow_check"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:button="@drawable/umeng_socialize_follow_check"
+                android:checked="true"
+                android:paddingLeft="25dp"
+                android:text="关注官方微博"
+                android:textColor="@color/umeng_socialize_text_share_content"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/umeng_socialize_share_location"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/umeng_socialize_post_fetch_image"
+            android:layout_toRightOf="@id/umeng_socialize_follow_layout"
             android:gravity="center" >
 
             <ImageButton

@@ -8,7 +8,7 @@ public class FavoItemDbHelper
 {
 	public static void insert(SQLiteDatabase db, String title, 
 			String pubdate, String itemDetail, String link, 
-			String firstImgUrl, String sectionTitle)
+			String firstImgUrl, String sectionTitle, String sectionUrl)
 	{
 		ContentValues values = new ContentValues();
 		values.put("title", title);
@@ -17,6 +17,8 @@ public class FavoItemDbHelper
 		values.put("link", link);
 		values.put("first_img_url", firstImgUrl);
 		values.put("table_name", sectionTitle);
+		values.put("table_url", sectionUrl);
+		
 		db.insert("favorite_item", null, values);
 		db.close();
 	}

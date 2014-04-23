@@ -15,7 +15,7 @@
 	        android:id="@+id/feeditem_title"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="程序人员写程序，又拿程序换酒钱！一辈子的程序员"
+	        android:text="标题栏"
 	        android:textSize="18sp" />
 	    <TextView
 	        android:id="@+id/feeditem_pubdate"

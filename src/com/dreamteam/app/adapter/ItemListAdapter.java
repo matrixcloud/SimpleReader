@@ -102,8 +102,8 @@ public class ItemListAdapter extends BaseAdapter
 		}
 		FeedItem item = items.get(position);
 		String title = item.getTitle();
-		if(title.length() > 24)
-			title = title.substring(0, 25) + "...";
+		if(title.length() > 30)
+			title = title.substring(0, 30);
 		if(item.isReaded())
 			colorState = 1;
 //		else
