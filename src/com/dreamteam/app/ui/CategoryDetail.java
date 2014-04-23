@@ -71,6 +71,7 @@ public class CategoryDetail extends Activity
 				cursor.moveToNext();
 			}
 		}
+		cursor.close();
 		db.close();
 		//设置适配器
 		mAdapter = new CategoryDetailAdapter(this, feeds, tableName);

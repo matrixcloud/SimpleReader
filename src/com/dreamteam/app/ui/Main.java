@@ -39,6 +39,7 @@ import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UIHelper;
+import com.dreamteam.app.db.DbConstant;
 import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
@@ -86,7 +87,7 @@ public class Main extends FragmentActivity
 		initBroadcast();
 		checkDeprecated();
 	}
-
+	
 	//检查是否来自shortcut的动作
 	private void checkShortcutMsg()
 	{
@@ -116,8 +117,8 @@ public class Main extends FragmentActivity
 				if (action.equals(ACTION_ADD_SECTION))
 				{
 					// 最后一个adapter为空或已满，新生一个gridView
-					Log.d(tag, gridAdapters.size() + "adapters");
-					Log.d(tag, gridViews.size() + "views");
+//					Log.d(tag, gridAdapters.size() + "adapters");
+//					Log.d(tag, gridViews.size() + "views");
 					GridAdapter lastGridAdapter = getLastGridAdapter();
 					if (lastGridAdapter == null || lastGridAdapter.isFull())
 					{
@@ -189,7 +190,7 @@ public class Main extends FragmentActivity
 		Section section = new Section();
 		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
 		SQLiteDatabase db = mgr.getWritableDatabase();
-		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, null, null, null,
+		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, null, null, null,
 				null, null, null);
 		if (cursor.moveToLast())
 		{
@@ -201,6 +202,7 @@ public class Main extends FragmentActivity
 			section.setUrl(url);
 			section.setTableName(tableName);
 		}
+		cursor.close();
 		db.close();
 		return section;
 	}
@@ -497,7 +499,7 @@ public class Main extends FragmentActivity
 		// 从数据库读数据
 		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
 		SQLiteDatabase db = mgr.getWritableDatabase();
-		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, 
+		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, 
 								null, null, null, null, null, null);
 		len = cursor.getCount();
 		db.close();
@@ -569,11 +571,12 @@ public class Main extends FragmentActivity
 		// 从数据库读数据
 		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
 		SQLiteDatabase db = mgr.getWritableDatabase();
-		Cursor cursor = db.query(DbManager.SECTION_TABLE_NAME, 
+		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, 
 					null, null, null, null, null, null);
 		// pager分页
 		int pageSize = 0;
 		int sectionCount = cursor.getCount();
+		cursor.close();
 		db.close();
 		
 		if (sectionCount % PAGE_SECTION_SIZE == 0)

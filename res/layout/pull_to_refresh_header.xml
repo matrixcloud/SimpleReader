@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:textColor="@color/white"
         />
     <TextView
         android:id="@+id/pull_to_refresh_updated_at"

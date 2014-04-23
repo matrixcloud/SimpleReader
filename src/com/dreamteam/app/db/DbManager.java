@@ -13,11 +13,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbManager extends SQLiteOpenHelper
 {
 	public static final String DB_NAME = "reader.db";
-	public static final String SECTION_TABLE_NAME = "section";
 	public static final String FAVORITE_ITEM_TABLE_NAME = "favorite_item";
 	
 	private static final String CREATE_SECTION_TABLE =
-			"create table" + " " + SECTION_TABLE_NAME 
+			"create table" + " " + DbConstant.SECTION_TABLE_NAME 
 			+ "(title text, url text, table_name text)";
 	
 	private static final String CREATE_FAVORITE_TABLE = "create table"

@@ -5,15 +5,16 @@ import java.io.File;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dreamteam.app.db.DbManager;
+import com.dreamteam.app.db.DbConstant;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreamteam.app.utils.MD5;
 
 public class SectionHelper
 {
+	
 	public static void removeRecord(SQLiteDatabase db, String url)
 	{
-		db.delete(DbManager.SECTION_TABLE_NAME, "url=?", new String[]{url});
+		db.delete(DbConstant.SECTION_TABLE_NAME, "url=?", new String[]{url});
 		db.close();
 	}
 	
@@ -23,7 +24,7 @@ public class SectionHelper
 		values.put("table_name", tableName);
 		values.put("title", title);
 		values.put("url", url);
-		db.insert(DbManager.SECTION_TABLE_NAME, null, values);
+		db.insert(DbConstant.SECTION_TABLE_NAME, null, values);
 	}
 
 	public static File newSdCache(String url)
