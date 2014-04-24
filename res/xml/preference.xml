@@ -23,6 +23,8 @@
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="语音设置">
+<!--         <PreferenceScreen android:title="播报时间设置"  -->
+<!--             android:key="pref_alarm" /> -->
         <Preference android:title="发音人设置" 
             	android:summary="请到讯飞语音+中设置"/>
     </PreferenceCategory>

@@ -143,5 +143,16 @@ public class Setting extends PreferenceActivity
 				return true;
 			}
 		});
+		
+//		//alarm tts
+//		findPreference("pref_alarm").setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//			@Override
+//			public boolean onPreferenceClick(Preference preference) {
+//				Intent intent = new Intent();
+//				intent.setClass(Setting.this, AlarmTts.class);
+//				Setting.this.startActivity(intent);
+//				return true;
+//			}
+//		});
 	}
 }
