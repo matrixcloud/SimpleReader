@@ -226,7 +226,7 @@ public class ItemDetail extends FragmentActivity
 //		 mWebView.addJavascriptInterface(this, "mWebViewImageListener");
 		 //是否加载图片
 		SharedPreferences pref = AppContext.getPrefrences(this);
-		if(!pref.getBoolean("pref_imageLoad", false))
+		if(!pref.getBoolean("pref_imageLoad", true))
 		{
 			itemDetail = itemDetail.replaceAll("(<|;)\\s*(IMG|img)\\s+([^;^>]*)\\s*(;|>)", "");
 		}

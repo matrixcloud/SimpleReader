@@ -60,7 +60,7 @@ public class ItemListAdapter extends BaseAdapter
 		}
 		//是否加载图片
 		SharedPreferences prefs = AppContext.getPrefrences(context);
-		loadImg = prefs.getBoolean("pref_imageLoad", false);
+		loadImg = prefs.getBoolean("pref_imageLoad", true);
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -168,7 +169,8 @@ public class GridAdapter extends BaseAdapter
 		Intent shortcutIntent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, entryIntent);
-		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, R.drawable.ic_launcher);
+		Parcelable icon = Intent.ShortcutIconResource.fromContext(context, R.drawable.ic_launcher);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
 		//只能创建一次
 		shortcutIntent.putExtra("duplicate", false);
 		context.sendBroadcast(shortcutIntent);
