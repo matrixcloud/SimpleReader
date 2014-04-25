@@ -12,7 +12,7 @@ public class Feed
 	
 	private String title;
 	private String url;
-	private int selectStatus;//是否已经选中	
+	private int selectStatus;//是否已经选中
 	
 	public String getTitle()
 	{

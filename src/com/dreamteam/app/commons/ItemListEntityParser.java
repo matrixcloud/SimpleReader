@@ -32,6 +32,7 @@ public class ItemListEntityParser extends DefaultHandler
 	private boolean isFeedTitle = true;
 	private boolean isFeedDesc = true;
 	private boolean isFeedLink = true;
+	private String feedTitle;
 	
 	
 	@Override
@@ -72,9 +73,16 @@ public class ItemListEntityParser extends DefaultHandler
 		{
 			feedItem.setLink(content);
 		}
-		if(!isFeedTitle && qName.equalsIgnoreCase("title"))
+		if(qName.equalsIgnoreCase("title"))
 		{
-			feedItem.setTitle(content);
+			if(isFeedTitle)
+			{
+				feedTitle = content;
+			}
+			else
+			{
+				feedItem.setTitle(content);
+			}
 			return;
 		}
 		if(!isFeedDesc && (qName.equalsIgnoreCase("description") || qName.equalsIgnoreCase("content:encoded")))
@@ -167,5 +175,9 @@ public class ItemListEntityParser extends DefaultHandler
 			}
 		}
 	}
-	
+
+	public String getFeedTitle() {
+		return feedTitle;
+	}
+
 }

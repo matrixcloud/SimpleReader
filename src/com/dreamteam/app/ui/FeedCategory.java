@@ -3,6 +3,7 @@ package com.dreamteam.app.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -12,9 +13,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dreamteam.app.adapter.FeedCategoryAdapter;
+import com.dreamteam.app.commons.AppContext;
 import com.dreateam.app.ui.R;
 
-public class FeedCategory extends Activity
+public class FeedCategory extends FragmentActivity
 {
 
 	private ListView categoryList;
@@ -42,8 +44,12 @@ public class FeedCategory extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				Toast.makeText(FeedCategory.this, "开发中功能", Toast.LENGTH_SHORT)
-						.show();
+//				if(!AppContext.isNetworkAvailable(FeedCategory.this))
+//				{
+//					Toast.makeText(FeedCategory.this, "请检查网络设置", Toast.LENGTH_SHORT).show();
+//					return;
+//				}
+				new AddDialog().show(getSupportFragmentManager(), "添加Feed");
 			}
 		});
 		findViewById(R.id.feed_category_btn_back).setOnClickListener(new OnClickListener()
