@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dreateam.app.ui"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="18"
+    />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -92,6 +93,16 @@
             android:theme="@style/Theme.UMDefault" >
         </activity>
 
+        <!-- umeng update sdk -->
+        <service
+		    android:name="com.umeng.common.net.DownloadingService"
+		    android:process=":DownloadingService" >
+		</service>
+		<activity 
+		    android:name="com.umeng.update.UpdateDialogActivity"
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+		</activity>
+        
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5269be4956240b2d8b048955" >

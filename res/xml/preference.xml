@@ -36,5 +36,10 @@
         </PreferenceScreen> 
         <Preference android:title="意见反馈"
             android:key="pref_feedback"/>
-    </PreferenceCategory>
+    	</PreferenceCategory>
+    	<PreferenceScreen
+    	    android:key="pref_update"
+    	    android:title="检测新版本"
+    	    android:summary="检测是否有最新版本">
+    	</PreferenceScreen>
 </PreferenceScreen>

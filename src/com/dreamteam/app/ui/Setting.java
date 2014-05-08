@@ -21,6 +21,10 @@ import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
 import com.dreamteam.app.utils.FileUtils;
 import com.dreateam.app.ui.R;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 public class Setting extends PreferenceActivity
 {
@@ -154,5 +158,38 @@ public class Setting extends PreferenceActivity
 //				return true;
 //			}
 //		});
+		
+		//update
+		findPreference("pref_update").setOnPreferenceClickListener(new OnPreferenceClickListener()
+		{
+			@Override
+			public boolean onPreferenceClick(Preference preference)
+			{
+				final Context mContext = Setting.this;
+				
+				UmengUpdateAgent.setUpdateAutoPopup(false);
+				UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+			    @Override
+			    public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+			        switch (updateStatus) {
+			        case UpdateStatus.Yes: // has update
+			            UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
+			            break;
+			        case UpdateStatus.No: // has no update
+			            Toast.makeText(mContext, "没有更新", Toast.LENGTH_SHORT).show();
+			            break;
+			        case UpdateStatus.NoneWifi: // none wifi
+			            Toast.makeText(mContext, "没有wifi连接， 只在wifi下更新", Toast.LENGTH_SHORT).show();
+			            break;
+			        case UpdateStatus.Timeout: // time out
+			            Toast.makeText(mContext, "超时", Toast.LENGTH_SHORT).show();
+			            break;
+			        	}
+			    	}
+				});
+				UmengUpdateAgent.forceUpdate(mContext);
+				return true;
+			}
+		});
 	}
 }
