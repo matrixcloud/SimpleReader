@@ -22,15 +22,71 @@
 		    android:textColor="@color/white"
 		    android:text="评论列表" />
 	</RelativeLayout>
-
-	<com.dreamteam.custom.ui.PullToRefreshListView
-	    android:id="@+id/comment_Lv"
-	    android:layout_gravity="center"
-	    android:layout_weight="1"
-	    android:layout_width="match_parent"
-	    android:layout_height="0dp" >
-	</com.dreamteam.custom.ui.PullToRefreshListView>
-    <LinearLayout android:layout_gravity="bottom" android:background="@drawable/article_toolbar" android:paddingLeft="20.0dip" android:paddingTop="8.0dip" android:paddingRight="20.0dip" android:layout_width="fill_parent" android:layout_height="60.0dip">
-        <TextView android:textSize="16.0sp" android:textColor="#ff999999" android:gravity="center_vertical" android:layout_gravity="center_vertical" android:background="@drawable/add_comment_bgd" android:paddingLeft="10.0dip" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="我来说两句" android:drawableLeft="@drawable/comment_write_icon" android:drawablePadding="10.0dip" android:onClick="onAddComment" />
+	<FrameLayout
+		    android:layout_gravity="center"
+		    android:layout_weight="1"
+		    android:layout_height="0dp"
+		    android:layout_width="match_parent">
+		<LinearLayout 
+		    android:layout_gravity="center" 
+		    android:orientation="vertical" 
+		    android:id="@+id/emptyTip" 
+		    android:visibility="gone" 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content">
+            <ImageView 
+                android:layout_gravity="center_horizontal" 
+                android:id="@+id/imgEmpty"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:src="@drawable/empty_comment" />
+            <TextView 
+                android:textSize="14.0sp" 
+                android:textColor="#ff969696" 
+                android:layout_gravity="center_horizontal" 
+                android:id="@+id/txtEmpty" 
+                android:paddingTop="30.0dip" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:text="暂无评论" />
+        </LinearLayout>
+		<ProgressBar
+		     android:layout_gravity="center"
+		     android:id="@+id/loadingAnimation" 
+		     android:layout_width="wrap_content" 
+		     android:layout_height="wrap_content" 
+		     />
+		<com.dreamteam.custom.ui.PullToRefreshListView
+		    android:id="@+id/comment_Lv"
+		    android:visibility="gone"
+		    android:layout_gravity="center"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent" >
+		</com.dreamteam.custom.ui.PullToRefreshListView>
+	</FrameLayout>
+    <LinearLayout 
+        android:layout_gravity="bottom" 
+        android:background="@drawable/article_toolbar"
+        android:paddingLeft="20.0dip"
+        android:paddingTop="8.0dip" 
+        android:paddingRight="20.0dip"
+        android:layout_width="fill_parent" 
+        android:layout_height="60.0dip">
+        <TextView 
+            android:textSize="16.0sp" 
+            android:textColor="#ff999999" 
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical" 
+            android:background="@drawable/add_comment_bgd" 
+            android:paddingLeft="10.0dip" 
+            android:clickable="true" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="我来说两句" 
+            android:drawableLeft="@drawable/comment_write_icon" 
+            android:drawablePadding="10.0dip" 
+            android:onClick="onAddComment" />
     </LinearLayout>
+    
+    <!-- Here is the view to show if the list is emtpy -->  
 </LinearLayout>
