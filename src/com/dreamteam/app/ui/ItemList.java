@@ -76,7 +76,7 @@ public class ItemList extends Activity
 		initView();
 		initData();
 		initTts();
-//		initBroadeCast();
+		initBroadeCast();
 	}
 
 	private void initBroadeCast()

@@ -32,6 +32,13 @@ public class AppContext
 		return true;
 	}
 
+	public static boolean isWifi(Context context)
+	{
+		ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); 
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+	}
+	
 	public static SharedPreferences getPrefrences(Context context)
 	{
 		return PreferenceManager.getDefaultSharedPreferences(context);

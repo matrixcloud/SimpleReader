@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
-import com.dreamteam.app.commons.AppConfig;
 import com.dreamteam.app.commons.AppContext;
+import com.dreamteam.app.commons.UMHelper;
 import com.dreateam.app.ui.R;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.RequestType;
-import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SocializeClientListener;
 
@@ -28,13 +26,11 @@ public class LoginDialog extends DialogFragment
 {
 
 	public static final String tag = "LoginDialog";
-	public static final String UM_USER_KEY = AppConfig.UM_BASE_KEY + "user";
 	private Activity mActivity;
 	private static final int POS_SINA_WEIBO = 0;
 	private static final int POS_QQZONE = 1;
 	private static final int POS_RENREN = 2;
-	private UMSocialService mController = UMServiceFactory.getUMSocialService(UM_USER_KEY,
-			RequestType.SOCIAL);
+	private UMSocialService mController = UMHelper.getUMSocialService();
 
 	
 	@Override

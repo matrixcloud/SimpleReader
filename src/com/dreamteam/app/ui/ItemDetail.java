@@ -137,8 +137,7 @@ public class ItemDetail extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
-				mController.setShareContent(title + "原文链接:" + link);
-				mController.openComment(ItemDetail.this, false);
+				openCommentUi();
 			}
 		});
 		collectBtn = (ImageButton) findViewById(R.id.fid_btn_collecte);
@@ -241,6 +240,13 @@ public class ItemDetail extends FragmentActivity
 		intent.putExtra("url", url);
 		intent.setClass(this, ImageDialog.class);
 		startActivity(intent);
+	}
+	
+	private void openCommentUi()
+	{
+		Intent intent = new Intent();
+		intent.setClass(ItemDetail.this, Comment.class);
+		ItemDetail.this.startActivity(intent);
 	}
 }
 

@@ -47,6 +47,7 @@ import com.dreamteam.app.utils.ImageUtils;
 import com.dreamteam.custom.ui.PathAnimations;
 import com.dreateam.app.ui.R;
 import com.umeng.socialize.controller.UMInfoAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 public class Main extends FragmentActivity
 {
@@ -86,6 +87,14 @@ public class Main extends FragmentActivity
 		initPager();
 		initBroadcast();
 		checkDeprecated();
+		checkVersion();
+	}
+
+	//检测新版本
+	public void checkVersion()
+	{
+		UmengUpdateAgent.setUpdateOnlyWifi(true);
+		UmengUpdateAgent.update(this);
 	}
 	
 	//检查是否来自shortcut的动作

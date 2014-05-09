@@ -122,6 +122,7 @@
         </receiver>
         <activity android:name="com.dreamteam.app.ui.ImageDialog"></activity>
         <activity android:name="com.dreamteam.app.ui.About"></activity>
+        <activity android:name="com.dreamteam.app.ui.Comment"></activity>
     </application>
 
 </manifest>
