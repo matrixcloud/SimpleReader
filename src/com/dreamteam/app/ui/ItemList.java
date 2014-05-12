@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +33,10 @@ import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.entity.FeedItem;
 import com.dreamteam.app.entity.ItemListEntity;
-import com.dreamteam.custom.ui.PullToRefreshListView;
-import com.dreamteam.custom.ui.PullToRefreshListView.OnRefreshListener;
 import com.dreateam.app.ui.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.iflytek.speech.SpeechConstant;
 import com.iflytek.speech.SpeechSynthesizer;
 import com.iflytek.speech.SynthesizerListener;
@@ -183,20 +185,30 @@ public class ItemList extends Activity
 			}
 		});
 		itemLv = (PullToRefreshListView) findViewById(R.id.fil_lv_feed_item);
-		itemLv.setOnRefreshListener(new OnRefreshListener()
+		itemLv.setOnRefreshListener(new OnRefreshListener<ListView>()
 		{
-			public void onRefresh()
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView)
 			{
-				if (!AppContext.isNetworkAvailable(ItemList.this))
-				{
-					itemLv.onRefreshComplete();
-					Toast.makeText(ItemList.this, R.string.no_network,
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				new RefreshTask().execute(sectionUrl);
+				
 			}
 		});
+		
+		
+//		itemLv.setOnRefreshListener(new OnRefreshListener()
+//		{
+//			public void onRefresh()
+//			{
+////				if (!AppContext.isNetworkAvailable(ItemList.this))
+////				{
+////					itemLv.onRefreshComplete();
+////					Toast.makeText(ItemList.this, R.string.no_network,
+////							Toast.LENGTH_SHORT).show();
+////					return;
+////				}
+////				new RefreshTask().execute(sectionUrl);
+//			}
+//		});
 		itemLv.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override

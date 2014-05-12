@@ -55,15 +55,21 @@ public class CommentAdapter extends BaseAdapter
 			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.comment_item, null);
 			holder = new ViewHolder();
-			holder.usrIconIv = (ImageView) convertView.findViewById(R.id.usr_portrait);
-			holder.usrCommentTv = (TextView) convertView.findViewById(R.id.usr_comment);
+			holder.usrIconIv = (ImageView) convertView.findViewById(R.id.comment_usr_icon);
+			holder.contentTv = (TextView) convertView.findViewById(R.id.comment_content);
+			holder.usrNameTv = (TextView) convertView.findViewById(R.id.comment_usr_nick);
+			holder.agoTimeTv =  (TextView) convertView.findViewById(R.id.comment_minuteago);
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.usrCommentTv.setText(comments.get(postion).mText);
+		UMComment comment = comments.get(postion);
+		holder.usrNameTv.setText(comment.mUname);
+		holder.agoTimeTv.setText(comment.mDt+"");
+		holder.contentTv.setText(comment.mText);
+		
 		
 		return convertView;
 	}
@@ -71,6 +77,8 @@ public class CommentAdapter extends BaseAdapter
 	private static final class ViewHolder
 	{
 		ImageView usrIconIv;
-		TextView usrCommentTv;
+		TextView usrNameTv;
+		TextView agoTimeTv;
+		TextView contentTv;
 	}
 }

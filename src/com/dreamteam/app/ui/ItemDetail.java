@@ -245,7 +245,7 @@ public class ItemDetail extends FragmentActivity
 	private void openCommentUi()
 	{
 		Intent intent = new Intent();
-		intent.setClass(ItemDetail.this, Comment.class);
+		intent.setClass(ItemDetail.this, CommentUI.class);
 		ItemDetail.this.startActivity(intent);
 	}
 }

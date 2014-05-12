@@ -51,4 +51,8 @@
 	    <item>10天</item>
 	</string-array>
 	
+	<string name="minuteago">分钟前</string>
+    <string name="hourago">小时前</string>
+    <string name="dayago">天前</string>
+	
 </resources>

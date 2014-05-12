@@ -1,5 +1,6 @@
 package com.dreamteam.app.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +9,13 @@ import org.apache.http.HttpStatus;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.dreamteam.app.adapter.CommentAdapter;
+import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UMHelper;
-import com.dreamteam.custom.ui.PullToRefreshListView;
-import com.dreamteam.custom.ui.PullToRefreshListView.OnRefreshListener;
+import com.dreamteam.app.entity.UMCommentListEntity;
 import com.dreateam.app.ui.R;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.umeng.socialize.bean.MultiStatus;
 import com.umeng.socialize.bean.SocializeConfig;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -23,15 +23,11 @@ import com.umeng.socialize.bean.UMComment;
 import com.umeng.socialize.controller.listener.SocializeListeners.FetchCommetsListener;
 import com.umeng.socialize.controller.listener.SocializeListeners.MulStatusListener;
 
-public class Comment extends Activity
+public class CommentUI extends Activity
 {
 	private PullToRefreshListView commentLv;
-	private LinearLayout emptyLayout;
-	private ProgressBar loadingBar;
-
 	private ArrayList<UMComment> mComments = new ArrayList<UMComment>();
 	private CommentAdapter mAdapter;
-	
 	
 
 	@Override
@@ -45,21 +41,16 @@ public class Comment extends Activity
 	private void initView()
 	{
 		setContentView(R.layout.comment);
-		emptyLayout = (LinearLayout) findViewById(R.id.emptyTip);
-		loadingBar = (ProgressBar) findViewById(R.id.loadingAnimation);
 		commentLv = (PullToRefreshListView) findViewById(R.id.comment_Lv);
-		commentLv.setOnRefreshListener(new OnRefreshListener()
-		{
-			@Override
-			public void onRefresh()
-			{
-				
-			}
-		});
 	}
 	
 	private void initData()
 	{
+		File file = new File("");
+		UMCommentListEntity entity = (UMCommentListEntity) SeriaHelper.newInstance().readObject(file);
+		
+		
+		
 		UMHelper.getUMSocialService().getComments(this, new FetchCommetsListener()
 		{
 			@Override
@@ -70,19 +61,10 @@ public class Comment extends Activity
 			@Override
 			public void onComplete(int status, List<UMComment> comments, SocializeEntity entity)
 			{
-				loadingBar.setVisibility(View.GONE);
-				commentLv.setVisibility(View.VISIBLE);
 				if(status == HttpStatus.SC_OK && comments != null)
 				{
-					if(comments.isEmpty())
-					{
-						commentLv.setEmptyView(emptyLayout);
-					}
-					else
-					{
-						mComments.addAll(comments);
-						mAdapter.notifyDataSetChanged();
-					}
+					mComments.addAll(comments);
+					mAdapter.notifyDataSetChanged();
 				}
 			}
 		}, System.currentTimeMillis());
