@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="switch2Day">已切回日间模式</string>
+	<string name="switch2Night">夜间模式已启用</string>
+	
+	<string name="loggedon">你已登陆</string>
+	<string name="exitEdit">按下返回键退出编辑模式</string>
+	
+	<string name="twice2Exit">再按下退出程序</string>
+</resources>
