@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -282,7 +281,6 @@ public class Main extends FragmentActivity
 
 	private void switchMode()
 	{
-		SharedPreferences prefs = AppContext.getPrefrences(this);
 		Editor editor = AppContext.getPrefrences(this).edit();
 		//切回日间模式
 		if(isNight)
@@ -290,16 +288,15 @@ public class Main extends FragmentActivity
 			isNight = false;
 			bgLayout.setBackgroundResource(R.drawable.home_bg_default);
 			switchModeBtn.setImageResource(R.drawable.composer_sun);
-			Toast.makeText(Main.this, "已切回日间模式", Toast.LENGTH_SHORT).show();
+			Toast.makeText(Main.this, R.string.switch2Day, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
 			//切回夜间模式
 			isNight = true;
-			bgLayout.setBackgroundResource(
-					prefs.getInt("home_bg_id", R.drawable.home_bg_night));
+			bgLayout.setBackgroundResource(R.drawable.home_bg_night);
 			switchModeBtn.setImageResource(R.drawable.composer_moon);
-			Toast.makeText(Main.this, "夜间模式已启用", Toast.LENGTH_SHORT).show();
+			Toast.makeText(Main.this, R.string.switch2Day, Toast.LENGTH_SHORT).show();
 		}
 		editor.putBoolean("day_night_mode", isNight);
 		editor.commit();
@@ -334,7 +331,7 @@ public class Main extends FragmentActivity
 	{
 		if(UMInfoAgent.isLogin(this))
 		{
-			Toast.makeText(this, "你已登陆！", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.loggedon, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		new LoginDialog().show(getSupportFragmentManager(), tag);
@@ -479,7 +476,7 @@ public class Main extends FragmentActivity
 		{
 			gridAdapters.get(i).changeDelBtnState(isVisble);
 		}
-		Toast.makeText(this, "按下返回键退出编辑模式", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.exitEdit, Toast.LENGTH_SHORT).show();
 	}
 	
 	//退出编辑模式
@@ -621,7 +618,7 @@ public class Main extends FragmentActivity
 			}
 			else
 			{
-				Toast.makeText(Main.this, "网络异常！", Toast.LENGTH_SHORT).show();
+				Toast.makeText(Main.this, R.string.networkexception, Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -661,7 +658,7 @@ public class Main extends FragmentActivity
 					finish();
 					return true;
 				}
-				Toast.makeText(this, "再按下退出程序", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.twice2Exit, Toast.LENGTH_SHORT).show();
 				exit = true;
 				Log.d(tag, "after toast");
 			}
