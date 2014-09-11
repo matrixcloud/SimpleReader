@@ -281,6 +281,7 @@ public class Main extends FragmentActivity
 
 	private void switchMode()
 	{
+		isNight = AppContext.getPrefrences(this).getBoolean("day_night_mode", false);
 		Editor editor = AppContext.getPrefrences(this).edit();
 		//切回日间模式
 		if(isNight)
@@ -296,7 +297,7 @@ public class Main extends FragmentActivity
 			isNight = true;
 			bgLayout.setBackgroundResource(R.drawable.home_bg_night);
 			switchModeBtn.setImageResource(R.drawable.composer_moon);
-			Toast.makeText(Main.this, R.string.switch2Day, Toast.LENGTH_SHORT).show();
+			Toast.makeText(Main.this, R.string.switch2Night, Toast.LENGTH_SHORT).show();
 		}
 		editor.putBoolean("day_night_mode", isNight);
 		editor.commit();
