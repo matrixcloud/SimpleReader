@@ -37,7 +37,7 @@ public class FeedbackUI extends Activity
 						Intent intent = new Intent();
 						intent.setType("message/rfc822");
 						intent.setAction(Intent.ACTION_SEND);
-						intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zcloud00@gmail.com"});
+						intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zcloud01@outlook.com"});
 						intent.putExtra(Intent.EXTRA_SUBJECT, "用户反馈");
 						intent.putExtra(Intent.EXTRA_TEXT, msg);
 						startActivity(Intent.createChooser(intent, "sending mail"));

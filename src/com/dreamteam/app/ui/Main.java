@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -39,8 +37,6 @@ import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UIHelper;
 import com.dreamteam.app.dao.SectionDAO;
-import com.dreamteam.app.db.DbConstant;
-import com.dreamteam.app.db.DbManager;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.utils.ImageUtils;
@@ -75,6 +71,7 @@ public class Main extends FragmentActivity
 	private boolean exit = false;//双击退出
 	private boolean isEdting = false;//是否编辑section中
 	private boolean isNight;//是否为夜间模式
+	private SectionDAO sectionDAO;
 	
 	
 	@Override
@@ -89,7 +86,7 @@ public class Main extends FragmentActivity
 		checkDeprecated();
 		checkVersion();
 	}
-
+	
 	//检测新版本
 	public void checkVersion()
 	{
@@ -135,7 +132,7 @@ public class Main extends FragmentActivity
 					} else
 					{
 						// 最后一个gridAdapter添加section
-						lastGridAdapter.addItem(getNewSection());
+						lastGridAdapter.addItem(sectionDAO.getLast());
 					}
 				} else if (action.equals(ACTION_DELETE_SECTION))
 				{
@@ -191,29 +188,6 @@ public class Main extends FragmentActivity
 		filter.addAction(ACTION_DELETE_SECTION);
 		filter.addAction(SwitchBg.SWITCH_HOME_BG);
 		registerReceiver(mReceiver, filter);
-	}
-
-	// 获取表新加入的section
-	private Section getNewSection()
-	{
-		Section section = new Section();
-		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
-		SQLiteDatabase db = mgr.getWritableDatabase();
-		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, null, null, null,
-				null, null, null);
-		if (cursor.moveToLast())
-		{
-			String title = cursor.getString(cursor.getColumnIndex("title"));
-			String url = cursor.getString(cursor.getColumnIndex("url"));
-			String tableName = cursor.getString(cursor
-					.getColumnIndex("table_name"));
-			section.setTitle(title);
-			section.setUrl(url);
-			section.setTableName(tableName);
-		}
-		cursor.close();
-		db.close();
-		return section;
 	}
 
 	private void initPathMenu()
@@ -347,8 +321,12 @@ public class Main extends FragmentActivity
 		startActivity(intent);
 	}
 
+	/**
+	 * @description 初始化pagerView,DAO
+	 */
 	private void initPager()
 	{
+		sectionDAO = new SectionDAO(this);
 		int pageSize = getPageSize();
 		for (int i = 0; i < pageSize; i++)
 		{
@@ -454,7 +432,7 @@ public class Main extends FragmentActivity
 		ArrayList<Section> sections = null;
 		try
 		{
-			sections = readSections(currentPage);
+			sections = sectionDAO.getList(currentPage);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -497,46 +475,6 @@ public class Main extends FragmentActivity
 		}
 	}
 	
-	private ArrayList<Section> readSections(int page) throws Exception
-	{
-		SectionDAO sd = new SectionDAO();
-		return sd.getList(this, page);
-//		ArrayList<Section> sections = null;
-//		int len = 0;// 表长
-//		int start = 0;// 其实读
-//		int end = 0;// 结尾
-//		Log.i(tag, "page = " + page);
-//		// 从数据库读数据
-//		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
-//		SQLiteDatabase db = mgr.getWritableDatabase();
-//		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, 
-//								null, null, null, null, null, null);
-//		len = cursor.getCount();
-//		db.close();
-//		
-//		start = page * Main.PAGE_SECTION_SIZE;
-//		if (cursor.moveToPosition(start))
-//		{
-//			sections = new ArrayList<Section>();
-//
-//			int offset = start + Main.PAGE_SECTION_SIZE;
-//			end = len < offset ? len : offset;
-//			for (int i = start; i < end; i++)
-//			{
-//				Section s = new Section();
-//				String title = cursor.getString(cursor.getColumnIndex("title"));
-//				String url = cursor.getString(cursor.getColumnIndex("url"));
-//				String tableName = cursor.getString(cursor.getColumnIndex("table_name"));
-//				s.setTitle(title);
-//				s.setUrl(url);
-//				s.setTableName(tableName);
-//				sections.add(s);
-//				cursor.moveToNext();
-//			}
-//		}
-//		return sections;
-	}
-
 	@Override
 	protected void onDestroy()
 	{
@@ -578,16 +516,9 @@ public class Main extends FragmentActivity
 	// 从1记
 	private int getPageSize()
 	{
-		// 从数据库读数据
-		DbManager mgr = new DbManager(Main.this, DbManager.DB_NAME, null, 1);
-		SQLiteDatabase db = mgr.getWritableDatabase();
-		Cursor cursor = db.query(DbConstant.SECTION_TABLE_NAME, 
-					null, null, null, null, null, null);
 		// pager分页
 		int pageSize = 0;
-		int sectionCount = cursor.getCount();
-		cursor.close();
-		db.close();
+		int sectionCount = sectionDAO.getCount();
 		
 		if (sectionCount % PAGE_SECTION_SIZE == 0)
 			pageSize = sectionCount / PAGE_SECTION_SIZE;
