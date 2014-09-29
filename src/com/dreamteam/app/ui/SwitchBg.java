@@ -45,9 +45,8 @@ public class SwitchBg extends Activity implements
 	{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		setContentView(R.layout.switch_bg);
-
+		
 		mSwitcher = (ImageSwitcher) findViewById(R.id.switcher);
 		mSwitcher.setFactory(this);
 		mSwitcher.setInAnimation(AnimationUtils.loadAnimation(this,
@@ -83,7 +82,7 @@ public class SwitchBg extends Activity implements
 				intent.setAction(SWITCH_HOME_BG);
 				intent.putExtra("home_bg_id", mImageIds[selectedPosition]);
 				sendBroadcast(intent);
-				Toast.makeText(SwitchBg.this, "设置成功！", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SwitchBg.this, R.string.bg_switch_success, Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

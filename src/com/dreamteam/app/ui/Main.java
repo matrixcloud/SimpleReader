@@ -262,7 +262,8 @@ public class Main extends FragmentActivity
 		if(isNight)
 		{
 			isNight = false;
-			bgLayout.setBackgroundResource(R.drawable.home_bg_default);
+			int resid = AppContext.getPrefrences(this).getInt("home_bg", R.drawable.home_bg_default);
+			bgLayout.setBackgroundResource(resid);
 			switchModeBtn.setImageResource(R.drawable.composer_sun);
 			Toast.makeText(Main.this, R.string.switch2Day, Toast.LENGTH_SHORT).show();
 		}
@@ -342,7 +343,11 @@ public class Main extends FragmentActivity
 		switchModeBtn = (ImageButton) findViewById(R.id.composer_btn_moon);
 		pageTv = (TextView) findViewById(R.id.home_page_tv);
 		homeLoadingLayout = (RelativeLayout) findViewById(R.id.home_loading_layout);
+		
 		bgLayout = (RelativeLayout) findViewById(R.id.home_bg_layout);
+		int resid = AppContext.getPrefrences(this).getInt("home_bg", R.drawable.home_bg_default); 
+		bgLayout.setBackgroundResource(resid);
+		
 		mPager = (ViewPager) findViewById(R.id.home_pager);
 		mPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
