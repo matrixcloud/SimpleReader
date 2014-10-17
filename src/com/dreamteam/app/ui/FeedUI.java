@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -17,17 +16,16 @@ import android.widget.Toast;
 
 import com.dreamteam.app.adapter.CategoryDetailAdapter;
 import com.dreamteam.app.commons.AppContext;
-import com.dreamteam.app.db.FeedDBManager;
+import com.dreamteam.app.dao.FeedDao;
 import com.dreamteam.app.entity.Feed;
-import com.dreamteam.app.utils.CategoryNameExchange;
 import com.dreateam.app.ui.R;
 
 /**
- * @description TODO
+ * @description  
  * @author zcloud
  * @date 2013年11月14日
  */
-public class CategoryDetail extends Activity
+public class FeedUI extends Activity
 {
 	public static final String tag = "CategoryDetail";
 	
@@ -35,6 +33,7 @@ public class CategoryDetail extends Activity
 	private TextView titleTv;
 	private ArrayList<Feed> feeds = new ArrayList<Feed>();
 	private CategoryDetailAdapter mAdapter;
+	private FeedDao mDao;
 	
 	
 	@Override
@@ -47,34 +46,14 @@ public class CategoryDetail extends Activity
 
 	private void initData()
 	{
+		mDao = new FeedDao(this);
 		Intent intent = getIntent();
-		String tableName = intent.getStringExtra("category");
-		CategoryNameExchange exchange = new CategoryNameExchange(this);
-		titleTv.setText(exchange.en2zh(tableName) + "");
-		//读取数据库
-		FeedDBManager helper = new FeedDBManager(this, FeedDBManager.DB_NAME, null, 1);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		Cursor cursor = db.query(tableName, null, null, null, null, null, null);
-		if (cursor.moveToFirst())
-		{
-			for (int i = 0, n = cursor.getCount(); i < n; i++)
-			{
-				Feed f = new Feed();
-				String title = cursor.getString(cursor.getColumnIndex("title"));
-				String url = cursor.getString(cursor.getColumnIndex("url"));
-				int selectStatus = cursor.getInt(cursor
-						.getColumnIndex("select_status"));
-				f.setTitle(title);
-				f.setUrl(url);
-				f.setSelectStatus(selectStatus);
-				feeds.add(f);
-				cursor.moveToNext();
-			}
-		}
-		cursor.close();
-		db.close();
+		int cid = intent.getIntExtra("category", 1);
+		Log.i(tag, "category.id = " + cid);
+		String id = String.valueOf(cid);
+		feeds = mDao.getListByCategoryId(id);
 		//设置适配器
-		mAdapter = new CategoryDetailAdapter(this, feeds, tableName);
+		mAdapter = new CategoryDetailAdapter(this, feeds, "feed");
 		detailList.setAdapter(mAdapter);
 	}
 
@@ -97,9 +76,9 @@ public class CategoryDetail extends Activity
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3)
 			{
-				if(!AppContext.isNetworkAvailable(CategoryDetail.this))
+				if(!AppContext.isNetworkAvailable(FeedUI.this))
 				{
-					Toast.makeText(CategoryDetail.this, "请检查网络设置！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(FeedUI.this, "请检查网络设置", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				//feed预览

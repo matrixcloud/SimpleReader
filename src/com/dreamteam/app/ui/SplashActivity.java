@@ -49,7 +49,8 @@ public class SplashActivity extends Activity
 			switch (msg.what)
 			{
 			case GO_HOME:
-				goHome();
+//				goHome();
+				goGuide();
 				break;
 			case GO_GUIDE:
 				goGuide();

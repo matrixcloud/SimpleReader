@@ -163,8 +163,8 @@ public class FileUtils
 				{
 					for (int i = 0; i < listfile.length; i++)
 					{
-						File deletedFile = new File(newPath.toString() + File.separator
-								+ listfile[i].toString());
+						File deletedFile = new File(newPath.toString()
+								+ File.separator + listfile[i].toString());
 						deletedFile.delete();
 					}
 					newPath.delete();
@@ -181,7 +181,7 @@ public class FileUtils
 			status = false;
 		return status;
 	}
-	
+
 	/**
 	 * @description 根据文件绝对路径创建文件/布覆盖原文件
 	 * @param path

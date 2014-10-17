@@ -44,7 +44,7 @@ public class FeedDBManager extends SQLiteOpenHelper
 	{
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put("select_status", state);
+		values.put("state", state);
 		db.update(tableName, values, "url=?", new String[]{url});
 		db.close();
 	}

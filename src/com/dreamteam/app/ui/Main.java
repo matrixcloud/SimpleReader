@@ -36,7 +36,7 @@ import com.dreamteam.app.commons.ItemListEntityParser;
 import com.dreamteam.app.commons.SectionHelper;
 import com.dreamteam.app.commons.SeriaHelper;
 import com.dreamteam.app.commons.UIHelper;
-import com.dreamteam.app.dao.SectionDAO;
+import com.dreamteam.app.dao.SectionDao;
 import com.dreamteam.app.entity.ItemListEntity;
 import com.dreamteam.app.entity.Section;
 import com.dreamteam.app.utils.ImageUtils;
@@ -71,7 +71,7 @@ public class Main extends FragmentActivity
 	private boolean exit = false;//双击退出
 	private boolean isEdting = false;//是否编辑section中
 	private boolean isNight;//是否为夜间模式
-	private SectionDAO sectionDAO;
+	private SectionDao sectionDAO;
 	
 	
 	@Override
@@ -318,7 +318,7 @@ public class Main extends FragmentActivity
 	private void openSubscribeCenter()
 	{
 		Intent intent = new Intent();
-		intent.setClass(this, FeedCategory.class);
+		intent.setClass(this, FeedCategoryUI.class);
 		startActivity(intent);
 	}
 
@@ -327,7 +327,7 @@ public class Main extends FragmentActivity
 	 */
 	private void initPager()
 	{
-		sectionDAO = new SectionDAO(this);
+		sectionDAO = new SectionDao(this);
 		int pageSize = getPageSize();
 		for (int i = 0; i < pageSize; i++)
 		{
@@ -406,7 +406,6 @@ public class Main extends FragmentActivity
 				File cache = SectionHelper.getSdCache(url);
 				if(cache.exists())
 				{
-					
 					Main.this.startActivity(mIntent);
 				}
 				else

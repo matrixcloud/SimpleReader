@@ -1,5 +1,7 @@
 package com.dreamteam.app.adapter;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.dreamteam.app.dao.FeedCategoryDao;
+import com.dreamteam.app.entity.FeedCategory;
 import com.dreateam.app.ui.R;
 
 /**
@@ -16,28 +20,25 @@ import com.dreateam.app.ui.R;
  */
 public class FeedCategoryAdapter extends BaseAdapter
 {
-	private Context context;
 	private LayoutInflater inflater;
-	private String[] categories_zh;
+	private ArrayList<FeedCategory> fcList;
 	
-	
-	public FeedCategoryAdapter(Context context)
+	public FeedCategoryAdapter(Context context, ArrayList<FeedCategory> fcList)
 	{
-		this.context = context;
-		categories_zh = context.getResources()
-				   .getStringArray(R.array.feed_category);
+		this.fcList = fcList;
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}	
 	
 	@Override
 	public int getCount()
 	{
-		return categories_zh.length;
+		return fcList.size();
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		return categories_zh[position];
+		return fcList.get(position);
 	}
 
 	@Override
@@ -49,12 +50,10 @@ public class FeedCategoryAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		ViewHolder viewHolder = null;
+		ViewHolder viewHolder;
 		
 		if(convertView == null)
-		{
-			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.category_item, null);
+		{	convertView = inflater.inflate(R.layout.category_item, null);
 			viewHolder = new ViewHolder();
 			viewHolder.categoryTitle = (TextView) convertView.findViewById(R.id.category_title);
 			convertView.setTag(viewHolder);
@@ -63,11 +62,11 @@ public class FeedCategoryAdapter extends BaseAdapter
 		{
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		viewHolder.categoryTitle.setText(categories_zh[position]);
+		viewHolder.categoryTitle.setText(fcList.get(position).getName());
 		return convertView;
 	}
 	
-	private static final class ViewHolder
+	private final static class ViewHolder
 	{
 		TextView categoryTitle;
 	}

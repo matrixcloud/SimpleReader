@@ -17,13 +17,13 @@ import com.dreamteam.app.ui.Main;
  * @author zcloud
  * @date 2014年9月11日
  */
-public class SectionDAO
+public class SectionDao
 {
 	public static final String tag = "SectionDAO";
 	private Context context;
 	
 	
-	public SectionDAO(Context context)
+	public SectionDao(Context context)
 	{
 		this.context = context;
 	}
