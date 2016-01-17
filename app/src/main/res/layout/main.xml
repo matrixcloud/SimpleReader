@@ -1,0 +1,148 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_bg_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="?attr/home_bg">
+	
+	<android.support.v4.view.ViewPager
+		android:id="@+id/home_pager"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		/>
+    
+	<RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dip">
+        <TextView
+            android:id="@+id/home_page_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="1"
+            android:gravity="center"
+           	android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/pageid" />
+    </RelativeLayout>
+	
+	<RelativeLayout
+  		    android:id="@+id/home_loading_layout"
+		    android:layout_width="100dp"
+		    android:layout_height="wrap_content"
+		    android:background="@color/light_black"
+		    android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+		    android:alpha="0.5"
+		    android:visibility="gone"
+		    >
+		    <ProgressBar
+		        style="@android:style/Widget.ProgressBar.Small"
+		        android:layout_alignParentLeft="true"
+		        android:layout_centerVertical="true"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		         />
+	   	  <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:textColor="@color/white"
+	        android:text="加载中……" />
+		</RelativeLayout>
+	
+   	<RelativeLayout
+        android:id="@+id/composer_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:clipChildren="false"
+        android:clipToPadding="false" >
+
+        <ImageButton
+            android:id="@+id/composer_btn_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="142dp"
+            android:layout_marginRight="10.667dp"
+            android:background="@drawable/composer_user"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="135.333dp"
+            android:layout_marginRight="52dp"
+            android:background="@drawable/composer_setting"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="116.666dp"
+            android:layout_marginRight="89.33333333333333dp"
+            android:background="@drawable/composer_favorite"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_switch_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="87.33333333333333dp"
+            android:layout_marginRight="118.6666666666667dp"
+            android:background="@drawable/composer_switch_bg"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="137.3333333333333dp"
+            android:background="@drawable/composer_add"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/composer_btn_moon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8.666666666666667dp"
+            android:layout_marginRight="144dp"
+            android:background="?attr/switch_mode_btn"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/composer_show_hide_button"
+        android:layout_width="60dp"
+        android:layout_height="57.33333333333333dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/composer_button_center" >
+
+        <ImageView
+            android:id="@+id/composer_show_hide_button_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/composer_icon_plus" />
+    </RelativeLayout>
+</RelativeLayout>

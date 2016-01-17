@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="title_bar_bg" format="reference"/>
+    <attr name="item_bg_color" format="reference|color"/>
+    <attr name="item_list_bg" format="reference|color"/>
+    <attr name="item_detail_title_bar_bg" format="reference"/>
+    <attr name="item_detail_bottom_bar_bg" format="reference|color"/>
+    <attr name="home_bg" format="reference"/>
+    <attr name="switch_mode_btn" format="reference"/>
+    <attr name="detail_btn_favorite" format="reference"/>
+    <attr name="detail_btn_share" format="reference"/>
+    <attr name="detail_btn_comment" format="reference"/>
+    <attr name="detail_btn_more" format="reference"/>
+    <attr name="detail_divide_line_bg" format="color"/>
+</resources>

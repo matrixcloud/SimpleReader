@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:descendantFocusability="blocksDescendants">
+	
+  	<TextView
+      android:id="@+id/category_detail_feed_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:textSize="16sp"
+      android:padding="12dp"
+      android:text="腾讯新闻"/>
+
+    <ImageButton
+        android:id="@+id/category_detail_add"
+        style="@style/img_btn_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="12dp"
+        android:src="@drawable/add" />
+</RelativeLayout>

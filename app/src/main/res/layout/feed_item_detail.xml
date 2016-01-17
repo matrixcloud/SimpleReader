@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	<WebView
+	    android:id="@+id/my_web_view"
+	    android:layout_weight="1"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"/>
+	<View 
+	    android:layout_width="match_parent"
+	    android:layout_height="1dp"
+	    android:background="?attr/detail_divide_line_bg"
+  		/>
+	<LinearLayout
+	    android:background="?attr/item_detail_bottom_bar_bg"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	    <ImageButton
+	        android:layout_weight="1"
+	      	android:id="@+id/fid_btn_collecte"
+	        style="@style/img_btn_style"
+	        android:alpha="0.8"
+	        android:src="?attr/detail_btn_favorite"
+			/>
+	    <ImageButton
+	 	    android:id="@+id/fid_btn_share"
+	 	   	android:layout_weight="1"
+	        style="@style/img_btn_style"
+	        android:alpha="0.8"
+	        android:src="?attr/detail_btn_share"
+			/>
+		<RelativeLayout
+		   	android:layout_weight="1" 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    >
+		    <ImageButton
+		        android:id="@+id/fid_btn_comment"
+		        android:layout_centerInParent="true"
+		        style="@style/img_btn_style"
+	        	android:alpha="0.8"
+		        android:src="?attr/detail_btn_comment"
+		        />
+		    <TextView
+		        android:id="@+id/fid_tv_comment_count"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_toRightOf="@id/fid_btn_comment"
+		        android:textSize="16sp"
+		        android:textColor="#6b6b6b" />
+		</RelativeLayout>
+<!-- 	     <ImageButton -->
+<!-- 	        android:id="@+id/fid_btn_more" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        style="@style/img_btn_style" -->
+<!-- 	        android:alpha="0.8" -->
+<!-- 	        android:src="?attr/detail_btn_more" -->
+<!-- 	        /> -->
+	</LinearLayout>
+</LinearLayout>

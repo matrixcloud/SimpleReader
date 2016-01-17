@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SimpleReader</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="feed_category">
+        <item>新闻资讯</item>
+        <item>科学技术</item>
+        <item>读书文娱</item>
+        <item>体育赛事</item>
+        <item>动漫游戏</item>
+        <item>名人博客</item>
+        <item>外语资讯</item>
+        <item>娱乐八卦</item>
+    </string-array>
+    
+    <string-array name="feed_category_en">
+        <item>news</item>
+        <item>science</item>
+        <item>culture</item>
+        <item>sports</item>
+        <item>manga</item>
+        <item>blog</item>
+        <item>english</item>
+        <item>fun</item>
+    </string-array>
+    
+     <string-array name="login_accounts">
+        <item>新浪微博登陆</item>
+        <item>QQ账号登陆</item>
+        <item>人人账号登陆</item>
+    </string-array>
+     
+    <string name="ani_time">250</string>
+	<string name="ani_time2">500</string>
+	<string name="ani_timestartof">150</string>
+	
+	<string name="no_network">请检查网络设置</string>
+	<string name="network_exception">网络异常，请稍后再试</string>
+	<string name="no_update">暂无更新</string>
+	
+	<string-array name="save_days">
+	    <item>3天</item>
+	    <item>4天</item>
+	    <item>5天</item>
+	    <item>6天</item>
+	    <item>7天</item>
+	    <item>8天</item>
+	    <item>9天</item>
+	    <item>10天</item>
+	</string-array>
+	
+	<string name="minuteago">分钟前</string>
+    <string name="hourago">小时前</string>
+    <string name="dayago">天前</string>
+	
+    <string name="bg_switch_success">设置成功</string>
+    
+</resources>

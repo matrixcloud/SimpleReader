@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+	
+	<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shap_title_bar">
+        <ImageButton
+            android:id="@+id/category_detail_btn_back"
+            style="@style/img_btn_style"
+            android:src="@drawable/btn_back" />
+        <TextView
+            android:id="@+id/cd_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:text="新闻资讯"/>
+    </RelativeLayout>
+
+	<ListView
+        android:id="@+id/catagory_detail_lv_feed"
+        android:divider="@color/gray"
+        android:dividerHeight="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+	<RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/shap_title_bar">
+	        <ImageButton
+	            android:id="@+id/setting_return_btn"
+	            style="@style/img_btn_style"
+	            android:src="@drawable/btn_back" />
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginTop="5dp"
+	            android:textSize="8pt"
+	            android:textColor="@color/white"
+	            android:text="系统设置"/>
+	</RelativeLayout>
+	<FrameLayout 
+	    android:id="@+id/setting_content"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    />
+</LinearLayout>

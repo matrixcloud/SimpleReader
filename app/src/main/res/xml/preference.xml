@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="流量控制" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_imageLoad"
+            android:summary="默认WIFI自动加载图片"
+            android:title="自动接收图片" />
+        <PreferenceScreen android:title="离线下载" >
+            <PreferenceCategory android:title="时间设置" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:summary="定时离线下载仅在WIFI下有效"
+                    android:title="开启离线下载" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="缓存设置" >
+        <Preference
+            android:key="pref_clearCache"
+            android:summary="0KB"
+            android:title="清除缓存" >
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="语音设置">
+<!--         <PreferenceScreen android:title="播报时间设置"  -->
+<!--             android:key="pref_alarm" /> -->
+        <Preference android:title="发音人设置" 
+            	android:summary="请到讯飞语音+中设置"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="其他" >
+        <PreferenceScreen
+            android:key="pref_about"
+            android:summary="开源介绍"
+            android:title="关于开源" >
+        </PreferenceScreen> 
+        <Preference android:title="意见反馈"
+            android:key="pref_feedback"/>
+    	</PreferenceCategory>
+    	<PreferenceScreen
+    	    android:key="pref_update"
+    	    android:title="检测新版本"
+    	    android:summary="检测是否有最新版本">
+    	</PreferenceScreen>
+</PreferenceScreen>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/item_bg" >
+
+    <RelativeLayout
+        android:id="@+id/layout_title_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/shap_title_bar" >
+
+        <ImageButton
+            android:id="@+id/button_return"
+			style="@style/img_btn_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/btn_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="反馈"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_title_bar"
+            android:layout_marginTop="5.0dip"
+	        android:orientation="vertical"
+            android:id="@+id/FrameLayout"
+            android:padding="5.0dip" >
+			       <EditText
+			        android:id="@+id/feedback_edit"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:textColor="@color/black"
+			        android:hint="你的建议就是对我最大的鼓励"
+			        android:gravity="top|left|center"
+                    android:inputType="textMultiLine"
+                    android:background="@drawable/bg_setting"
+                    android:lines="6"
+                    android:padding="5.0dip"
+                    android:maxLength="300"
+                    android:maxLines="10"
+			        />
+        </FrameLayout>
+    <Button
+        android:id="@+id/feedback_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/FrameLayout"
+        android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:background="@color/blue"
+          />
+
+</RelativeLayout>

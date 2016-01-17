@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shap_title_bar">
+        <ImageButton
+            android:id="@+id/favorite_list_btn_back"
+            style="@style/img_btn_style"
+            android:src="@drawable/btn_back" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textSize="8pt"
+            android:textColor="@color/white"
+            android:text="收藏列表"/>
+    </RelativeLayout>
+
+	<ListView
+	    android:id="@+id/favorite_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	</ListView>
+
+</LinearLayout>

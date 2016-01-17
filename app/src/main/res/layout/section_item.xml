@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    >
+	<RelativeLayout
+	    android:id="@+id/item_relate"
+	    android:layout_width="200dp"	
+	    android:layout_height="105dp" 
+	    android:layout_margin="5dp"
+	    android:background="@drawable/blue" >
+	    <ImageView
+	        android:id="@+id/item_img"
+	        android:layout_width="100dp"	
+	        android:layout_centerHorizontal="true"
+	        android:layout_height="100dp"	
+	        android:scaleType="centerInside"/>
+<!-- 	TextView添加singLine属性后不能滑动？ -->
+
+	<ImageView
+	        android:id="@+id/item_btn_add_launcher"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:padding="5dp"
+	        android:src="@drawable/btn_add_to_launcher" />
+
+	    <ImageView
+	        android:id="@+id/item_btn_delete"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        android:padding="5dp"
+	        android:src="@drawable/btn_delete" />
+
+	    <TextView
+	        android:id="@+id/item_text"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:ellipsize="marquee"
+	        android:gravity="center"
+	        android:marqueeRepeatLimit="marquee_forever"
+	        android:paddingTop="60dp"
+	        android:scrollHorizontally="true"
+	        android:text="Item"
+	        android:textColor="#ffffff"
+	        android:textSize="16sp" />
+
+	</RelativeLayout>
+</RelativeLayout>

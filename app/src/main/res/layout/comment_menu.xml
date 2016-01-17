@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:background="@color/light_gray" >
+
+    <EditText 
+        android:background="@color/white"
+        android:id="@+id/comment_context_et"
+        android:textSize="16.0sp" 
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:layout_width="0dp" 
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp" 
+       />
+
+    <Button
+        android:background="@color/blue"
+        android:id="@+id/comment_send_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"  
+        android:layout_marginRight="5dp"
+        android:text="评论" />
+
+</LinearLayout>
