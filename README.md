@@ -15,4 +15,5 @@
 - 友盟社区组件
 
 ### Android Studio项目的更新
+- [有问题，可以试试这位童鞋的](https://github.com/Jack-Xiao/SimpleReader-second)
 - 请直接检出as分支
